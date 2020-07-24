@@ -17,7 +17,7 @@
 
 namespace dogb::UT
 {
-class UT_API Engine
+class DB_UT_API Engine
 {
 public:
     Engine(const Engine &) = delete;

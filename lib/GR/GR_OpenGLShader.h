@@ -16,7 +16,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLShader : public GR::Shader
+class DB_GR_API GLShader : public GR::Shader
 {
 public:
     explicit GLShader(const std::string& filepath);

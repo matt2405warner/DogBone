@@ -13,10 +13,10 @@
 
 namespace dogb::GR
 {
-class GR_API Framebuffer
+class DB_GR_API Framebuffer
 {
 public:
-    struct GR_API Specification
+    struct DB_GR_API Specification
     {
         uint32_t m_width;
         uint32_t m_height;

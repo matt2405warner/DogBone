@@ -4,7 +4,13 @@
 
 #include "Inspector.h"
 
+#include "Editor.h"
+
 #include <IMGUI/IMGUI_SubSystemContext.h>
+
+#include <GS/GS_Scene.h>
+#include <GS/GS_EntityManager.h>
+#include <GS/GS_SubSystem.h>
 
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
@@ -29,8 +35,12 @@ Inspector::onGUI(const UT::Timestep&)
         UT_LOG_ERROR("IMGUI context is not attached to a window.");
         return;
     }
+    UT::Engine& engine = UT::Engine::get();
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
 
-    ImGui::Text("Hello World.");
+    auto scene = gs_system->m_activeScene;
+
+    EditorGUI(scene->m_entityManager, scene->m_selectedEntity);
 }
 
 } // namespace dogb

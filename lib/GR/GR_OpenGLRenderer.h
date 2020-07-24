@@ -16,7 +16,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLRenderer : public detail::RendererAPI
+class DB_GR_API GLRenderer : public detail::RendererAPI
 {
 public:
     GLRenderer();

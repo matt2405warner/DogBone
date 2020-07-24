@@ -15,7 +15,7 @@
 
 namespace dogb::CE
 {
-struct CE_API glfw_deleter
+struct DB_CE_API glfw_deleter
 {
     void operator()(GLFWwindow* ptr)
     {

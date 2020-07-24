@@ -14,7 +14,7 @@
 namespace dogb::GR
 {
 
-class GR_API SubSystem : public UT::SubSystem
+class DB_GR_API SubSystem : public UT::SubSystem
 {
 public:
     void init() override;

@@ -33,7 +33,7 @@ enum class Api
 
 namespace detail
 {
-class GR_API RendererAPI
+class DB_GR_API RendererAPI
 {
 public:
 
@@ -55,7 +55,7 @@ private:
 };
 }
 
-class GR_API Renderer
+class DB_GR_API Renderer
 {
 public:
     static inline Api api() { return theApi->api(); }

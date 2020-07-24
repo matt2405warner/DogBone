@@ -12,7 +12,7 @@
 namespace dogb::UT
 {
 template <typename T>
-class UT_API IDManager
+class DB_UT_API IDManager
 {
 public:
     using IdType = T;

@@ -10,7 +10,7 @@
 namespace dogb::GS
 {
 
-struct GS_API MeshComponent
+struct DB_GS_API MeshComponent
 {
     MeshComponent() = default;
 

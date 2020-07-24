@@ -21,7 +21,7 @@
 
 namespace dogb::IMGUI
 {
-class IMGUI_API SubSystem : public UT::SubSystem
+class DB_IMGUI_API SubSystem : public UT::SubSystem
 {
 public:
     using context_t = IMGUI::SubSystemContext;

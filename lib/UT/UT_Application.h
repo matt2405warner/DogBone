@@ -15,7 +15,7 @@
 
 namespace dogb::UT
 {
-class UT_API Application
+class DB_UT_API Application
 {
 public:
     explicit Application(std::string  name) :
@@ -54,7 +54,7 @@ protected:
     friend class AppInterface;
 };
 
-class UT_API AppInterface
+class DB_UT_API AppInterface
 {
 public:
     virtual ~AppInterface() = default;

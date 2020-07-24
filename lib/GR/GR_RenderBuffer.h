@@ -59,7 +59,7 @@ ShaderDataTypeSize(ShaderDataType type)
     return 0;
 }
 
-struct GR_API BufferElement
+struct DB_GR_API BufferElement
 {
     BufferElement(
             ShaderDataType _type,
@@ -109,7 +109,7 @@ struct GR_API BufferElement
     bool is_normalized;
 };
 
-class GR_API BufferLayout
+class DB_GR_API BufferLayout
 {
 public:
     BufferLayout() = default;
@@ -154,7 +154,7 @@ private:
     uint32_t m_stride{};
 };
 
-class GR_API VertexBuffer
+class DB_GR_API VertexBuffer
 {
 public:
     virtual ~VertexBuffer() = default;
@@ -173,7 +173,7 @@ protected:
     VertexBuffer() = default;
 };
 
-class GR_API IndexBuffer
+class DB_GR_API IndexBuffer
 {
 public:
     virtual ~IndexBuffer() = default;

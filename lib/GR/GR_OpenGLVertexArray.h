@@ -14,7 +14,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLVertexArray : public VertexArray
+class DB_GR_API GLVertexArray : public VertexArray
 {
 public:
     GLVertexArray();

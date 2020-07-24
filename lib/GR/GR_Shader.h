@@ -15,7 +15,7 @@
 
 namespace dogb::GR
 {
-class GR_API Shader
+class DB_GR_API Shader
 {
     friend class ShaderLibrary;
 public:
@@ -49,7 +49,7 @@ protected:
     std::string m_name;
 };
 
-class GR_API ShaderLibrary
+class DB_GR_API ShaderLibrary
 {
 public:
     bool add(std::shared_ptr<Shader> shader);

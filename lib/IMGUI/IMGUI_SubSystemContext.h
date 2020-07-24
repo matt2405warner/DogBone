@@ -28,7 +28,7 @@ class Window;
 
 namespace dogb::IMGUI
 {
-class IMGUI_API SubSystemContext : public UT::SubSystemContext
+class DB_IMGUI_API SubSystemContext : public UT::SubSystemContext
 {
     friend class SubSystem;
 

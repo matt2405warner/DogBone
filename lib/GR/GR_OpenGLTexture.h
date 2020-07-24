@@ -13,7 +13,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLTexture2D : public Texture2D
+class DB_GR_API GLTexture2D : public Texture2D
 {
 public:
     explicit GLTexture2D(const std::string& path);

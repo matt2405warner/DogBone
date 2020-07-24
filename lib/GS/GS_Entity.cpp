@@ -6,8 +6,8 @@
 
 namespace dogb::GS
 {
-Entity::Entity(entt::entity handle, Scene* scene)
-    : m_handle(handle), m_scene(scene)
+Entity::Entity(entt::entity handle, EntityManager* mgr)
+    : m_handle(handle), m_mgr(mgr)
 {
 }
 

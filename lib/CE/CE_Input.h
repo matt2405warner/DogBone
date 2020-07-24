@@ -208,11 +208,11 @@ enum ActionType : ActionBaseType
     REPEAT = GLFW_REPEAT
 };
 
-CE_API bool IsKeyPressed(KeyType key);
-CE_API bool IsButtonPressed(MouseButtonType button);
-CE_API float GetMouseX();
-CE_API float GetMouseY();
-CE_API std::pair<float, float> GetMousePos();
+DB_CE_API bool IsKeyPressed(KeyType key);
+DB_CE_API bool IsButtonPressed(MouseButtonType button);
+DB_CE_API float GetMouseX();
+DB_CE_API float GetMouseY();
+DB_CE_API std::pair<float, float> GetMousePos();
 
 }
 

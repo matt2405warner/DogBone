@@ -12,7 +12,7 @@
 namespace dogb::GR
 {
 // This is currently just a 2D camera
-class GR_API OrthoGraphicCamera
+class DB_GR_API OrthoGraphicCamera
 {
 public:
     OrthoGraphicCamera(float left, float right, float bottom, float top);

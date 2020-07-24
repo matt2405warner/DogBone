@@ -9,6 +9,7 @@ set(sources
         GS_MeshComponent.cpp
         GS_Scene.cpp
         GS_Entity.cpp
+        GS_EntityManager.cpp
         )
 
 set(headers
@@ -20,6 +21,7 @@ set(headers
         GS_MeshComponent.h
         GS_Scene.h
         GS_Entity.h
+        GS_EntityManager.h
         )
 
 db_lib(

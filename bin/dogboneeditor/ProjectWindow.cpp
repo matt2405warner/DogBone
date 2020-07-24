@@ -53,6 +53,7 @@ ProjectWindow::onGUI(const UT::Timestep &)
     ImGui::Text("Vertices: %d", stats.totalVertexCount());
     ImGui::Text("Indices: %d", stats.totalIndexCount());
 
+#if 0
     UT::Engine &engine = UT::Engine::get();
     GS::SubSystem *gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
     auto scene = gs_system->m_activeScene;
@@ -64,6 +65,8 @@ ProjectWindow::onGUI(const UT::Timestep &)
                         .m_color;
         ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
     }
+
+#endif
 }
 
 } // namespace dogb

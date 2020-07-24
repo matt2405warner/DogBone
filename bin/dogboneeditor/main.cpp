@@ -2,7 +2,7 @@
 // Created by matt on 2020-07-11.
 //
 
-#include "Editor.h"
+#include "EditorApp.h"
 
 int main(int argc, char* argv[])
 {

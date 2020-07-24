@@ -2,6 +2,6 @@
 #define DOGBONE_GS_API_H
 
 #include <SYS/API.h>
-#define GS_API DB_DLL_EXPORT
+#define DB_GS_API DB_DLL_EXPORT
 
 #endif // DOGBONE_GS_API_H

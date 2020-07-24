@@ -14,7 +14,7 @@
 
 namespace dogb::UT
 {
-class UT_API SubSystem
+class DB_UT_API SubSystem
 {
 public:
     virtual ~SubSystem() = default;

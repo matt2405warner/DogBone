@@ -2,6 +2,6 @@
 #define DOGBONE_${target_name_upper}_API_H
 
 #include <SYS/API.h>
-#define ${target_name_upper}_API DB_DLL_EXPORT
+#define DB_${target_name_upper}_API DB_DLL_EXPORT
 
 #endif // DOGBONE_${target_name_upper}_API_H

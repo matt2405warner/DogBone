@@ -35,10 +35,10 @@ DB_RENDER_NAME(a_TexIndex)
 DB_RENDER_NAME(a_TilingFactor)
 } // namespace RenderNames
 
-class GR_API Renderer2D
+class DB_GR_API Renderer2D
 {
 public:
-    struct GR_API Statistics
+    struct DB_GR_API Statistics
     {
         uint32_t m_drawCalls = 0;
         uint32_t m_quadCount = 0;

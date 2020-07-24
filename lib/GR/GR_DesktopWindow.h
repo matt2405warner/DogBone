@@ -36,7 +36,7 @@ enum Type
     kMouseButtonEvent
 };
 
-struct GR_API Event
+struct DB_GR_API Event
 {
     explicit Event(Type type) : m_type(type) {}
     const Type m_type;
@@ -45,7 +45,7 @@ struct GR_API Event
 
 #endif
 
-class GR_API DesktopWindow : public UT::Window
+class DB_GR_API DesktopWindow : public UT::Window
 {
 public:
     using ResizeSignalType = boost::signals2::signal<void(I32, I32)>;

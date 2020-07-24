@@ -12,7 +12,7 @@
 namespace dogb::GS
 {
 
-struct GS_API TransformComponent
+struct DB_GS_API TransformComponent
 {
     TransformComponent() = default;
     TransformComponent(const glm::mat4& transform) :

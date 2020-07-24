@@ -13,7 +13,7 @@
 
 namespace dogb::GR
 {
-class GR_API VertexArray
+class DB_GR_API VertexArray
 {
 public:
     virtual ~VertexArray() = default;

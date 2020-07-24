@@ -17,7 +17,7 @@
 
 namespace dogb::GR
 {
-class GR_API Texture : public CE::Asset
+class DB_GR_API Texture : public CE::Asset
     {
     public:
         virtual ~Texture() = default;
@@ -30,7 +30,7 @@ class GR_API Texture : public CE::Asset
         virtual void setData(void* data, uint32_t size) = 0;
     };
 
-    class GR_API Texture2D : public Texture
+    class DB_GR_API Texture2D : public Texture
     {
     public:
         static std::unique_ptr<Texture2D> create(uint32_t width, uint32_t height);

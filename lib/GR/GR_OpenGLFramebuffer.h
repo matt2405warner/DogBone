@@ -11,7 +11,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLFramebuffer : public Framebuffer
+class DB_GR_API GLFramebuffer : public Framebuffer
 {
 public:
     explicit GLFramebuffer(const Specification& spec);

@@ -16,8 +16,16 @@
 #include <UT/UT_Profiler.h>
 #include <UT/UT_Assert.h>
 
+#include <imgui.h>
+
 namespace dogb
 {
+void
+SpriteRendererComponent::onGUI(GS::EntityManager &, GS::Entity &)
+{
+    ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
+}
+
 TestContext_2D::TestContext_2D(SceneWindow* scene_window)
     : m_sceneWindow(scene_window)
 {
@@ -38,6 +46,8 @@ TestContext_2D::onInit()
 
     m_testEntity = scene->createEntity();
     m_testEntity.addComponent<SpriteRendererComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
+
+    scene->m_selectedEntity = m_testEntity;
 }
 
 void
@@ -63,7 +73,7 @@ TestContext_2D::update(UT::Timestep ts)
 #if 1
     (void)ts;
 
-    auto group = scene->registry().group<GS::TransformComponent>(entt::get<dogb::SpriteRendererComponent>);
+    auto group = scene->m_entityManager.registry().group<GS::TransformComponent>(entt::get<dogb::SpriteRendererComponent>);
     for (auto entity : group)
     {
         auto&& [transform, sprite] = group.get<GS::TransformComponent, SpriteRendererComponent>(entity);
@@ -71,7 +81,6 @@ TestContext_2D::update(UT::Timestep ts)
     }
 
 #else
-
     GR::Renderer2D::drawQuad(
             {-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
     GR::Renderer2D::drawQuad(
@@ -105,4 +114,5 @@ TestContext_2D::update(UT::Timestep ts)
 
     m_framebuffer->unbind();
 }
+
 } // namespace dogb

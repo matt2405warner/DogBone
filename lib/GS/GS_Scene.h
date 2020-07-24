@@ -7,6 +7,8 @@
 
 #include "GS_API.h"
 
+#include "GS_EntityManager.h"
+
 #include <UT/UT_Timestep.h>
 
 #include <entt/entt.hpp>
@@ -19,12 +21,11 @@ class Scene
 {
 public:
     void update(const UT::Timestep& ts);
+
     Entity createEntity();
 
-    entt::registry & registry() { return m_registry; }
-
-private:
-    entt::registry m_registry;
+    EntityManager m_entityManager;
+    Entity m_selectedEntity;
 };
 
 }

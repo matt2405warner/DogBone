@@ -30,15 +30,15 @@
 
 #include <imgui.h>
 
-IMGUI_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = nullptr);
-IMGUI_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+DB_IMGUI_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = nullptr);
+DB_IMGUI_API void     ImGui_ImplOpenGL3_Shutdown();
+DB_IMGUI_API void     ImGui_ImplOpenGL3_NewFrame();
+DB_IMGUI_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
 
 // Called by Init/NewFrame/Shutdown
-IMGUI_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+DB_IMGUI_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+DB_IMGUI_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+DB_IMGUI_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+DB_IMGUI_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
 
 #endif // DOGBONE_IMGUI_OPENGLIMPL_H

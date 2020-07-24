@@ -18,7 +18,7 @@ namespace dogb::UT
 {
 class SubSystem;
 
-struct UT_API WindowProperties
+struct DB_UT_API WindowProperties
 {
     WindowProperties() = default;
     WindowProperties(
@@ -39,7 +39,7 @@ struct UT_API WindowProperties
     bool m_vsync{};
 };
 
-class UT_API Window
+class DB_UT_API Window
 {
 public:
     using IDType = U32;

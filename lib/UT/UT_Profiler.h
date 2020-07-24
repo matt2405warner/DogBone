@@ -20,7 +20,7 @@
 
 namespace dogb::UT::Profiler
 {
-struct UT_API ProfilerResult
+struct DB_UT_API ProfilerResult
 {
     std::string m_name;
     std::size_t m_start;
@@ -28,7 +28,7 @@ struct UT_API ProfilerResult
     uint32_t m_threadID;
 };
 
-class UT_API Profiler
+class DB_UT_API Profiler
 {
 public:
     static Profiler &instance();
@@ -93,7 +93,7 @@ private:
     std::string m_session;
 };
 
-class UT_API Timer
+class DB_UT_API Timer
 {
 public:
     explicit Timer(const char *name) : m_isStopped(false), m_name(name)

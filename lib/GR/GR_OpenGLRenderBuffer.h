@@ -11,7 +11,7 @@
 
 namespace dogb::GR::OpenGL
 {
-class GR_API GLVertexBuffer : public VertexBuffer
+class DB_GR_API GLVertexBuffer : public VertexBuffer
 {
 public:
     GLVertexBuffer(float *vertices, uint32_t size);
@@ -29,7 +29,7 @@ private:
     BufferLayout m_layout;
 };
 
-class GR_API GLIndexBuffer : public IndexBuffer
+class DB_GR_API GLIndexBuffer : public IndexBuffer
 {
 public:
     GLIndexBuffer(uint32_t *vertices, uint32_t size);

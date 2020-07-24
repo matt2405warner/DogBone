@@ -14,6 +14,10 @@
 #include <UT/UT_SubSystemContext.h>
 #include <UT/UT_Timestep.h>
 
+#include <imgui.h>
+
+#include <glm/gtc/type_ptr.hpp>
+
 #include <entt/entt.hpp>
 
 #include <memory>
@@ -27,6 +31,8 @@ struct SpriteRendererComponent
 
     operator glm::vec4 &() { return m_color; }
     operator const glm::vec4 &() const { return m_color; }
+
+    void onGUI(GS::EntityManager& , GS::Entity& );
 
     glm::vec4 m_color{1.0f, 1.0f, 1.0f, 1.0f};
 };

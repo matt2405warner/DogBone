@@ -23,7 +23,7 @@
 namespace dogb::UT
 {
 // Logger for logging useful information to different locations
-class UT_API Logger
+class DB_UT_API Logger
 {
 public:
     using addlog_clb_t = std::function<void(const std::string &)>;

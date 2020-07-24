@@ -17,7 +17,7 @@
 
 namespace dogb::GS
 {
-struct GS_API CameraBounds
+struct DB_GS_API CameraBounds
 {
 public:
     [[nodiscard]] float width() const { return m_right - m_left; }
@@ -29,7 +29,7 @@ public:
     float m_top;
 };
 
-class GS_API CameraController
+class DB_GS_API CameraController
 {
 public:
     explicit CameraController(float aspect_ratio, bool enable_rotate = true);

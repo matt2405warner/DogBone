@@ -9,7 +9,7 @@
 
 namespace dogb::UT
 {
-class UT_API Timestep
+class DB_UT_API Timestep
 {
 public:
     Timestep(float t = 0.0f) :

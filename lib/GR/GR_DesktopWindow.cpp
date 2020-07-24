@@ -19,7 +19,7 @@ static bool theWindowInitialized = false;
 
 namespace WindowEvent
 {
-struct GR_API WindowResizeEvent : public detail::Event
+struct DB_GR_API WindowResizeEvent : public detail::Event
 {
     WindowResizeEvent(I32 _width, I32 _height)
         : detail::Event(detail::Type::kResizeEvent)
@@ -32,7 +32,7 @@ struct GR_API WindowResizeEvent : public detail::Event
     I32 height;
 };
 
-struct GR_API WindowFocusEvent : public detail::Event
+struct DB_GR_API WindowFocusEvent : public detail::Event
 {
     explicit WindowFocusEvent(bool gained)
         : detail::Event(detail::Type::kFocusEvent), gainedFocus(gained)
@@ -42,7 +42,7 @@ struct GR_API WindowFocusEvent : public detail::Event
     bool gainedFocus;
 };
 
-struct GR_API WindowMovedEvent : public detail::Event
+struct DB_GR_API WindowMovedEvent : public detail::Event
 {
     WindowMovedEvent(I32 _width, I32 _height)
         : detail::Event(detail::Type::kWindowMovedEvent)
@@ -55,7 +55,7 @@ struct GR_API WindowMovedEvent : public detail::Event
     int height;
 };
 
-struct GR_API KeyEvent : public detail::Event
+struct DB_GR_API KeyEvent : public detail::Event
 {
     KeyEvent(CE::Input::KeyType _code, CE::Input::ActionType _action)
         : detail::Event(detail::Type::kKeyEvent), code(_code), action(_action)
@@ -65,7 +65,7 @@ struct GR_API KeyEvent : public detail::Event
     CE::Input::ActionType action;
 };
 
-struct GR_API MouseMovedEvent : public detail::Event
+struct DB_GR_API MouseMovedEvent : public detail::Event
 {
     MouseMovedEvent(float _x, float _y)
         : detail::Event(detail::Type::kMouseMovedEvent), x(_x), y(_y)
@@ -76,7 +76,7 @@ struct GR_API MouseMovedEvent : public detail::Event
     float y{};
 };
 
-struct GR_API MouseScrolledEvent : public detail::Event
+struct DB_GR_API MouseScrolledEvent : public detail::Event
 {
     MouseScrolledEvent(float x, float y)
         : detail::Event(detail::Type::kMouseScrolledEvent)
@@ -89,7 +89,7 @@ struct GR_API MouseScrolledEvent : public detail::Event
     float yOffset{};
 };
 
-struct GR_API MouseButtonEvent : public detail::Event
+struct DB_GR_API MouseButtonEvent : public detail::Event
 {
     MouseButtonEvent(
             CE::Input::MouseButtonType _button,

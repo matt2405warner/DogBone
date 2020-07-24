@@ -20,7 +20,7 @@ namespace dogb::IMGUI
 {
 class SubSystemContext;
 
-class IMGUI_API Window
+class DB_IMGUI_API Window
 {
     friend class IMGUI::SubSystemContext;
     RTTR_ENABLE()
@@ -31,7 +31,7 @@ public:
     }
     virtual ~Window() = default;
 
-    struct IMGUI_API Style
+    struct DB_IMGUI_API Style
     {
         ImVec2 m_padding{10, 10};
     };
