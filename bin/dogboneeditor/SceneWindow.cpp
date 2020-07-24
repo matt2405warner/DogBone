@@ -10,6 +10,13 @@
 
 namespace dogb
 {
+SceneWindow::SceneWindow(UT::Window *window)
+    : m_cameraController(
+              static_cast<float>(window->width()) /
+              static_cast<float>(window->height()))
+{
+}
+
 void
 SceneWindow::onStart()
 {
@@ -19,8 +26,15 @@ SceneWindow::onStart()
 }
 
 void
-SceneWindow::onGUI()
+SceneWindow::onGUI(const UT::Timestep &ts)
 {
+    bool is_focused = ImGui::IsWindowFocused();
+
+    m_cameraController.setDisable(!is_focused);
+
+    if (is_focused)
+        m_cameraController.onUpdate(ts);
+
     ImVec2 viewport_size = ImGui::GetContentRegionAvail();
 
     if (m_viewportSize.x != viewport_size.x ||
@@ -32,7 +46,7 @@ SceneWindow::onGUI()
         if (m_viewportSize.y <= 0)
             m_viewportSize.y = 1;
 
-        m_ctx->m_cameraController.resize(m_viewportSize.x, m_viewportSize.y);
+        m_cameraController.resize(m_viewportSize.x, m_viewportSize.y);
         m_framebuffer->resize(
                 static_cast<uint32_t>(m_viewportSize.x),
                 static_cast<uint32_t>(m_viewportSize.y));

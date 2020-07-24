@@ -19,7 +19,7 @@ class ConsoleWindow : public IMGUI::Window
 
 public:
     virtual void onStart() override;
-    virtual void onGUI() override;
+    virtual void onGUI(const UT::Timestep& ts) override;
     virtual void onDestroy() override;
 
 private:

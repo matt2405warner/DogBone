@@ -15,7 +15,7 @@ class HierarchyWindow : public IMGUI::Window
 
 public:
     void onStart() override;
-    void onGUI() override;
+    void onGUI(const UT::Timestep& ts) override;
 };
 } // namespace dogb
 

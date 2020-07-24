@@ -4,6 +4,8 @@
 
 #include "TestContext_3D.h"
 
+#include "SceneWindow.h"
+
 #include <GR/GR_OpenGLShader.h>
 #include <GR/GR_RenderBuffer.h>
 #include <GR/GR_Renderer.h>
@@ -18,13 +20,10 @@
 
 namespace dogb
 {
-TestContext_3D::TestContext_3D(UT::Window *window)
-    : m_cameraController(
-              static_cast<float>(window->width()) /
-              static_cast<float>(window->height()))
-
-    , m_color({0.2f, 0.8f, 0.3f, 1.0f})
-    , m_window(window)
+TestContext_3D::TestContext_3D(SceneWindow* scene_window)
+    :
+    m_color({0.2f, 0.8f, 0.3f, 1.0f})
+    , m_sceneWindow(scene_window)
 {
 }
 
@@ -32,9 +31,6 @@ void
 TestContext_3D::onAttach()
 {
     UT_PROFILE_FUNCTION();
-
-    GR::DesktopWindow *window = reinterpret_cast<GR::DesktopWindow *>(m_window);
-    m_cameraController.attach(*window);
 
     m_flatShader = m_shaderLibrary.load("../assets/shaders/FlatShader.glsl");
     m_texShader = m_shaderLibrary.load("../assets/shaders/Texture.glsl");
@@ -79,7 +75,7 @@ void TestContext_3D::update(UT::Timestep)
     GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
     GR::Renderer::clear();
 
-    GR::Renderer::beginScene(m_cameraController.camera());
+    GR::Renderer::beginScene(m_sceneWindow->m_cameraController.camera());
 
     m_flatShader->bind();
     m_flatShader->setFloat4("u_Color", m_color);

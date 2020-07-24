@@ -121,7 +121,7 @@ SubSystemContext::getDockID(IMGUI::Window::DockDirection dir)
 }
 #endif
 
-void SubSystemContext::update(UT::Timestep)
+void SubSystemContext::update(UT::Timestep ts)
 {
     ImGui::SetCurrentContext(m_imguiContext);
 
@@ -206,7 +206,7 @@ void SubSystemContext::update(UT::Timestep)
             ImGui::DockBuilderDockWindow(win->title().c_str(), dock_id);
         }
 #endif
-        win->onGUI();
+        win->onGUI(ts);
 
         ImGui::End();
 

@@ -21,7 +21,7 @@ Inspector::onStart()
 }
 
 void
-Inspector::onGUI()
+Inspector::onGUI(const UT::Timestep&)
 {
     UT::Window *window = imguiContext()->window();
     if (window == nullptr)
@@ -29,9 +29,6 @@ Inspector::onGUI()
         UT_LOG_ERROR("IMGUI context is not attached to a window.");
         return;
     }
-
-    //int win_width = window->width();
-    //int win_height = window->height();
 
     ImGui::Text("Hello World.");
 }

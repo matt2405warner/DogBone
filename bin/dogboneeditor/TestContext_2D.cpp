@@ -4,6 +4,8 @@
 
 #include "TestContext_2D.h"
 
+#include "SceneWindow.h"
+
 #include <GR/GR_Renderer.h>
 #include <GR/GR_Renderer2D.h>
 
@@ -11,11 +13,8 @@
 
 namespace dogb
 {
-TestContext_2D::TestContext_2D(UT::Window *window)
-    : m_cameraController(
-              static_cast<float>(window->width()) /
-              static_cast<float>(window->height()))
-    , m_window(window)
+TestContext_2D::TestContext_2D(SceneWindow* scene_window)
+    : m_sceneWindow(scene_window)
 {
 }
 
@@ -24,8 +23,6 @@ TestContext_2D::onAttach()
 {
     UT_PROFILE_FUNCTION();
 
-    GR::DesktopWindow *window = reinterpret_cast<GR::DesktopWindow *>(m_window);
-    m_cameraController.attach(*window);
     m_texture = GR::Texture2D::create("../assets/textures/Checkerboard.png");
 }
 
@@ -33,8 +30,6 @@ void
 TestContext_2D::update(UT::Timestep ts)
 {
     UT_PROFILE_FUNCTION();
-
-    m_cameraController.onUpdate(ts);
 
     GR::Renderer::setClearColor({0.0f, 0.0f, 0.0f, 1.0f});
     GR::Renderer::clear();
@@ -44,7 +39,7 @@ TestContext_2D::update(UT::Timestep ts)
     GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
     GR::Renderer::clear();
 
-    GR::Renderer2D::beginScene(m_cameraController.camera());
+    GR::Renderer2D::beginScene(m_sceneWindow->m_cameraController.camera());
 
     GR::Renderer2D::drawQuad(
             {-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});

@@ -13,7 +13,7 @@ HierarchyWindow::onStart()
 }
 
 void
-HierarchyWindow::onGUI()
+HierarchyWindow::onGUI(const UT::Timestep&)
 {
 }
 

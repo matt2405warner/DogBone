@@ -18,7 +18,7 @@ class ProjectWindow : public IMGUI::Window
     RTTR_ENABLE()
 public:
     void onStart() override;
-    void onGUI() override;
+    void onGUI(const UT::Timestep& ts) override;
 
     glm::vec4 m_color;
 

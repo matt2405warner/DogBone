@@ -43,7 +43,7 @@ ConsoleWindow::onDestroy()
 }
 
 void
-ConsoleWindow::onGUI()
+ConsoleWindow::onGUI(const UT::Timestep&)
 {
     if (ImGui::Button("Clear"))
         m_logs.clear();

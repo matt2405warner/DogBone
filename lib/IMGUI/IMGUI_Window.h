@@ -7,6 +7,8 @@
 
 #include "IMGUI_API.h"
 
+#include <UT/UT_Timestep.h>
+
 #include <optional>
 #include <string>
 
@@ -52,7 +54,7 @@ public:
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, m_style.m_padding);
     }
     // Called when repainting
-    virtual void onGUI() = 0;
+    virtual void onGUI(const UT::Timestep& ts) = 0;
     void onPostGUI()
     {
         ImGui::PopStyleVar();

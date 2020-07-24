@@ -45,11 +45,15 @@ public:
     void resize(float width, float height);
 
     [[nodiscard]] GR::OrthoGraphicCamera& camera() { return m_camera; }
+
+    void setDisable(bool disable) { m_disable = disable; }
 private:
     void onMouseScrolled(float x, float y);
     void onWindowResized(I32 width, I32 height);
 
     void refreshView();
+
+    bool m_disable = false;
 
     float m_moveSpeed;
     float m_rotateSpeed;

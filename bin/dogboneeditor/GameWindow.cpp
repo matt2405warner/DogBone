@@ -12,7 +12,7 @@ GameWindow::onStart()
 }
 
 void
-GameWindow::onGUI()
+GameWindow::onGUI(const UT::Timestep&)
 {
 }
 

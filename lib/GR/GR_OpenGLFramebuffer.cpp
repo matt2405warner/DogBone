@@ -10,6 +10,8 @@
 
 namespace dogb::GR::OpenGL
 {
+static uint32_t theMaxFramebufferSize = 8192;
+
 GLFramebuffer::GLFramebuffer(const Specification &spec) : Framebuffer(spec)
 {
     invalidate();
@@ -99,6 +101,10 @@ GLFramebuffer::unbind()
 void
 GLFramebuffer::resize(uint32_t width, uint32_t height)
 {
+    if (width == 0 || height == 0 || width > theMaxFramebufferSize ||
+        height > theMaxFramebufferSize)
+        return;
+
     m_specification.m_width = width;
     m_specification.m_height = height;
 

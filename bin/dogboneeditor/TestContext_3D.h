@@ -27,16 +27,16 @@ class Window;
 
 namespace dogb
 {
+class SceneWindow;
+
 class TestContext_3D : public GS::SubSystemContext
 {
 public:
-    explicit TestContext_3D(UT::Window *window);
+    explicit TestContext_3D(SceneWindow* scene);
 
     void onAttach() override;
 
     void update(UT::Timestep ts) override;
-
-    GS::CameraController m_cameraController;
 
     GR::ShaderLibrary m_shaderLibrary;
     std::shared_ptr<GR::Shader> m_texShader;
@@ -51,7 +51,7 @@ public:
 
     glm::vec4 m_color;
 
-    UT::Window* m_window;
+    SceneWindow* m_sceneWindow;
 };
 } // namespace dogb
 

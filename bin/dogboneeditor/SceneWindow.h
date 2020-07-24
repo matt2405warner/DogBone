@@ -7,28 +7,32 @@
 
 #include <IMGUI/IMGUI_Window.h>
 
+#include <GS/GS_CameraController.h>
 #include <GR/GR_Framebuffer.h>
+
+#include <UT/UT_Timestep.h>
 
 #include <glm/glm.hpp>
 
 namespace dogb
 {
-class TestContext_2D;
+    namespace UT
+    {
+    class Window;
+    }
 
 class SceneWindow : public IMGUI::Window
 {
     RTTR_ENABLE()
 public:
-    explicit SceneWindow(TestContext_2D* ctx) :
-        m_ctx(ctx)
-    {}
+    explicit SceneWindow(UT::Window* window);
 
     void onStart() override;
-    void onGUI() override;
+    void onGUI(const UT::Timestep& ts) override;
 
+    GS::CameraController m_cameraController;
     std::shared_ptr<GR::Framebuffer> m_framebuffer;
     glm::vec2 m_viewportSize;
-    TestContext_2D* m_ctx;
 };
 }
 

@@ -90,6 +90,9 @@ CameraController::attach(GR::DesktopWindow &window)
 void
 CameraController::onMouseScrolled(float, float y)
 {
+    if (m_disable)
+        return;
+
     m_zoomLevel -= y;
     m_zoomLevel = std::max(m_zoomLevel, 0.25f);
     refreshView();
@@ -98,6 +101,9 @@ CameraController::onMouseScrolled(float, float y)
 void
 CameraController::onWindowResized(I32 width, I32 height)
 {
+    if (m_disable)
+        return;
+
     m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
     refreshView();
 }

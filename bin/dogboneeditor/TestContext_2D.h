@@ -5,7 +5,6 @@
 #ifndef DOGBONE_TESTCONTEXT_2D_H
 #define DOGBONE_TESTCONTEXT_2D_H
 
-#include <GS/GS_CameraController.h>
 #include <GS/GS_SubSystemContext.h>
 
 #include <GR/GR_Texture.h>
@@ -16,28 +15,24 @@
 
 #include <memory>
 
-namespace dogb::UT
-{
-class Window;
-}
-
 namespace dogb
 {
+class SceneWindow;
+
 class TestContext_2D : public GS::SubSystemContext
 {
 public:
-    explicit TestContext_2D(UT::Window* window);
+    explicit TestContext_2D(SceneWindow* scene_window);
 
     void onAttach() override;
 
     void update(UT::Timestep ts) override ;
 
-    GS::CameraController m_cameraController;
 
     std::shared_ptr<GR::Texture2D> m_texture;
     std::shared_ptr<GR::Framebuffer> m_framebuffer;
 
-    UT::Window* m_window;
+    SceneWindow* m_sceneWindow;
 };
 
 }

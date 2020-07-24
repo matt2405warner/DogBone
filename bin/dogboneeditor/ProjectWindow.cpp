@@ -28,9 +28,8 @@ ProjectWindow::onStart()
 }
 
 void
-ProjectWindow::onGUI()
+ProjectWindow::onGUI(const UT::Timestep& )
 {
-#if 0
     UT::Window *window = imguiContext()->window();
     if (window == nullptr)
     {
@@ -52,7 +51,6 @@ ProjectWindow::onGUI()
 
     if (m_ctx != nullptr)
         ImGui::ColorEdit4("Square Color", glm::value_ptr(m_ctx->m_color));
-#endif
 }
 
 } // namespace rne
