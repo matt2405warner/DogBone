@@ -43,8 +43,14 @@ public:
         uint32_t m_drawCalls = 0;
         uint32_t m_quadCount = 0;
 
-        [[nodiscard]] uint32_t totalVertexCount() const { return m_quadCount * 4; }
-        [[nodiscard]] uint32_t totalIndexCount() const { return m_quadCount * 6; }
+        [[nodiscard]] uint32_t totalVertexCount() const
+        {
+            return m_quadCount * 4;
+        }
+        [[nodiscard]] uint32_t totalIndexCount() const
+        {
+            return m_quadCount * 6;
+        }
     };
 
     static void init();
@@ -88,6 +94,13 @@ public:
             float tiling = 1.0f,
             const glm::vec4 &tint = glm::vec4(1.0f));
 
+    static void drawQuad(const glm::mat4 &transform, const glm::vec4 &color);
+    static void drawQuad(
+            const glm::mat4 &transform,
+            std::shared_ptr<Texture2D> tex,
+            float tiling = 1.0f,
+            const glm::vec4 &tint = glm::vec4(1.0f));
+
     static void drawRotatedQuad(
             const glm::vec2 &position,
             const glm::vec2 &size,
@@ -128,7 +141,7 @@ public:
             const glm::vec4 &tint = glm::vec4(1.0f));
 
     static void resetStats();
-    static const Statistics& statistics();
+    static const Statistics &statistics();
 };
 } // namespace dogb::GR
 

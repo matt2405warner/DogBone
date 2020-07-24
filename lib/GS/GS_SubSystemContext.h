@@ -15,6 +15,7 @@ namespace dogb::GS
 class SubSystemContext : public UT::SubSystemContext
 {
 public:
+    virtual void onInit() {}
     virtual void onAttach() {}
     virtual void onShutdown() {}
 };

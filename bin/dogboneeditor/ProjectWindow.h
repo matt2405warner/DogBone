@@ -11,6 +11,7 @@
 
 namespace dogb
 {
+class TestContext_2D;
 class TestContext_3D;
 
 class ProjectWindow : public IMGUI::Window
@@ -22,6 +23,7 @@ public:
 
     glm::vec4 m_color;
 
+    TestContext_2D* m_ctx2D{};
     TestContext_3D* m_ctx{};
 };
 

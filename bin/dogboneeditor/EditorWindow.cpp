@@ -8,8 +8,11 @@
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
 #include <GS/GS_SubSystem.h>
+#include <GS/GS_TransformComponent.h>
 
 #include <GR/GR_SubSystem.h>
+
+#include <UT/UT_Assert.h>
 
 #include "ConsoleWindow.h"
 #include "GameWindow.h"
@@ -37,15 +40,14 @@ EditorWindow::initialize()
 
     auto imgui_ctx =
             addContext<IMGUI::SubSystem, IMGUI::SubSystemContext>(this);
+    UT_ASSERT(imgui_ctx != nullptr);
 
     // Add all of the standard editor GUI windows
     Inspector *inspector = imgui_ctx->createGUIWindow<Inspector>();
     // imgui_ctx->dockGUIWindowRight(*inspector);
     inspector->show();
     ProjectWindow *proj_window = imgui_ctx->createGUIWindow<ProjectWindow>();
-#ifdef USE_3D
-    proj_window->m_ctx = ctx.get();
-#endif
+
     // imgui_ctx->dockGUIWindowLeft(*project);
     proj_window->show();
 
@@ -71,6 +73,12 @@ EditorWindow::initialize()
     auto ctx = addContext<GS::SubSystem, TestContext_2D>(scene_win);
 #else
     auto ctx = addContext<GS::SubSystem, TestContext_3D>(scene_win);
+#endif
+
+#ifdef USE_3D
+    proj_window->m_ctx = ctx.get();
+#else
+    proj_window->m_ctx2D = ctx.get();
 #endif
 
     ctx->m_framebuffer = m_framebuffer;

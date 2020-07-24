@@ -187,12 +187,23 @@ Renderer2D::flush()
     theRenderStorage.m_stats.m_drawCalls++;
 }
 
-static void
-grSubmitRender(
+static glm::mat4
+grCalcTransform(
         const glm::vec3 &position,
         const glm::vec2 &size,
+        float rotation = 0.0f)
+{
+    return glm::translate(glm::mat4(1.0f), position) *
+           glm::rotate(
+                   glm::mat4(1.0f), glm::radians(rotation),
+                   {0.0f, 0.0f, 1.0f}) *
+           glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
+}
+
+static void
+grSubmitRender(
+        const glm::mat4 &transform,
         const glm::vec4 &color,
-        float rotation,
         std::shared_ptr<Texture> tex = nullptr,
         float tiling = 1.0f,
         const glm::vec2 coords[4] = nullptr)
@@ -237,12 +248,6 @@ grSubmitRender(
             theRenderStorage.m_textureSlotIndex++;
         }
     }
-
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-                          glm::rotate(
-                                  glm::mat4(1.0f), glm::radians(rotation),
-                                  {0.0f, 0.0f, 1.0f}) *
-                          glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
     // x1y1
     theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_position =
@@ -345,7 +350,8 @@ Renderer2D::drawQuad(
         const glm::vec2 &size,
         const glm::vec4 &color)
 {
-    grSubmitRender(position, size, color, 0.0f);
+    const glm::mat4 transform = grCalcTransform(position, size);
+    grSubmitRender(transform, color);
 }
 
 void
@@ -368,7 +374,8 @@ Renderer2D::drawQuad(
         float tiling,
         const glm::vec4 &tint)
 {
-    grSubmitRender(position, size, tint, 0.0f, tex, tiling);
+    const glm::mat4 transform = grCalcTransform(position, size);
+    grSubmitRender(transform, tint, tex, tiling);
 }
 
 void
@@ -390,9 +397,24 @@ Renderer2D::drawQuad(
         float tiling,
         const glm::vec4 &tint)
 {
+    const glm::mat4 transform = grCalcTransform(position, size);
     grSubmitRender(
-            position, size, tint, 0.0f, tex->texture(), tiling,
+            transform, tint, tex->texture(), tiling,
             tex->texCoords());
+}
+void
+Renderer2D::drawQuad(const glm::mat4 &transform, const glm::vec4 &color)
+{
+    grSubmitRender(transform, color);
+}
+void
+Renderer2D::drawQuad(
+        const glm::mat4 &transform,
+        std::shared_ptr<Texture2D> tex,
+        float tiling,
+        const glm::vec4 &tint)
+{
+    grSubmitRender(transform, tint, tex, tiling);
 }
 
 void
@@ -411,7 +433,8 @@ Renderer2D::drawRotatedQuad(
         float rotation,
         const glm::vec4 &color)
 {
-    grSubmitRender(position, size, color, rotation);
+    const glm::mat4 transform = grCalcTransform(position, size, rotation);
+    grSubmitRender(transform, color);
 }
 
 void
@@ -437,7 +460,8 @@ Renderer2D::drawRotatedQuad(
         float tiling,
         const glm::vec4 &tint)
 {
-    grSubmitRender(position, size, tint, rotation, tex, tiling);
+    const glm::mat4 transform = grCalcTransform(position, size, rotation);
+    grSubmitRender(transform, tint, tex, tiling);
 }
 
 void
@@ -462,8 +486,9 @@ Renderer2D::drawRotatedQuad(
         float tiling,
         const glm::vec4 &tint)
 {
+    const glm::mat4 transform = grCalcTransform(position, size, rotation);
     grSubmitRender(
-            position, size, tint, rotation, tex->texture(), tiling,
+            transform, tint, tex->texture(), tiling,
             tex->texCoords());
 }
 

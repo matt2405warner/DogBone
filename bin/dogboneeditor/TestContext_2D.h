@@ -13,10 +13,25 @@
 #include <UT/UT_SubSystemContext.h>
 #include <UT/UT_Timestep.h>
 
+#include <entt/entt.hpp>
+
 #include <memory>
 
 namespace dogb
 {
+struct SpriteRendererComponent
+{
+    SpriteRendererComponent() = default;
+    SpriteRendererComponent(const glm::vec4& color) :
+            m_color(color)
+    {}
+
+    operator glm::vec4 & () { return m_color; }
+    operator const glm::vec4 & () const { return m_color; }
+
+    glm::vec4 m_color{1.0f, 1.0f, 1.0f, 1.0f};
+};
+
 class SceneWindow;
 
 class TestContext_2D : public GS::SubSystemContext
@@ -24,7 +39,7 @@ class TestContext_2D : public GS::SubSystemContext
 public:
     explicit TestContext_2D(SceneWindow* scene_window);
 
-    void onAttach() override;
+    void onInit() override;
 
     void update(UT::Timestep ts) override ;
 
@@ -33,6 +48,8 @@ public:
     std::shared_ptr<GR::Framebuffer> m_framebuffer;
 
     SceneWindow* m_sceneWindow;
+
+    entt::entity m_testEntity;
 };
 
 }

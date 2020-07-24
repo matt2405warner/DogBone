@@ -17,6 +17,7 @@
 #include <IMGUI/IMGUI_SubSystem.h>
 
 #include <GS/GS_SubSystem.h>
+#include <GS/GS_Scene.h>
 
 #include <CE/CE_Input.h>
 
@@ -65,6 +66,10 @@ int
 Editor::exec()
 {
     Application::exec();
+
+    entt::registry registry;
+    auto entity = registry.create();
+    (void)entity;
 
     UT::Engine& engine = UT::Engine::get();
 

@@ -7,8 +7,20 @@
 namespace dogb::GS
 {
 void
+SubSystem::init() {
+    m_activeScene = std::make_shared<GS::Scene>();
+
+    for (auto&& ctx : m_contexts)
+    {
+        ctx->onInit();
+    }
+}
+
+void
 SubSystem::update(const UT::Timestep& timestep)
 {
+    m_activeScene->update(timestep);
+
     for (auto &ctx : m_contexts)
     {
         ctx->update(timestep);

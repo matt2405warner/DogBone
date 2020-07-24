@@ -10,6 +10,7 @@ glm/0.9.8.5@g-truc/stable
 rttr/0.9.6
 stb/20190512@conan/stable
 boost/1.72.0
+entt/3.4.0
 
 [generators]
 cmake

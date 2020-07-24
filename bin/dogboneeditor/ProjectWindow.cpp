@@ -4,9 +4,13 @@
 
 #include "ProjectWindow.h"
 
+#include "TestContext_2D.h"
 #include "TestContext_3D.h"
 
 #include <IMGUI/IMGUI_SubSystemContext.h>
+
+#include <GS/GS_SubSystem.h>
+#include <GS/GS_Scene.h>
 
 #include <GR/GR_Renderer2D.h>
 
@@ -49,8 +53,16 @@ ProjectWindow::onGUI(const UT::Timestep& )
     ImGui::Text("Vertices: %d", stats.totalVertexCount());
     ImGui::Text("Indices: %d", stats.totalIndexCount());
 
-    if (m_ctx != nullptr)
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(m_ctx->m_color));
+    UT::Engine& engine = UT::Engine::get();
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+    auto scene = gs_system->m_activeScene;
+
+    if (m_ctx2D)
+    {
+        auto& color = scene->registry().get<SpriteRendererComponent>(
+                m_ctx2D->m_testEntity).m_color;
+        ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
+    }
 }
 
 } // namespace rne

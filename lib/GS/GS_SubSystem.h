@@ -9,6 +9,8 @@
 
 #include "GS_SubSystemContext.h"
 
+#include "GS_Scene.h"
+
 #include <UT/UT_Timestep.h>
 #include <UT/UT_SubSystem.h>
 
@@ -22,12 +24,14 @@ class SubSystem : public UT::SubSystem
 public:
     using context_t = GS::SubSystemContext;
 
-    void init() override {}
+    void init() override;
     void shutdown() override;
 
     void update(const UT::Timestep &timestep) override;
 
     void attach(std::shared_ptr<context_t> ctx) { ctx->onAttach(); m_contexts.emplace_back(ctx); }
+
+    std::shared_ptr<Scene> m_activeScene;
 private:
     std::vector<std::shared_ptr<context_t>> m_contexts;
 };

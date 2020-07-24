@@ -6,10 +6,15 @@
 
 #include "SceneWindow.h"
 
+#include <GS/GS_SubSystem.h>
+#include <GS/GS_Scene.h>
+#include <GS/GS_TransformComponent.h>
+
 #include <GR/GR_Renderer.h>
 #include <GR/GR_Renderer2D.h>
 
 #include <UT/UT_Profiler.h>
+#include <UT/UT_Assert.h>
 
 namespace dogb
 {
@@ -19,17 +24,32 @@ TestContext_2D::TestContext_2D(SceneWindow* scene_window)
 }
 
 void
-TestContext_2D::onAttach()
+TestContext_2D::onInit()
 {
     UT_PROFILE_FUNCTION();
 
     m_texture = GR::Texture2D::create("../assets/textures/Checkerboard.png");
+
+    UT::Engine& engine = UT::Engine::get();
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+
+    auto scene = gs_system->m_activeScene;
+    UT_ASSERT(scene != nullptr);
+
+    m_testEntity = scene->createEntity();
+    scene->registry().emplace<GS::TransformComponent>(m_testEntity);
+    scene->registry().emplace<SpriteRendererComponent>(m_testEntity, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
 }
 
 void
 TestContext_2D::update(UT::Timestep ts)
 {
     UT_PROFILE_FUNCTION();
+
+    UT::Engine& engine = UT::Engine::get();
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+
+    auto scene = gs_system->m_activeScene;
 
     GR::Renderer::setClearColor({0.0f, 0.0f, 0.0f, 1.0f});
     GR::Renderer::clear();
@@ -40,6 +60,18 @@ TestContext_2D::update(UT::Timestep ts)
     GR::Renderer::clear();
 
     GR::Renderer2D::beginScene(m_sceneWindow->m_cameraController.camera());
+
+#if 1
+    (void)ts;
+
+    auto group = scene->registry().group<GS::TransformComponent>(entt::get<dogb::SpriteRendererComponent>);
+    for (auto entity : group)
+    {
+        auto&& [transform, sprite] = group.get<GS::TransformComponent, SpriteRendererComponent>(entity);
+        GR::Renderer2D::drawQuad(transform, sprite);
+    }
+
+#else
 
     GR::Renderer2D::drawQuad(
             {-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
@@ -68,6 +100,7 @@ TestContext_2D::update(UT::Timestep ts)
                     {x, y, 1.0f}, {0.45f, 0.45f}, color);
         }
     }
+#endif
 
     GR::Renderer2D::endScene();
 
