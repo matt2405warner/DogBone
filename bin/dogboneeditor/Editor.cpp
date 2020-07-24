@@ -22,6 +22,7 @@
 
 #include <UT/UT_Logger.h>
 
+#include <UT/UT_Assert.h>
 #include <unistd.h>
 
 namespace dogb
