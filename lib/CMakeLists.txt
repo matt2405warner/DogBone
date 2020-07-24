@@ -1,0 +1,6 @@
+add_subdirectory(SYS)
+add_subdirectory(UT)
+add_subdirectory(CE)
+add_subdirectory(GR)
+add_subdirectory(GS)
+add_subdirectory(IMGUI)

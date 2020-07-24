@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+check_required_components(@target_name@)
+foreach(dep in @target_name@_STATIC_DEPS)
+    find_dependency(${dep} REQUIRED)
+endforeach()
+
+include("${CMAKE_CURRENT_LIST_DIR}/@target_name@Targets.cmake")

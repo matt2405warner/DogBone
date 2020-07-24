@@ -1,0 +1,43 @@
+//
+// Created by matt on 2020-07-11.
+//
+
+#include "GR_Renderer.h"
+
+#include "GR_OrthoGraphicCamera.h"
+#include "GR_VertexArray.h"
+#include "GR_Shader.h"
+
+#include "GR_OpenGLRenderer.h"
+#include "GR_OpenGLShader.h"
+
+namespace dogb::GR
+{
+std::unique_ptr<detail::RendererAPI> Renderer::theApi = std::make_unique<OpenGL::GLRenderer>();
+Renderer::SceneContext Renderer::theSceneCtx;
+
+void
+Renderer::submit(Shader *shader, std::shared_ptr<VertexArray> vao, const glm::mat4 &transform)
+{
+    if (!shader || !vao)
+        return;
+
+    shader->bind();
+    shader->setMat4("u_ViewProj", theSceneCtx.m_viewProjMatrix);
+    shader->setMat4("u_Transform", transform);
+
+    vao->bind();
+    theApi->drawIndexed(vao, vao->indexBuffer()->count());
+}
+
+void
+Renderer::beginScene(OrthoGraphicCamera &camera)
+{
+    theSceneCtx.m_viewProjMatrix = camera.viewProjectionMatrix();
+}
+
+void
+Renderer::endScene()
+{
+}
+} // namespace dogb::GR
