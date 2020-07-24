@@ -9,8 +9,8 @@
 
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
-#include <GS/GS_SubSystem.h>
 #include <GS/GS_Scene.h>
+#include <GS/GS_SubSystem.h>
 
 #include <GR/GR_Renderer2D.h>
 
@@ -28,11 +28,11 @@ ProjectWindow::onStart()
 {
     m_title = "Project";
 
-    m_color = glm::vec4 ( 0.8f, 0.2f, 0.3f , 1.0f);
+    m_color = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
 }
 
 void
-ProjectWindow::onGUI(const UT::Timestep& )
+ProjectWindow::onGUI(const UT::Timestep &)
 {
     UT::Window *window = imguiContext()->window();
     if (window == nullptr)
@@ -43,8 +43,8 @@ ProjectWindow::onGUI(const UT::Timestep& )
 
     GR::Renderer2D::Statistics stats = GR::Renderer2D::statistics();
 
-    //int win_width = window->width();
-    //int win_height = window->height();
+    // int win_width = window->width();
+    // int win_height = window->height();
     ImGui::Text("Another window...");
 
     ImGui::Text("Render2D Stats:");
@@ -53,16 +53,17 @@ ProjectWindow::onGUI(const UT::Timestep& )
     ImGui::Text("Vertices: %d", stats.totalVertexCount());
     ImGui::Text("Indices: %d", stats.totalIndexCount());
 
-    UT::Engine& engine = UT::Engine::get();
-    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+    UT::Engine &engine = UT::Engine::get();
+    GS::SubSystem *gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
     auto scene = gs_system->m_activeScene;
 
     if (m_ctx2D)
     {
-        auto& color = scene->registry().get<SpriteRendererComponent>(
-                m_ctx2D->m_testEntity).m_color;
+        auto &color =
+                m_ctx2D->m_testEntity.getComponent<SpriteRendererComponent>()
+                        .m_color;
         ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
     }
 }
 
-} // namespace rne
+} // namespace dogb

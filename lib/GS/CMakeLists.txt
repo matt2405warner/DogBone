@@ -7,6 +7,8 @@ set(sources
         GS_Scene.cpp
         GS_TransformComponent.cpp
         GS_MeshComponent.cpp
+        GS_Scene.cpp
+        GS_Entity.cpp
         )
 
 set(headers
@@ -16,6 +18,8 @@ set(headers
         GS_Scene.h
         GS_TransformComponent.h
         GS_MeshComponent.h
+        GS_Scene.h
+        GS_Entity.h
         )
 
 db_lib(

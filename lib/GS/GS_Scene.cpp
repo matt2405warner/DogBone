@@ -4,18 +4,23 @@
 
 #include "GS_Scene.h"
 
+#include "GS_Entity.h"
+#include "GS_TransformComponent.h"
+
 namespace dogb::GS
 {
-
 void
 Scene::update(const UT::Timestep &)
 {
-
 }
-entt::entity
+
+Entity
 Scene::createEntity()
 {
-    return m_registry.create();
+    Entity entity{m_registry.create(), this};
+    // Every component must! have a transform component
+    entity.addComponent<TransformComponent>();
+    return entity;
 }
 
-}
+} // namespace dogb::GS

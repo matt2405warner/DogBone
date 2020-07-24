@@ -37,8 +37,7 @@ TestContext_2D::onInit()
     UT_ASSERT(scene != nullptr);
 
     m_testEntity = scene->createEntity();
-    scene->registry().emplace<GS::TransformComponent>(m_testEntity);
-    scene->registry().emplace<SpriteRendererComponent>(m_testEntity, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
+    m_testEntity.addComponent<SpriteRendererComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
 }
 
 void

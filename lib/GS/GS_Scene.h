@@ -13,12 +13,13 @@
 
 namespace dogb::GS
 {
+class Entity;
 
 class Scene
 {
 public:
     void update(const UT::Timestep& ts);
-    entt::entity createEntity();
+    Entity createEntity();
 
     entt::registry & registry() { return m_registry; }
 
