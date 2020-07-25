@@ -102,7 +102,7 @@ macro(db_set_compile_definitions name)
     endif()
 
     # determine platform type
-    if (CMAKE_SYSTEM_NAME STREQUAL "Window")
+    if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
         list(APPEND all_defines "DB_WINDOWS")
     elseif (CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
         list(APPEND all_defines "DB_WINDOWS")
