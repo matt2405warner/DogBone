@@ -170,7 +170,7 @@ function(db_lib)
 
     add_library(${target_name}_Headers INTERFACE)
 
-    target_compile_definitions(${target_name}_Headers INTERFACE cxx_std_${DN_CXX_VERSION})
+    target_compile_definitions(${target_name}_Headers INTERFACE cxx_std_${DB_CXX_VERSION})
     # standard compiler warnings
     set_project_warnings(${target_name}_Headers)
     # santitizer options if supported by compiler
@@ -327,7 +327,7 @@ function(db_exec)
 
     add_executable(${target_name} ${DB_EXEC_SRCS} ${DB_EXEC_HEADERS})
 
-    target_compile_definitions(${target_name} PRIVATE cxx_std_${DN_CXX_VERSION})
+    target_compile_definitions(${target_name} PRIVATE cxx_std_${DB_CXX_VERSION})
 
     # standard compiler warnings
     set_project_warnings(${target_name})
