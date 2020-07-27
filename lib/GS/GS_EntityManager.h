@@ -58,6 +58,8 @@ template <typename T>
 void internalRemove(GS::EntityManager& mgr, GS::Entity& e);
 template <typename T>
 void internalGUI(GS::EntityManager& mgr, GS::Entity& e);
+template <typename T>
+void internalCreate(GS::EntityManager& mgr, GS::Entity& e);
 }
 
 class DB_GS_API EntityManager
@@ -68,6 +70,7 @@ public:
         using Callback = std::function<void(GS::EntityManager&, GS::Entity&)>;
 
         std::string m_name;
+        Callback m_createCallback;
         Callback m_removeCallback;
         Callback m_guiCallback;
     };
@@ -84,6 +87,7 @@ public:
         {
             Info info;
             info.m_name = rttr::type::get<T>().get_name().data();
+            info.m_createCallback = details::internalCreate<T>;
             info.m_removeCallback = details::internalRemove<T>;
             info.m_guiCallback = details::internalGUI<T>;
             m_types.emplace(entt::type_info<T>::id(), info);
@@ -94,6 +98,15 @@ public:
                 std::forward<Args>(args)...);
 
         return comp;
+    }
+
+    void addComponent(Entity& entity, entt::id_type id)
+    {
+        // Find our component type and add the component
+        if (auto it = m_types.find(id); it == m_types.end())
+        {
+            it->second.m_createCallback(*this, entity);
+        }
     }
 
     template <typename T>
@@ -172,6 +185,13 @@ void internalGUI([[maybe_unused]] GS::EntityManager& mgr, GS::Entity& e)
         dogb::EditorGUI<T>(comp);
     }
 }
+
+template <typename T>
+void internalCreate(GS::EntityManager& mgr, GS::Entity& e)
+{
+    mgr.addComponent<T>(e);
+}
+
 }
 
 

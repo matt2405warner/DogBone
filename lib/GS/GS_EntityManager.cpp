@@ -15,7 +15,7 @@ EntityManager::createEntity()
 {
     Entity entity{m_registry.create(), this};
     // Every component must! have a transform component
-    m_registry.emplace<TransformComponent>(entity.m_handle);
+    addComponent<TransformComponent>(entity);
     return entity;
 }
 

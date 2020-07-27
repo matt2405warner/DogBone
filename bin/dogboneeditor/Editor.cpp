@@ -60,6 +60,36 @@ EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
         ImGui::PopID();
     }
 
+    if (ImGui::Button("Add Component"))
+    {
+        ImGui::OpenPopup("AddComponent_Popup");
+    }
+
+    if (ImGui::BeginPopup("AddComponent_Popup"))
+    {
+        ImGui::ListBoxHeader("");
+        for (auto &&[id, type] : mgr.m_types)
+        {
+            (void)id;
+
+            ImGui::PushID((int)id);
+            // Check if we can add this component.
+            bool is_selectable = !mgr.hasComponent(e, id);
+            ImGuiSelectableFlags_ flags = is_selectable ?
+                                                  ImGuiSelectableFlags_None :
+                                                  ImGuiSelectableFlags_Disabled;
+            bool selected = false;
+            if (ImGui::Selectable(type.m_name.c_str(), &selected, flags))
+            {
+                // Add the component
+                type.m_createCallback(mgr, e);
+            }
+            ImGui::PopID();
+        }
+        ImGui::ListBoxFooter();
+        ImGui::EndPopup();
+    }
+
     ImGui::PopID();
 }
 } // namespace dogb

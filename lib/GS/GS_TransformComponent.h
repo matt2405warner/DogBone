@@ -9,15 +9,20 @@
 
 #include <glm/glm.hpp>
 
+#include <rttr/type>
+
 namespace dogb::GS
 {
 
 struct DB_GS_API TransformComponent
 {
+    RTTR_ENABLE()
+public:
     TransformComponent() = default;
     TransformComponent(const glm::mat4& transform) :
         m_transform(transform)
     {}
+    virtual ~TransformComponent() = default;
 
     operator glm::mat4 & () { return m_transform; }
     operator const glm::mat4 & () const { return m_transform; }
