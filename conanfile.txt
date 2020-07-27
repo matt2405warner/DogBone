@@ -20,3 +20,6 @@ glad:gl_profile=compatibility
 glad:gl_version=4.6
 glad:spec=gl
 glad:no_loader=False
+
+rttr:shared=True
+rttr:with_rtti=True

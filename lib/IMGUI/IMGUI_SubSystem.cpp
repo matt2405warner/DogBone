@@ -4,8 +4,15 @@
 
 #include "IMGUI_SubSystem.h"
 
+#include "IMGUI_Editor.h"
+
 namespace dogb::IMGUI
 {
+void
+SubSystem::init()
+{
+    IMGUI::Editor::initialize();
+}
 
 void
 SubSystem::update(const UT::Timestep& timestep)

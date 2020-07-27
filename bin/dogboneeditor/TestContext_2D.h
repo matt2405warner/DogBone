@@ -26,13 +26,14 @@ namespace dogb
 {
 struct SpriteRendererComponent
 {
+    RTTR_ENABLE()
+public:
     SpriteRendererComponent() = default;
     SpriteRendererComponent(const glm::vec4 &color) : m_color(color) {}
+    virtual ~SpriteRendererComponent() = default;
 
     operator glm::vec4 &() { return m_color; }
     operator const glm::vec4 &() const { return m_color; }
-
-    void onGUI(GS::EntityManager& , GS::Entity& );
 
     glm::vec4 m_color{1.0f, 1.0f, 1.0f, 1.0f};
 };

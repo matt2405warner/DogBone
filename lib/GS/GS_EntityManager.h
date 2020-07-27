@@ -7,6 +7,8 @@
 
 #include "GS_API.h"
 
+#include "GS_Editor.h"
+
 #include <UT/UT_Assert.h>
 #include <UT/UT_Logger.h>
 
@@ -134,18 +136,22 @@ private:
 
 namespace details
 {
-template <typename T>
-class has_onGUI
+template <typename T, typename = void>
+struct HasOnGUIMemFn : std::false_type
 {
-    typedef char one;
-    struct two { char x[2]; };
-
-    template <typename C> static one test( typeof(&C::onGUI) ) ;
-    template <typename C> static two test(...);
-
-public:
-    enum { value = sizeof(test<T>(0)) == sizeof(char) };
 };
+
+template <typename T>
+struct HasOnGUIMemFn<
+        T,
+        std::enable_if_t<
+                std::is_member_function_pointer_v<decltype(&T::onGUI)>>>
+        : std::true_type
+{
+};
+
+template <typename T>
+constexpr bool HasOnGUIMemFn_v = HasOnGUIMemFn<T>::value;
 
 template <typename T>
 void internalRemove(GS::EntityManager& mgr, GS::Entity& e)
@@ -154,17 +160,16 @@ void internalRemove(GS::EntityManager& mgr, GS::Entity& e)
 }
 
 template <typename T>
-void internalGUI(GS::EntityManager& mgr, GS::Entity& e)
+void internalGUI([[maybe_unused]] GS::EntityManager& mgr, GS::Entity& e)
 {
-    if constexpr (has_onGUI<T>::value)
+    T &comp = e.getComponent<T>();
+    if constexpr (HasOnGUIMemFn_v<T>)
     {
-        T& comp = e.getComponent<T>();
-        comp.onGUI(mgr, e);
+        comp.onGUI();
     }
     else
     {
-        UT_LOG_WARN("No GUI function found...");
-        // TODO: figure out what to do here.
+        dogb::EditorGUI<T>(comp);
     }
 }
 }

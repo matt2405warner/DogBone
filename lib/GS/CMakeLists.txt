@@ -10,6 +10,7 @@ set(sources
         GS_Scene.cpp
         GS_Entity.cpp
         GS_EntityManager.cpp
+        GS_Editor.cpp
         )
 
 set(headers
@@ -22,6 +23,7 @@ set(headers
         GS_Scene.h
         GS_Entity.h
         GS_EntityManager.h
+        GS_Editor.h
         )
 
 db_lib(

@@ -18,4 +18,5 @@ EntityManager::createEntity()
     m_registry.emplace<TransformComponent>(entity.m_handle);
     return entity;
 }
+
 } // namespace dogb::GS

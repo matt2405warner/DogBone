@@ -26,7 +26,7 @@ class DB_IMGUI_API SubSystem : public UT::SubSystem
 public:
     using context_t = IMGUI::SubSystemContext;
 
-    void init() override {}
+    void init() override;
     void shutdown() override;
 
     void update(const UT::Timestep &timestep) override;
