@@ -131,6 +131,7 @@ public:
     template <typename T>
     void removeComponent(Entity &e)
     {
+        UT_ASSERT_MSG(isValid(e), "Cannot remove component from invalid entity");
         m_registry.remove<T>(static_cast<Entity::IdType>(e));
     }
 

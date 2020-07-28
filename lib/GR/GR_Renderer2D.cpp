@@ -158,12 +158,16 @@ Renderer2D::endScene()
 {
     UT_PROFILE_FUNCTION();
 
-    theRenderStorage.m_VB->setData(
-            theRenderStorage.m_vertices.data(),
-            theRenderStorage.m_quadVertexCount *
-                    static_cast<uint32_t>(sizeof(QuadVertex)));
+    // If we dont have anything to render then dont render anything.
+    if (theRenderStorage.m_quadVertexCount > 0)
+    {
+        theRenderStorage.m_VB->setData(
+                theRenderStorage.m_vertices.data(),
+                theRenderStorage.m_quadVertexCount *
+                        static_cast<uint32_t>(sizeof(QuadVertex)));
 
-    flush();
+        flush();
+    }
 
     // Clear out the shared pointers as we no longer need them. Make sure that
     // we dont clear the white texture
@@ -174,6 +178,10 @@ Renderer2D::endScene()
 void
 Renderer2D::flush()
 {
+    // If we dont have anything to flush dont flush anything.
+    if (theRenderStorage.m_quadVertexCount <= 0)
+        return;
+
     // Bind all of our textures
     for (uint32_t i = 0; i < theRenderStorage.m_textureSlotIndex; i++)
         theRenderStorage.m_textureSlots[i]->bind(i);
@@ -183,6 +191,8 @@ Renderer2D::flush()
 
     for (uint32_t i = 0; i < theRenderStorage.m_textureSlotIndex; i++)
         theRenderStorage.m_textureSlots[i]->unbind();
+
+    grResetBatchInfo();
 
     theRenderStorage.m_stats.m_drawCalls++;
 }
