@@ -4,7 +4,10 @@
 
 #include "DBE_Editor.h"
 
+#include <IMGUI/IMGUI_Std.h>
+
 #include <GS/GS_Entity.h>
+#include <GS/GS_TagComponent.h>
 
 #include <imgui.h>
 
@@ -20,12 +23,28 @@ Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
 
     ImGui::PushID(static_cast<int>(e_id));
 
-    ImGui::Text("ID: %d", entt::to_integral(static_cast<entt::entity>(entity)));
+    GS::TagComponent& tag = entity.getComponent<GS::TagComponent>();
+
+    tag.m_name.reserve(100);
+    IMGUI::InputText("Name", tag.m_name);
 
     for (auto &[comp_id, info] : mgr.m_types)
     {
         if (!mgr.hasComponent(entity, comp_id))
             continue;
+
+        if (info.m_type.is_valid())
+        {
+            // Check if we want to hide the component.
+            auto hide = info.m_type.get_metadata("GUI_HIDE");
+            if (hide.is_valid())
+            {
+                UT_ASSERT_MSG(hide.can_convert<bool>(), "GUI_HIDE is a bool property");
+                bool should_hide = hide.convert<bool>();
+                if (should_hide)
+                    continue;
+            }
+        }
 
         ImGui::PushID(static_cast<int>(comp_id));
 
@@ -61,7 +80,7 @@ Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
 
     if (ImGui::BeginPopup("AddComponent_Popup"))
     {
-        ImGui::ListBoxHeader("");
+        ImGui::ListBoxHeader("##");
         for (auto &&[id, type] : mgr.m_types)
         {
             (void)id;

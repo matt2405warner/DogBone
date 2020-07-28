@@ -15,6 +15,7 @@ set(sources
         GS_SystemGroup.cpp
         GS_RenderSystemGroup.cpp
         GS_World.cpp
+        GS_TagComponent.cpp
         )
 
 set(headers
@@ -33,6 +34,7 @@ set(headers
         GS_RenderSystemGroup.h
         GS_SystemGroupDefines.h
         GS_World.h
+        GS_TagComponent.h
         )
 
 db_lib(

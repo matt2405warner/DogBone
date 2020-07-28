@@ -32,7 +32,7 @@ public:
     using IdType = entt::entity;
 
     Entity() = default;
-    Entity(entt::entity handle, EntityManager *scene);
+    explicit Entity(entt::entity handle) : m_handle(handle) {}
 
     explicit operator bool() const { return m_handle == entt::null; }
     explicit operator IdType() const { return m_handle; }
@@ -47,11 +47,11 @@ public:
     void removeComponent();
 
 private:
+    static EntityManager& manager();
+
     friend class EntityManager;
 
     IdType m_handle = entt::null;
-
-    EntityManager *m_mgr = nullptr;
 };
 
 namespace details
@@ -75,6 +75,10 @@ public:
         Callback m_createCallback;
         Callback m_removeCallback;
         Callback m_guiCallback;
+        // Hold a garbage type
+        rttr::type m_type = theInvalid;
+    private:
+        static rttr::type theInvalid;
     };
 
     Entity createEntity();
@@ -91,7 +95,11 @@ public:
             info.m_name = rttr::type::get<T>().get_name().data();
             info.m_createCallback = details::internalCreate<T>;
             info.m_removeCallback = details::internalRemove<T>;
+            // NB: We only need these two for editor related things. We should
+            //      ifdef this so that its not included in an actual runtime.
             info.m_guiCallback = details::internalGUI<T>;
+            info.m_type = rttr::type::get<T>();
+
             m_types.emplace(entt::type_info<T>::id(), info);
         }
 
@@ -196,36 +204,31 @@ void internalCreate(GS::EntityManager& mgr, GS::Entity& e)
 
 }
 
-
 template <typename T, typename... Args>
 T &
 Entity::addComponent(Args &&... args)
 {
-    UT_ASSERT(m_mgr != nullptr);
-    return m_mgr->addComponent<T>(*this, std::forward<Args>(args)...);
+    return manager().addComponent<T>(*this, std::forward<Args>(args)...);
 }
 template <typename T>
 T &
 Entity::getComponent()
 {
-    UT_ASSERT(m_mgr != nullptr);
-    return m_mgr->getComponent<T>(*this);
+    return manager().getComponent<T>(*this);
 }
 
 template <typename T>
 bool
 Entity::hasComponent()
 {
-    UT_ASSERT(m_mgr != nullptr);
-    return m_mgr->hasComponent<T>(*this);
+    return manager().hasComponent<T>(*this);
 }
 
 template <typename T>
 void
 Entity::removeComponent()
 {
-    UT_ASSERT(m_mgr != nullptr);
-    m_mgr->removeComponent<T>(*this);
+    manager().removeComponent<T>(*this);
 }
 
 } // namespace dogb::GS

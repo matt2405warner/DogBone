@@ -6,7 +6,6 @@ set(sources
         EditorWindow.cpp
         main.cpp
         GameWindow.cpp
-        HierarchyWindow.cpp
         ProjectWindow.cpp
 
         TestSpriteComponent.cpp
@@ -18,7 +17,6 @@ set(headers
         EditorApp.h
         EditorWindow.h
         GameWindow.h
-        HierarchyWindow.h
         ProjectWindow.h
 
         TestSpriteComponent.h

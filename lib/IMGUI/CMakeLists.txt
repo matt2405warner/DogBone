@@ -5,6 +5,7 @@ set(sources
         IMGUI_SubSystem.cpp
         IMGUI_SubSystemContext.cpp
         IMGUI_Editor.cpp
+        IMGUI_Std.cpp
 
         IMGUI_OpenGLImpl.cpp
         IMGUI_GLFWImpl.cpp
@@ -15,6 +16,7 @@ set(headers
         IMGUI_SubSystem.h
         IMGUI_SubSystemContext.h
         IMGUI_Editor.h
+        IMGUI_Std.h
 
         IMGUI_OpenGLImpl.h
         IMGUI_GLFWImpl.h

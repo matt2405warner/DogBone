@@ -6,13 +6,13 @@
 
 #include "ConsoleWindow.h"
 #include "GameWindow.h"
-#include "HierarchyWindow.h"
 #include "ProjectWindow.h"
 #include "TestContext_3D.h"
 #include "TestSpriteComponent.h"
 
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
+#include <DBE/DBE_HierarchyWindow.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
 #include <IMGUI/IMGUI_SubSystemContext.h>
@@ -55,7 +55,7 @@ EditorWindow::initialize()
     proj_window->show();
 
     // std::optional<rttr::type> t(rttr::type::get<ProjectWindow>());
-    HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<HierarchyWindow>();
+    DBE::HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<DBE::HierarchyWindow>();
     hierarchy->show();
 
     DBE::SceneWindow *scene_win =
@@ -83,6 +83,8 @@ EditorWindow::initialize()
     auto ent = world.createEntity();
     ent.addComponent<TestSpriteComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
     // m_testEntity.addComponent<TestComponent>(5);
+    world.createEntity();
+    world.createEntity();
 
     world.m_selectedEntity = ent;
 }
