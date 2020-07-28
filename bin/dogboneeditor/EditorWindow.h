@@ -26,8 +26,6 @@ public:
     void shutdown() override ;
 
     ProjectWindow *m_projectWindow{};
-
-    std::shared_ptr<GR::Framebuffer> m_framebuffer;
 };
 
 } // namespace dogb

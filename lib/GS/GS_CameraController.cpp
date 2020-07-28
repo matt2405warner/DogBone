@@ -4,6 +4,8 @@
 
 #include "GS_CameraController.h"
 
+#include "GS_World.h"
+
 #include <CE/CE_Input.h>
 
 namespace dogb::GS
@@ -16,12 +18,13 @@ CameraController::CameraController(float aspect_ratio, bool enable_rotate)
     , m_zoomLevel(1.0f)
     , m_position(0.0f)
     , m_rotation(0.0f)
-    , m_camera(
-              -m_aspectRatio * m_zoomLevel,
-              m_aspectRatio * m_zoomLevel,
-              -m_zoomLevel,
-              m_zoomLevel)
 {
+    World& world = World::instance();
+    world.mainCamera()->m_orthographic = true;
+    world.mainCamera()->m_rect = glm::vec4(-m_aspectRatio * m_zoomLevel,
+                                m_aspectRatio * m_zoomLevel,
+                                -m_zoomLevel,
+                                m_zoomLevel);
 }
 
 CameraController::~CameraController()
@@ -58,6 +61,8 @@ CameraController::onUpdate(UT::Timestep timestep)
         m_position.y -= glm::cos(glm::radians(m_rotation)) * m_moveSpeed * ts;
     }
 
+    World& world = World::instance();
+
     if (m_enableRotate)
     {
         if (IsKeyPressed(KeyType::KEY_Q))
@@ -70,10 +75,10 @@ CameraController::onUpdate(UT::Timestep timestep)
         else if (m_rotation <= -180.0f)
             m_rotation += 360.0f;
 
-        m_camera.setRotation(m_rotation);
+        world.mainCamera()->m_rotation = m_rotation;
     }
 
-    m_camera.setPosition(m_position);
+    world.mainCamera()->m_position = m_position;
     m_moveSpeed = m_zoomLevel;
 }
 
@@ -124,10 +129,11 @@ CameraController::setZoomLevel(float level)
 void
 CameraController::refreshView()
 {
+    World& world = World::instance();
+
     m_bounds = {-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel,
                 -m_zoomLevel, m_zoomLevel};
-    m_camera.setProjection(
-            m_bounds.m_left, m_bounds.m_right, m_bounds.m_bottom, m_bounds.m_top);
+    world.mainCamera()->m_rect = glm::vec4(m_bounds.m_left, m_bounds.m_right, m_bounds.m_bottom, m_bounds.m_top);
 }
 void
 CameraController::resize(float width, float height)

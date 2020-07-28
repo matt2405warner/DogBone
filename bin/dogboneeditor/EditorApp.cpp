@@ -54,10 +54,19 @@ EditorApp::initialize(int argc, char *argv[])
     UT::Logger &logger = UT::Logger::get();
     logger.setLog(std::move(log));
 
+    UT::Engine& engine = UT::Engine::get();
+
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+    gs_system->init();
+
     WindowProperties props("Hello World", 1080, 920, 800, 600, true, true);
     createWindow<EditorWindow>(props);
 
-    GR::Renderer::init();
+    GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
+    gr_system->init();
+
+    IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+    imgui_system->init();
 
     return 0;
 }
@@ -80,15 +89,6 @@ EditorApp::exec()
 
     float last_time = 0;
 
-    GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
-    gr_system->init();
-
-    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
-    gs_system->init();
-
-    IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    imgui_system->init();
-
     while (isRunning())
     {
         using namespace CE::Input;
@@ -101,15 +101,15 @@ EditorApp::exec()
         {
             m_mainWindow->preUpdate();
 
-            gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+            GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
             gs_system->update(timestep);
 
-            imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+            IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
             imgui_system->update(timestep);
 
             m_mainWindow->postUpdate();
 
-            gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
+            GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
             gr_system->update(timestep);
         }
 
@@ -121,13 +121,13 @@ EditorApp::exec()
         // timestep.milliseconds());
     }
 
-    gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
+    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
     gs_system->shutdown();
 
-    imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+    IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
     imgui_system->shutdown();
 
-    gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
+    GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
     gr_system->shutdown();
 
     return 0;

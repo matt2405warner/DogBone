@@ -4,6 +4,8 @@
 
 #include "DBE_SceneWindow.h"
 
+#include <GS/GS_World.h>
+
 namespace dogb::DBE
 {
 SceneWindow::SceneWindow(UT::Window *window)
@@ -24,6 +26,8 @@ SceneWindow::onStart()
 void
 SceneWindow::onGUI(const UT::Timestep &ts)
 {
+    GS::World& world = GS::World::instance();
+
     bool is_focused = ImGui::IsWindowFocused();
 
     m_cameraController.setDisable(!is_focused);
@@ -43,12 +47,12 @@ SceneWindow::onGUI(const UT::Timestep &ts)
             m_viewportSize.y = 1;
 
         m_cameraController.resize(m_viewportSize.x, m_viewportSize.y);
-        m_framebuffer->resize(
+        world.mainCamera()->m_activeTexture->resize(
                 static_cast<uint32_t>(m_viewportSize.x),
                 static_cast<uint32_t>(m_viewportSize.y));
     }
 
-    uint32_t tex_id = m_framebuffer->colorAttachmentRendererID();
+    uint32_t tex_id = world.mainCamera()->m_activeTexture->colorAttachmentRendererID();
 
     ImGui::Image(
             reinterpret_cast<void *>(tex_id),

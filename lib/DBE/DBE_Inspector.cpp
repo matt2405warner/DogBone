@@ -9,6 +9,7 @@
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
 #include <GS/GS_SubSystem.h>
+#include <GS/GS_World.h>
 
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
@@ -35,6 +36,7 @@ Inspector::onGUI(const UT::Timestep&)
 
     auto scene = gs_system->m_activeScene;
 
-    DBE::Editor::drawEntity(scene->m_entityManager, scene->m_selectedEntity);
+    GS::World& world = GS::World::instance();
+    DBE::Editor::drawEntity(world.m_entityManager, world.m_selectedEntity);
 }
 }

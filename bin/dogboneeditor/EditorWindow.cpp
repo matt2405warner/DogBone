@@ -4,6 +4,13 @@
 
 #include "EditorWindow.h"
 
+#include "ConsoleWindow.h"
+#include "GameWindow.h"
+#include "HierarchyWindow.h"
+#include "ProjectWindow.h"
+#include "TestContext_3D.h"
+#include "TestSpriteComponent.h"
+
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
 
@@ -12,17 +19,11 @@
 
 #include <GS/GS_SubSystem.h>
 #include <GS/GS_TransformComponent.h>
+#include <GS/GS_World.h>
 
 #include <GR/GR_SubSystem.h>
 
 #include <UT/UT_Assert.h>
-
-#include "ConsoleWindow.h"
-#include "GameWindow.h"
-#include "HierarchyWindow.h"
-#include "ProjectWindow.h"
-#include "TestContext_2D.h"
-#include "TestContext_3D.h"
 
 namespace dogb
 {
@@ -37,7 +38,8 @@ EditorWindow::initialize()
     spec.m_width = static_cast<uint32_t>(m_width);
     spec.m_height = static_cast<uint32_t>(m_height);
 
-    m_framebuffer = GR::Framebuffer::create(spec);
+    GS::World &world = GS::World::instance();
+    world.mainCamera()->m_activeTexture = GR::Framebuffer::create(spec);
 
     auto imgui_ctx =
             addContext<IMGUI::SubSystem, IMGUI::SubSystemContext>(this);
@@ -56,8 +58,8 @@ EditorWindow::initialize()
     HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<HierarchyWindow>();
     hierarchy->show();
 
-    DBE::SceneWindow *scene_win = imgui_ctx->createGUIWindow<DBE::SceneWindow>(this);
-    scene_win->m_framebuffer = m_framebuffer;
+    DBE::SceneWindow *scene_win =
+            imgui_ctx->createGUIWindow<DBE::SceneWindow>(this);
     scene_win->m_cameraController.attach(*this);
     // imgui_ctx->dockGUIWindowUp(*scene_win);
     scene_win->show();
@@ -70,26 +72,24 @@ EditorWindow::initialize()
     // imgui_ctx->dockGUIWindowDown(*console_win);
     console_win->show();
 
-#ifndef USE_3D
-    auto ctx = addContext<GS::SubSystem, TestContext_2D>(scene_win);
-#else
+#ifdef USE_3D
     auto ctx = addContext<GS::SubSystem, TestContext_3D>(scene_win);
 #endif
 
 #ifdef USE_3D
     proj_window->m_ctx = ctx.get();
-#else
-    proj_window->m_ctx2D = ctx.get();
 #endif
 
-    ctx->m_framebuffer = m_framebuffer;
+    auto ent = world.createEntity();
+    ent.addComponent<TestSpriteComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
+    // m_testEntity.addComponent<TestComponent>(5);
+
+    world.m_selectedEntity = ent;
 }
 void
 EditorWindow::shutdown()
 {
     DesktopWindow::shutdown();
-
-    m_framebuffer = nullptr;
 }
 
 } // namespace dogb

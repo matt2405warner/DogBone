@@ -38,7 +38,6 @@ public:
     void onGUI(const UT::Timestep& ts) override;
 
     GS::CameraController m_cameraController;
-    std::shared_ptr<GR::Framebuffer> m_framebuffer;
     glm::vec2 m_viewportSize;
 };
 

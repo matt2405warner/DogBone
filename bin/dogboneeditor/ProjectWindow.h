@@ -11,20 +11,12 @@
 
 namespace dogb
 {
-class TestContext_2D;
-class TestContext_3D;
-
 class ProjectWindow : public IMGUI::Window
 {
     RTTR_ENABLE()
 public:
     void onStart() override;
     void onGUI(const UT::Timestep& ts) override;
-
-    glm::vec4 m_color;
-
-    TestContext_2D* m_ctx2D{};
-    TestContext_3D* m_ctx{};
 };
 
 } // namespace dogb

@@ -8,7 +8,7 @@
 #include "GS_API.h"
 
 #include <GR/GR_DesktopWindow.h>
-#include <GR/GR_OrthoGraphicCamera.h>
+#include <GR/GR_Camera.h>
 
 #include <UT/UT_Timestep.h>
 #include <UT/UT_EventDispatcher.h>
@@ -44,8 +44,6 @@ public:
 
     void resize(float width, float height);
 
-    [[nodiscard]] GR::OrthoGraphicCamera& camera() { return m_camera; }
-
     void setDisable(bool disable) { m_disable = disable; }
 private:
     void onMouseScrolled(float x, float y);
@@ -65,8 +63,6 @@ private:
     float m_rotation;
 
     CameraBounds m_bounds;
-    GR::OrthoGraphicCamera m_camera;
-
 private:
     boost::signals2::connection m_resizeConnection;
     boost::signals2::connection m_scrolledConnection;

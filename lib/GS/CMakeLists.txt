@@ -11,6 +11,10 @@ set(sources
         GS_Entity.cpp
         GS_EntityManager.cpp
         GS_Editor.cpp
+        GS_ComponentSystem.cpp
+        GS_SystemGroup.cpp
+        GS_RenderSystemGroup.cpp
+        GS_World.cpp
         )
 
 set(headers
@@ -24,6 +28,11 @@ set(headers
         GS_Entity.h
         GS_EntityManager.h
         GS_Editor.h
+        GS_ComponentSystem.h
+        GS_SystemGroup.h
+        GS_RenderSystemGroup.h
+        GS_SystemGroupDefines.h
+        GS_World.h
         )
 
 db_lib(

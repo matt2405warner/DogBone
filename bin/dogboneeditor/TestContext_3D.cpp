@@ -67,6 +67,7 @@ TestContext_3D::onAttach()
 
 void TestContext_3D::update(UT::Timestep)
 {
+#if 0
     UT_PROFILE_FUNCTION();
     using namespace GR::OpenGL;
 
@@ -106,6 +107,7 @@ void TestContext_3D::update(UT::Timestep)
     GR::Renderer::endScene();
 
     m_framebuffer->unbind();
+#endif
 }
 
 } // namespace dogb

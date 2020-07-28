@@ -7,12 +7,14 @@
 
 #include "GR_API.h"
 
+#include "GR_Camera.h"
+
 #include <glm/glm.hpp>
 
 namespace dogb::GR
 {
 // This is currently just a 2D camera
-class DB_GR_API OrthoGraphicCamera
+class DB_GR_API OrthoGraphicCamera : public Camera
 {
 public:
     OrthoGraphicCamera(float left, float right, float bottom, float top);

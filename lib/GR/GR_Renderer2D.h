@@ -7,7 +7,7 @@
 
 #include "GR_API.h"
 
-#include "GR_OrthoGraphicCamera.h"
+#include "GR_Camera.h"
 #include "GR_SubTexture.h"
 #include "GR_Texture.h"
 
@@ -56,7 +56,7 @@ public:
     static void init();
     static void shutdown();
 
-    static void beginScene(const OrthoGraphicCamera &camera);
+    static void beginScene(const GR::Camera &camera);
     static void endScene();
 
     static void flush();

@@ -9,8 +9,9 @@ set(sources
         HierarchyWindow.cpp
         ProjectWindow.cpp
 
+        TestSpriteComponent.cpp
         TestContext_3D.cpp
-        TestContext_2D.cpp
+        TestComponentSystem.cpp
         )
 set(headers
         ConsoleWindow.h
@@ -20,8 +21,9 @@ set(headers
         HierarchyWindow.h
         ProjectWindow.h
 
+        TestSpriteComponent.h
         TestContext_3D.h
-        TestContext_2D.h
+        TestComponentSystem.h
         )
 
 db_exec(SRCS ${sources} HEADERS ${headers})

@@ -8,6 +8,7 @@
 #include "GS_API.h"
 
 #include "GS_Editor.h"
+#include "GS_SystemGroup.h"
 
 #include <UT/UT_Assert.h>
 #include <UT/UT_Logger.h>
@@ -16,8 +17,9 @@
 
 #include <entt/entt.hpp>
 
-#include <functional>
+#include <UT/UT_Timestep.h>
 #include <array>
+#include <functional>
 
 namespace dogb::GS
 {
@@ -144,7 +146,6 @@ public:
 
     std::unordered_map<entt::id_type , Info> m_types;
 private:
-
     entt::registry m_registry;
 };
 

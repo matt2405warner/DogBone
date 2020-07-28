@@ -145,11 +145,15 @@ grFlushAndReset()
 }
 
 void
-Renderer2D::beginScene(const OrthoGraphicCamera &camera)
+Renderer2D::beginScene(const Camera &camera)
 {
+    glm::mat4 proj, view;
+    camera.calculateMatricies(proj, view);
+    glm::mat4 viewproj = proj * view;
+
     theRenderStorage.m_texShader->bind();
     theRenderStorage.m_texShader->setMat4(
-            RenderNames::u_ViewProj, camera.viewProjectionMatrix());
+            RenderNames::u_ViewProj, viewproj);
 
     grResetBatchInfo();
 }
