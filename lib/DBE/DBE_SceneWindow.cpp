@@ -1,19 +1,15 @@
 //
-// Created by matt on 2020-07-11.
+// Created by matt on 2020-07-27.
 //
 
-#include "SceneWindow.h"
+#include "DBE_SceneWindow.h"
 
-#include "TestContext_2D.h"
-
-#include <imgui.h>
-
-namespace dogb
+namespace dogb::DBE
 {
 SceneWindow::SceneWindow(UT::Window *window)
-    : m_cameraController(
-              static_cast<float>(window->width()) /
-              static_cast<float>(window->height()))
+        : m_cameraController(
+        static_cast<float>(window->width()) /
+        static_cast<float>(window->height()))
 {
 }
 
@@ -59,5 +55,4 @@ SceneWindow::onGUI(const UT::Timestep &ts)
             ImVec2{m_viewportSize.x, m_viewportSize.y}, ImVec2{0, 1},
             ImVec2{1, 0});
 }
-
-} // namespace dogb
+}

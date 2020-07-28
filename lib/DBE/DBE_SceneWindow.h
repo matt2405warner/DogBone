@@ -1,29 +1,36 @@
 //
-// Created by matt on 2020-07-11.
+// Created by matt on 2020-07-27.
 //
 
-#ifndef DOGBONE_SCENEWINDOW_H
-#define DOGBONE_SCENEWINDOW_H
+#ifndef DOGBONE_DBE_SCENEWINDOW_H
+#define DOGBONE_DBE_SCENEWINDOW_H
+
+#include "DBE_API.h"
 
 #include <IMGUI/IMGUI_Window.h>
 
 #include <GS/GS_CameraController.h>
+
 #include <GR/GR_Framebuffer.h>
 
-#include <UT/UT_Timestep.h>
-
 #include <glm/glm.hpp>
+
+#include <memory>
 
 namespace dogb
 {
     namespace UT
     {
     class Window;
+    class Timestep;
     }
+}
 
-class SceneWindow : public IMGUI::Window
+namespace dogb::DBE
 {
-    RTTR_ENABLE()
+
+class DB_DBE_API SceneWindow : public IMGUI::Window
+{
 public:
     explicit SceneWindow(UT::Window* window);
 
@@ -34,6 +41,7 @@ public:
     std::shared_ptr<GR::Framebuffer> m_framebuffer;
     glm::vec2 m_viewportSize;
 };
+
 }
 
-#endif // DOGBONE_SCENEWINDOW_H
+#endif // DOGBONE_DBE_SCENEWINDOW_H

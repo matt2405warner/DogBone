@@ -4,6 +4,9 @@
 
 #include "EditorWindow.h"
 
+#include <DBE/DBE_Inspector.h>
+#include <DBE/DBE_SceneWindow.h>
+
 #include <IMGUI/IMGUI_SubSystem.h>
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
@@ -17,9 +20,7 @@
 #include "ConsoleWindow.h"
 #include "GameWindow.h"
 #include "HierarchyWindow.h"
-#include "Inspector.h"
 #include "ProjectWindow.h"
-#include "SceneWindow.h"
 #include "TestContext_2D.h"
 #include "TestContext_3D.h"
 
@@ -43,7 +44,7 @@ EditorWindow::initialize()
     UT_ASSERT(imgui_ctx != nullptr);
 
     // Add all of the standard editor GUI windows
-    Inspector *inspector = imgui_ctx->createGUIWindow<Inspector>();
+    DBE::Inspector *inspector = imgui_ctx->createGUIWindow<DBE::Inspector>();
     // imgui_ctx->dockGUIWindowRight(*inspector);
     inspector->show();
     ProjectWindow *proj_window = imgui_ctx->createGUIWindow<ProjectWindow>();
@@ -55,7 +56,7 @@ EditorWindow::initialize()
     HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<HierarchyWindow>();
     hierarchy->show();
 
-    SceneWindow *scene_win = imgui_ctx->createGUIWindow<SceneWindow>(this);
+    DBE::SceneWindow *scene_win = imgui_ctx->createGUIWindow<DBE::SceneWindow>(this);
     scene_win->m_framebuffer = m_framebuffer;
     scene_win->m_cameraController.attach(*this);
     // imgui_ctx->dockGUIWindowUp(*scene_win);

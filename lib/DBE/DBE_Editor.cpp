@@ -1,43 +1,37 @@
 //
-// Created by matt on 2020-07-24.
+// Created by matt on 2020-07-27.
 //
 
-#include "Editor.h"
+#include "DBE_Editor.h"
 
 #include <GS/GS_Entity.h>
 
-#include <UT/UT_Logger.h>
-
-#include <rttr/type>
-
 #include <imgui.h>
 
-#include <unordered_map>
-
-namespace dogb
+namespace dogb::DBE
 {
 void
-EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
+Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
 {
-    if (!mgr.isValid(e))
+    if (!mgr.isValid(entity))
         return;
 
-    auto e_id = entt::to_integral(static_cast<GS::Entity::IdType>(e));
+    auto e_id = entt::to_integral(static_cast<GS::Entity::IdType>(entity));
 
     ImGui::PushID(static_cast<int>(e_id));
 
-    ImGui::Text("ID: %d", entt::to_integral(static_cast<entt::entity>(e)));
+    ImGui::Text("ID: %d", entt::to_integral(static_cast<entt::entity>(entity)));
 
     for (auto &[comp_id, info] : mgr.m_types)
     {
-        if (!mgr.hasComponent(e, comp_id))
+        if (!mgr.hasComponent(entity, comp_id))
             continue;
 
         ImGui::PushID(static_cast<int>(comp_id));
 
         if (ImGui::Button("-"))
         {
-            info.m_removeCallback(mgr, e);
+            info.m_removeCallback(mgr, entity);
             ImGui::PopID();
             continue;
         }
@@ -51,7 +45,7 @@ EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
             ImGui::Indent(30.0f);
 
             ImGui::PushID("Widget");
-            info.m_guiCallback(mgr, e);
+            info.m_guiCallback(mgr, entity);
             ImGui::PopID();
 
             ImGui::Unindent(30.0f);
@@ -74,7 +68,7 @@ EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
 
             ImGui::PushID((int)id);
             // Check if we can add this component.
-            bool is_selectable = !mgr.hasComponent(e, id);
+            bool is_selectable = !mgr.hasComponent(entity, id);
             ImGuiSelectableFlags_ flags = is_selectable ?
                                                   ImGuiSelectableFlags_None :
                                                   ImGuiSelectableFlags_Disabled;
@@ -82,7 +76,7 @@ EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
             if (ImGui::Selectable(type.m_name.c_str(), &selected, flags))
             {
                 // Add the component
-                type.m_createCallback(mgr, e);
+                type.m_createCallback(mgr, entity);
             }
             ImGui::PopID();
         }
@@ -92,4 +86,4 @@ EditorGUI(GS::EntityManager &mgr, GS::Entity &e)
 
     ImGui::PopID();
 }
-} // namespace dogb
+} // namespace dogb::DBE

@@ -4,7 +4,7 @@
 
 #include "IMGUI_Editor.h"
 
-#include "IMGUI_StandardTypes.h"
+#include <imgui.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>

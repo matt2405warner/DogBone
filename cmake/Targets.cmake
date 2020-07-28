@@ -71,7 +71,7 @@ macro(copy_headers command_target headers)
                 TARGET ${command_target} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E make_directory "${DB_INCLUDE_PATH}/${target_name}"
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                "Creating include directory for ${command_target}"
+                COMMENT "Creating include directory for ${command_target}"
         )
     endif()
     add_custom_command(

@@ -1,24 +1,19 @@
 //
-// Created by matt on 2020-07-11.
+// Created by matt on 2020-07-27.
 //
 
-#include "Inspector.h"
+#include "DBE_Inspector.h"
 
-#include "Editor.h"
+#include "DBE_Editor.h"
 
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
-#include <GS/GS_Scene.h>
-#include <GS/GS_EntityManager.h>
 #include <GS/GS_SubSystem.h>
 
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
 
-#include <imgui.h>
-#include <imgui_internal.h>
-
-namespace dogb
+namespace dogb::DBE
 {
 void
 Inspector::onStart()
@@ -40,7 +35,6 @@ Inspector::onGUI(const UT::Timestep&)
 
     auto scene = gs_system->m_activeScene;
 
-    EditorGUI(scene->m_entityManager, scene->m_selectedEntity);
+    DBE::Editor::drawEntity(scene->m_entityManager, scene->m_selectedEntity);
 }
-
-} // namespace dogb
+}

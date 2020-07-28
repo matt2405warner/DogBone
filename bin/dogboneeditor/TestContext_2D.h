@@ -24,6 +24,11 @@
 
 namespace dogb
 {
+namespace DBE
+{
+class SceneWindow;
+}
+
 struct SpriteRendererComponent
 {
     RTTR_ENABLE()
@@ -38,12 +43,10 @@ public:
     glm::vec4 m_color{1.0f, 1.0f, 1.0f, 1.0f};
 };
 
-class SceneWindow;
-
 class TestContext_2D : public GS::SubSystemContext
 {
 public:
-    explicit TestContext_2D(SceneWindow *scene_window);
+    explicit TestContext_2D(DBE::SceneWindow *scene_window);
 
     void onInit() override;
 
@@ -52,7 +55,7 @@ public:
     std::shared_ptr<GR::Texture2D> m_texture;
     std::shared_ptr<GR::Framebuffer> m_framebuffer;
 
-    SceneWindow *m_sceneWindow;
+    DBE::SceneWindow *m_sceneWindow;
 
     GS::Entity m_testEntity;
 };

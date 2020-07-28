@@ -27,12 +27,15 @@ class Window;
 
 namespace dogb
 {
+namespace DBE
+{
 class SceneWindow;
+}
 
 class TestContext_3D : public GS::SubSystemContext
 {
 public:
-    explicit TestContext_3D(SceneWindow* scene);
+    explicit TestContext_3D(DBE::SceneWindow* scene);
 
     void onAttach() override;
 
@@ -51,7 +54,7 @@ public:
 
     glm::vec4 m_color;
 
-    SceneWindow* m_sceneWindow;
+    DBE::SceneWindow* m_sceneWindow;
 };
 } // namespace dogb
 

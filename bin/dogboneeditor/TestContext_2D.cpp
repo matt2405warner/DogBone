@@ -4,7 +4,7 @@
 
 #include "TestContext_2D.h"
 
-#include "SceneWindow.h"
+#include <DBE/DBE_SceneWindow.h>
 
 #include <GS/GS_Scene.h>
 #include <GS/GS_SubSystem.h>
@@ -15,6 +15,7 @@
 
 #include <UT/UT_Assert.h>
 #include <UT/UT_Profiler.h>
+#include <UT/UT_Engine.h>
 
 #include <imgui.h>
 
@@ -32,7 +33,7 @@ RTTR_REGISTRATION
 
 namespace dogb
 {
-TestContext_2D::TestContext_2D(SceneWindow *scene_window)
+TestContext_2D::TestContext_2D(DBE::SceneWindow *scene_window)
     : m_sceneWindow(scene_window)
 {
 }

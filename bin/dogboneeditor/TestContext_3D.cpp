@@ -4,7 +4,7 @@
 
 #include "TestContext_3D.h"
 
-#include "SceneWindow.h"
+#include <DBE/DBE_SceneWindow.h>
 
 #include <GR/GR_OpenGLShader.h>
 #include <GR/GR_RenderBuffer.h>
@@ -20,7 +20,7 @@
 
 namespace dogb
 {
-TestContext_3D::TestContext_3D(SceneWindow* scene_window)
+TestContext_3D::TestContext_3D(DBE::SceneWindow* scene_window)
     :
     m_color({0.2f, 0.8f, 0.3f, 1.0f})
     , m_sceneWindow(scene_window)
