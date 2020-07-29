@@ -20,6 +20,7 @@
 #include <UT/UT_Timestep.h>
 #include <array>
 #include <functional>
+#include <vector>
 
 namespace dogb::GS
 {
@@ -34,8 +35,21 @@ public:
     Entity() = default;
     explicit Entity(entt::entity handle) : m_handle(handle) {}
 
-    explicit operator bool() const { return m_handle == entt::null; }
+    explicit operator bool() const { return m_handle != entt::null; }
     explicit operator IdType() const { return m_handle; }
+
+    bool operator<(const Entity &entity) const { return m_handle < entity.m_handle; }
+    bool operator>(const Entity &entity) const { return m_handle > entity.m_handle; }
+    bool operator>=(const Entity &entity) const
+    {
+        return (*this > entity) || (*this == entity);
+    }
+    bool operator<=(const Entity &entity) const
+    {
+        return (*this < entity) || (*this == entity);
+    }
+    bool operator==(const Entity &entity) const { return m_handle == entity.m_handle; }
+    bool operator!=(const Entity &entity) const { return !(*this == entity); }
 
     template <typename T, typename... Args>
     T &addComponent(Args &&... args);
@@ -47,6 +61,11 @@ public:
     void removeComponent();
 
     void clear() { m_handle = entt::null; }
+
+    void addChildEntity(const Entity& child);
+    const Entity& parent();
+    const Entity& root();
+    const std::vector<Entity>& children();
 
 private:
     static EntityManager& manager();

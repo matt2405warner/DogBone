@@ -26,7 +26,14 @@ EditorIMGUIContext::onGUI()
             {
                 GS::World& world = GS::World::instance();
                 GS::Entity e = world.createEntity();
-                world.m_selectedEntity = e;
+                if (world.m_selectedEntity)
+                {
+                    world.m_selectedEntity.addChildEntity(e);
+                }
+                else
+                {
+                    world.m_selectedEntity = e;
+                }
             }
 
             ImGui::EndMenu();

@@ -7,9 +7,13 @@
 
 #include "GS_API.h"
 
+#include "GS_Entity.h"
+
 #include <glm/glm.hpp>
 
 #include <rttr/type>
+
+#include <vector>
 
 namespace dogb::GS
 {
@@ -28,6 +32,10 @@ public:
     operator const glm::mat4 & () const { return m_transform; }
 
     glm::mat4 m_transform{1.0f};
+
+    Entity m_root;
+    Entity m_parent;
+    std::vector<Entity> m_children;
 };
 
 }

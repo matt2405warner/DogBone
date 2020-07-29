@@ -9,6 +9,11 @@
 
 #include <IMGUI/IMGUI_Window.h>
 
+namespace dogb::GS
+{
+class Entity;
+}
+
 namespace dogb::DBE
 {
 
@@ -17,6 +22,9 @@ class DB_DBE_API HierarchyWindow : public IMGUI::Window
 public:
     void onStart() override ;
     void onGUI(const UT::Timestep& ts);
+
+private:
+    void drawEntity(GS::Entity& entity, bool is_root);
 };
 
 }
