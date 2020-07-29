@@ -4,6 +4,8 @@
 
 #include "IMGUI_Editor.h"
 
+#include <GR/GR_Color.h>
+
 #include <imgui.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -56,6 +58,10 @@ Editor::initialize()
             &drawGLMVec4;
     editor->m_typeCallbacks[rttr::type::get<glm::mat4>().get_id()] =
             &drawGLMMat4;
+    editor->m_typeCallbacks[rttr::type::get<GR::Color3>().get_id()] =
+            &drawColor3;
+    editor->m_typeCallbacks[rttr::type::get<GR::Color>().get_id()] =
+            &drawColor;
 
     // Register our extra types
     RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::vec2);
@@ -303,6 +309,46 @@ Editor::drawGLMMat4(
             *mat = glm::translate(glm::mat4(), translation) *
                   glm::toMat4(quat) * glm::scale(glm::mat4(), scale);
         }
+    }
+}
+void
+Editor::drawColor3(
+        rttr::instance &_obj,
+        const rttr::type &t,
+        const rttr::property &prop)
+{
+    if (prop.is_valid())
+    {
+        GR::Color3 color = prop.get_value(_obj).convert<GR::Color3>();
+
+        rttr::string_view view = prop.get_name();
+        if (ImGui::ColorEdit3(view.begin(), glm::value_ptr(color.toVec3())))
+            prop.set_value(_obj, color);
+    }
+    else if (t.is_valid())
+    {
+        GR::Color3 *color = _obj.try_convert<GR::Color3>();
+        ImGui::ColorEdit3("Color", glm::value_ptr(color->toVec3()));
+    }
+}
+void
+Editor::drawColor(
+        rttr::instance &_obj,
+        const rttr::type &t,
+        const rttr::property &prop)
+{
+    if (prop.is_valid())
+    {
+        GR::Color color = prop.get_value(_obj).convert<GR::Color>();
+
+        rttr::string_view view = prop.get_name();
+        if (ImGui::ColorEdit3(view.begin(), glm::value_ptr(color.toVec4())))
+            prop.set_value(_obj, color);
+    }
+    else if (t.is_valid())
+    {
+        GR::Color *color = _obj.try_convert<GR::Color>();
+        ImGui::ColorEdit3("Color", glm::value_ptr(color->toVec4()));
     }
 }
 

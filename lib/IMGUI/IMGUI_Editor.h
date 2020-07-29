@@ -29,6 +29,9 @@ private:
     static void drawGLMVec3(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
     static void drawGLMVec4(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
     static void drawGLMMat4(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
+    // Color Types
+    static void drawColor3(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
+    static void drawColor(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
 };
 
 }

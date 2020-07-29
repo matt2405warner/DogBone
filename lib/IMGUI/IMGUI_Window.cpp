@@ -10,12 +10,6 @@
 
 #include <rttr/registration>
 
-RTTR_REGISTRATION
-{
-    using namespace rttr;
-    registration::class_<dogb::IMGUI::Window>("dogb::IMGUI::Window");
-}
-
 namespace dogb::IMGUI
 {
 IMGUI::SubSystemContext *

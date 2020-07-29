@@ -23,7 +23,6 @@ class SubSystemContext;
 class DB_IMGUI_API Window
 {
     friend class IMGUI::SubSystemContext;
-    RTTR_ENABLE()
 public:
     explicit Window()
         : m_isOpen(false), m_initializedDock(false)

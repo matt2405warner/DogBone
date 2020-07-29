@@ -12,6 +12,7 @@ set(sources
         GR_SubTexture.cpp
         GR_Framebuffer.cpp
         GR_Camera.cpp
+        GR_Color.cpp
 
         GR_OpenGLShader.cpp
         GR_OpenGLVertexArray.cpp
@@ -33,6 +34,7 @@ set(headers
         GR_SubTexture.h
         GR_Framebuffer.h
         GR_Camera.h
+        GR_Color.h
 
         GR_OpenGLShader.h
         GR_OpenGLVertexArray.h
