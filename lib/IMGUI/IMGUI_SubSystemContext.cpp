@@ -129,13 +129,13 @@ void SubSystemContext::update(UT::Timestep ts)
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
+    onGUI();
+#if 0
     ImGuiIO &io = ImGui::GetIO();
-
     float width = static_cast<float>(m_window->width());
     float height = static_cast<float>(m_window->height());
     io.DisplaySize = ImVec2(width, height);
 
-#if 0
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar;
     window_flags |= ImGuiWindowFlags_NoDocking;
     ImGuiViewport *viewport = ImGui::GetMainViewport();

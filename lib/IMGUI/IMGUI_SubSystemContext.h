@@ -39,6 +39,7 @@ public:
     void onShutdown();
 
     void update(UT::Timestep timestep) override;
+    virtual void onGUI() {}
 
     void setWindow(UT::Window *window) { m_window = window; }
     [[nodiscard]] UT::Window *window() const { return m_window; }

@@ -13,6 +13,7 @@
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
 #include <DBE/DBE_HierarchyWindow.h>
+#include <DBE/DBE_EditorIMGUIContext.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
 #include <IMGUI/IMGUI_SubSystemContext.h>
@@ -42,7 +43,7 @@ EditorWindow::initialize()
     world.mainCamera()->m_activeTexture = GR::Framebuffer::create(spec);
 
     auto imgui_ctx =
-            addContext<IMGUI::SubSystem, IMGUI::SubSystemContext>(this);
+            addContext<IMGUI::SubSystem, DBE::EditorIMGUIContext>(this);
     UT_ASSERT(imgui_ctx != nullptr);
 
     // Add all of the standard editor GUI windows
