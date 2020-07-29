@@ -14,6 +14,8 @@
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
 
+#include <imgui.h>
+
 namespace dogb::DBE
 {
 void
@@ -31,12 +33,9 @@ Inspector::onGUI(const UT::Timestep&)
         UT_LOG_ERROR("IMGUI context is not attached to a window.");
         return;
     }
-    UT::Engine& engine = UT::Engine::get();
-    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
-
-    auto scene = gs_system->m_activeScene;
 
     GS::World& world = GS::World::instance();
+
     DBE::Editor::drawEntity(world.m_entityManager, world.m_selectedEntity);
 }
 }

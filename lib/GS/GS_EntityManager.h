@@ -46,6 +46,8 @@ public:
     template <typename T>
     void removeComponent();
 
+    void clear() { m_handle = entt::null; }
+
 private:
     static EntityManager& manager();
 
@@ -148,6 +150,13 @@ public:
     bool isValid(const Entity &e) const
     {
         return m_registry.valid(static_cast<Entity::IdType>(e));
+    }
+
+    void destroy(Entity& e)
+    {
+        entt::entity entity = static_cast<entt::entity>(e);
+        m_registry.destroy(entity);
+        e.m_handle = entt::null;
     }
 
     Registry& registry() { return m_registry; }
