@@ -25,7 +25,8 @@ EditorIMGUIContext::onGUI()
             if (ImGui::MenuItem("Create Empty"))
             {
                 GS::World& world = GS::World::instance();
-                world.createEntity();
+                GS::Entity e = world.createEntity();
+                world.m_selectedEntity = e;
             }
 
             ImGui::EndMenu();
