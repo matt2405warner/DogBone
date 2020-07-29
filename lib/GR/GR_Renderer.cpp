@@ -4,9 +4,9 @@
 
 #include "GR_Renderer.h"
 
-#include "GR_OrthoGraphicCamera.h"
 #include "GR_VertexArray.h"
 #include "GR_Shader.h"
+#include "GR_Camera.h"
 
 #include "GR_OpenGLRenderer.h"
 #include "GR_OpenGLShader.h"
@@ -31,9 +31,12 @@ Renderer::submit(Shader *shader, std::shared_ptr<VertexArray> vao, const glm::ma
 }
 
 void
-Renderer::beginScene(OrthoGraphicCamera &camera)
+Renderer::beginScene(Camera &camera)
 {
-    theSceneCtx.m_viewProjMatrix = camera.viewProjectionMatrix();
+    glm::mat4 proj, view;
+    camera.calculateMatricies(proj, view);
+
+    theSceneCtx.m_viewProjMatrix = proj * view;
 }
 
 void

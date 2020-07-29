@@ -22,7 +22,7 @@ class Window;
 namespace dogb::GR
 {
 class VertexArray;
-class OrthoGraphicCamera;
+class Camera;
 class Shader;
 
 enum class Api
@@ -61,7 +61,7 @@ public:
     static inline Api api() { return theApi->api(); }
 
     static void init() { theApi->init(); }
-    static void beginScene(OrthoGraphicCamera &camera);
+    static void beginScene(Camera &camera);
     static void endScene();
     static void drawIndexed(std::shared_ptr<VertexArray> vao, uint32_t count = 0)
     {
