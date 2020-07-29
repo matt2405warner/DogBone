@@ -8,13 +8,10 @@
 
 #include <IMGUI/IMGUI_SubSystemContext.h>
 
-#include <GS/GS_SubSystem.h>
 #include <GS/GS_World.h>
 
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
-
-#include <imgui.h>
 
 namespace dogb::DBE
 {
