@@ -259,11 +259,11 @@ Editor::drawGLMMat4(
 
         glm::vec3 euler_rotation = glm::eulerAngles(rotation);
 
-        if (ImGui::InputFloat3("Position", glm::value_ptr(translation)))
+        if (ImGui::DragFloat3("Position", glm::value_ptr(translation)))
             modified |= true;
-        if (ImGui::InputFloat3("Rotation", glm::value_ptr(euler_rotation)))
+        if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler_rotation)))
             modified |= true;
-        if (ImGui::InputFloat3("Scale", glm::value_ptr(scale)))
+        if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
             modified |= true;
 
         if (modified)
@@ -294,11 +294,11 @@ Editor::drawGLMMat4(
 
         glm::vec3 euler_rotation = glm::eulerAngles(rotation);
 
-        if (ImGui::InputFloat3("Position", glm::value_ptr(translation)))
+        if (ImGui::DragFloat3("Position", glm::value_ptr(translation)))
             modified |= true;
-        if (ImGui::InputFloat3("Rotation", glm::value_ptr(euler_rotation)))
+        if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler_rotation)))
             modified |= true;
-        if (ImGui::InputFloat3("Scale", glm::value_ptr(scale)))
+        if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
             modified |= true;
 
         if (modified)
