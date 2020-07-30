@@ -75,7 +75,7 @@ Editor::initialize()
 void
 Editor::drawInt32Clb(
         rttr::instance &_obj,
-        const rttr::type &t,
+        const rttr::type &,
         const rttr::property &prop)
 {
     // For some reason using numeric limits causes imgui to freak out so we use
@@ -85,31 +85,35 @@ Editor::drawInt32Clb(
 
     if (prop.is_valid())
     {
-        auto min_meta = prop.get_metadata("min_value");
-        auto max_meta = prop.get_metadata("max_value");
-        min = imgui_VariantToInt32(min_meta, min);
-        max = imgui_VariantToInt32(max_meta, max);
 
         int32_t i = prop.get_value(_obj).to_int32();
         rttr::string_view view = prop.get_name();
-        if (ImGui::SliderInt(view.begin(), &i, min, max))
-            prop.set_value(_obj, i);
-    }
-    else if (t.is_valid())
-    {
-        auto min_meta = t.get_metadata("min_value");
-        auto max_meta = t.get_metadata("max_value");
-        min = imgui_VariantToInt32(min_meta, min);
-        max = imgui_VariantToInt32(max_meta, max);
+        bool value_changed = false;
 
-        int32_t *i = _obj.try_convert<int32_t>();
-        ImGui::SliderInt("int", i, min, max);
+        auto min_meta = prop.get_metadata("min_value");
+        auto max_meta = prop.get_metadata("max_value");
+        if (min_meta.is_valid() && max_meta.is_valid())
+        {
+            min = imgui_VariantToInt32(min_meta, min);
+            max = imgui_VariantToInt32(max_meta, max);
+
+            if (ImGui::SliderInt(view.begin(), &i, min, max))
+                value_changed = true;
+        }
+        else
+        {
+            if (ImGui::DragInt(view.begin(), &i))
+                value_changed = true;
+        }
+
+        if (value_changed)
+            prop.set_value(_obj, i);
     }
 }
 void
 Editor::drawGLMvec2(
         rttr::instance &_obj,
-        const rttr::type &t,
+        const rttr::type &,
         const rttr::property &prop)
 {
     // For some reason using numeric limits causes imgui to freak out so we use
@@ -121,34 +125,39 @@ Editor::drawGLMvec2(
     {
         auto min_meta = prop.get_metadata("min_value");
         auto max_meta = prop.get_metadata("max_value");
-        min = imgui_VariantToFloat(min_meta, min);
-        max = imgui_VariantToFloat(max_meta, max);
 
         bool modified = false;
         glm::vec2 v = prop.get_value(_obj).convert<glm::vec2>();
         rttr::string_view view = prop.get_name();
 
         ImGui::Text("%s:", view.begin());
-        if (ImGui::SliderFloat("x", &(v.x), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("y", &(v.y), min, max))
-            modified |= true;
+
+        if (min_meta.is_valid() && max_meta.is_valid())
+        {
+            min = imgui_VariantToFloat(min_meta, min);
+            max = imgui_VariantToFloat(max_meta, max);
+            if (ImGui::SliderFloat("x", &(v.x), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("y", &(v.y), min, max))
+                modified |= true;
+        }
+        else
+        {
+            if (ImGui::DragFloat("x", &(v.x)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("y", &(v.y)))
+                modified |= true;
+        }
 
         if (modified)
             prop.set_value(_obj, v);
-    }
-    else if (t.is_valid())
-    {
-        glm::vec2 *v = _obj.try_convert<glm::vec2>();
-        ImGui::Text("%s:", t.get_name().begin());
-        ImGui::SliderFloat("x", &(v->x), min, max);
-        ImGui::SliderFloat("y", &(v->y), min, max);
     }
 }
 void
 Editor::drawGLMVec3(
         rttr::instance &_obj,
-        const rttr::type &t,
+        const rttr::type &,
         const rttr::property &prop)
 {
     // For some reason using numeric limits causes imgui to freak out so we use
@@ -160,38 +169,45 @@ Editor::drawGLMVec3(
     {
         auto min_meta = prop.get_metadata("min_value");
         auto max_meta = prop.get_metadata("max_value");
-        min = imgui_VariantToFloat(min_meta, min);
-        max = imgui_VariantToFloat(max_meta, max);
 
         bool modified = false;
         glm::vec3 v = prop.get_value(_obj).convert<glm::vec3>();
         rttr::string_view view = prop.get_name();
 
         ImGui::Text("%s:", view.begin());
-        if (ImGui::SliderFloat("x", &(v.x), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("y", &(v.y), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("z", &(v.z), min, max))
-            modified |= true;
+
+        if (min_meta.is_valid() && max_meta.is_valid())
+        {
+            min = imgui_VariantToFloat(min_meta, min);
+            max = imgui_VariantToFloat(max_meta, max);
+            if (ImGui::SliderFloat("x", &(v.x), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("y", &(v.y), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("z", &(v.z), min, max))
+                modified |= true;
+        }
+        else
+        {
+            if (ImGui::DragFloat("x", &(v.x)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("y", &(v.y)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("z", &(v.z)))
+                modified |= true;
+        }
 
         if (modified)
             prop.set_value(_obj, v);
-    }
-    else if (t.is_valid())
-    {
-        glm::vec3 *v = _obj.try_convert<glm::vec3>();
-        ImGui::Text("%s:", t.get_name().begin());
-        ImGui::SliderFloat("x", &(v->x), min, max);
-        ImGui::SliderFloat("y", &(v->y), min, max);
-        ImGui::SliderFloat("z", &(v->z), min, max);
     }
 }
 
 void
 Editor::drawGLMVec4(
         rttr::instance &_obj,
-        const rttr::type &t,
+        const rttr::type &,
         const rttr::property &prop)
 {
     // For some reason using numeric limits causes imgui to freak out so we use
@@ -203,34 +219,43 @@ Editor::drawGLMVec4(
     {
         auto min_meta = prop.get_metadata("min_value");
         auto max_meta = prop.get_metadata("max_value");
-        min = imgui_VariantToFloat(min_meta, min);
-        max = imgui_VariantToFloat(max_meta, max);
 
         bool modified = false;
         glm::vec4 v = prop.get_value(_obj).convert<glm::vec4>();
         rttr::string_view view = prop.get_name();
 
         ImGui::Text("%s:", view.begin());
-        if (ImGui::SliderFloat("x", &(v.x), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("y", &(v.y), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("z", &(v.z), min, max))
-            modified |= true;
-        if (ImGui::SliderFloat("w", &(v.w), min, max))
-            modified |= true;
+
+        if (min_meta.is_valid() && max_meta.is_valid())
+        {
+            min = imgui_VariantToFloat(min_meta, min);
+            max = imgui_VariantToFloat(max_meta, max);
+            if (ImGui::SliderFloat("x", &(v.x), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("y", &(v.y), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("z", &(v.z), min, max))
+                modified |= true;
+            if (ImGui::SliderFloat("w", &(v.w), min, max))
+                modified |= true;
+        }
+        else
+        {
+            if (ImGui::DragFloat("x", &(v.x)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("y", &(v.y)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("z", &(v.z)))
+                modified |= true;
+            ImGui::SameLine();
+            if (ImGui::DragFloat("w", &(v.w)))
+                modified |= true;
+        }
 
         if (modified)
             prop.set_value(_obj, v);
-    }
-    else if (t.is_valid())
-    {
-        glm::vec4 *v = _obj.try_convert<glm::vec4>();
-        ImGui::Text("%s:", t.get_name().begin());
-        ImGui::SliderFloat("x", &(v->x), min, max);
-        ImGui::SliderFloat("y", &(v->y), min, max);
-        ImGui::SliderFloat("z", &(v->z), min, max);
-        ImGui::SliderFloat("w", &(v->w), min, max);
     }
 }
 
@@ -283,7 +308,6 @@ Editor::drawGLMMat4(
 
         bool modified = false;
 
-        glm::vec3 position;
         glm::vec3 scale;
         glm::quat rotation;
         glm::vec3 translation;
