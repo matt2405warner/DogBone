@@ -18,10 +18,8 @@ class DB_GR_API Camera
 public:
     Camera();
 
-    void calculateMatricies(glm::mat4& proj, glm::mat4& view) const;
+    void calculateMatricies(glm::mat4& proj) const;
 
-    glm::vec3 m_position;
-    float m_rotation = 0.0f;
     bool m_orthographic = true;
     glm::vec4 m_rect;
     std::shared_ptr<Framebuffer> m_activeTexture;

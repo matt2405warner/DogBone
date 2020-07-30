@@ -34,7 +34,7 @@ World::update(const UT::Timestep &ts)
 void
 World::init()
 {
-    m_mainCamera = std::make_shared<GR::Camera>();
+    m_mainCamera = std::make_shared<GS::Camera>();
 
     m_systemInitGroup = std::make_shared<SystemGroup>(SystemGroupType::INIT);
     m_systemSimGroup = std::make_shared<SystemGroup>(SystemGroupType::SIMULATION);

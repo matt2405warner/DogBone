@@ -112,14 +112,16 @@ public:
         // Create the callbacks for this new component type.
         if (auto it = m_types.find(entt::type_info<T>::id()); it == m_types.end())
         {
-            Info info;
-            info.m_name = rttr::type::get<T>().get_name().data();
-            info.m_createCallback = details::internalCreate<T>;
-            info.m_removeCallback = details::internalRemove<T>;
-            // NB: We only need these two for editor related things. We should
-            //      ifdef this so that its not included in an actual runtime.
-            info.m_guiCallback = details::internalGUI<T>;
-            info.m_type = rttr::type::get<T>();
+            Info info
+            {
+                .m_name = rttr::type::get<T>().get_name().data(),
+                .m_createCallback = details::internalCreate<T>,
+                .m_removeCallback = details::internalRemove<T>,
+                // NB: We only need these two for editor related things. We should
+                //      ifdef this so that its not included in an actual runtime.
+                .m_guiCallback = details::internalGUI<T>,
+                .m_type = rttr::type::get<T>(),
+            };
 
             m_types.emplace(entt::type_info<T>::id(), info);
         }

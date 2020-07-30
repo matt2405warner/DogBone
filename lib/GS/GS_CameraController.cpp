@@ -61,7 +61,9 @@ CameraController::onUpdate(UT::Timestep timestep)
         m_position.y -= glm::cos(glm::radians(m_rotation)) * m_moveSpeed * ts;
     }
 
+#if 0
     World& world = World::instance();
+#endif
 
     if (m_enableRotate)
     {
@@ -75,10 +77,14 @@ CameraController::onUpdate(UT::Timestep timestep)
         else if (m_rotation <= -180.0f)
             m_rotation += 360.0f;
 
+#if 0
         world.mainCamera()->m_rotation = m_rotation;
+#endif
     }
 
+#if 0
     world.mainCamera()->m_position = m_position;
+#endif
     m_moveSpeed = m_zoomLevel;
 }
 

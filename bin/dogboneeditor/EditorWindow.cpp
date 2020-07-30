@@ -8,7 +8,6 @@
 #include "GameWindow.h"
 #include "ProjectWindow.h"
 #include "TestContext_3D.h"
-#include "TestSpriteComponent.h"
 
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
@@ -21,6 +20,8 @@
 #include <GS/GS_SubSystem.h>
 #include <GS/GS_TransformComponent.h>
 #include <GS/GS_World.h>
+#include <GS/GS_MeshComponent.h>
+#include <GS/GS_CameraComponent.h>
 
 #include <GR/GR_SubSystem.h>
 
@@ -82,10 +83,13 @@ EditorWindow::initialize()
 #endif
 
     auto ent = world.createEntity();
-    ent.addComponent<TestSpriteComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ent.addComponent<GS::MeshComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
     // m_testEntity.addComponent<TestComponent>(5);
     world.createEntity();
     world.createEntity();
+    auto cam_ent = world.createEntity();
+    GS::CameraComponent& cam_comp = cam_ent.addComponent<GS::CameraComponent>();
+    cam_comp.m_camera = world.mainCamera();
 
     world.m_selectedEntity = ent;
 }

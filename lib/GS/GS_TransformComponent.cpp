@@ -9,7 +9,6 @@
 RTTR_REGISTRATION
 {
     using namespace rttr;
-    using namespace rttr;
     rttr::registration::class_<dogb::GS::TransformComponent>("TransformComponent")
             .constructor<>()
             .property("m_transform", &dogb::GS::TransformComponent::m_transform);

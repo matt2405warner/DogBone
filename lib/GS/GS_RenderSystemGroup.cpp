@@ -19,20 +19,9 @@ RenderSystemGroup::RenderSystemGroup()
 void
 RenderSystemGroup::onUpdate(const dogb::UT::Timestep &ts)
 {
-    std::shared_ptr<GR::Camera> main_camera = World::instance().mainCamera();
-
     GR::Renderer::setClearColor({0.0f, 0.0f, 0.0f, 1.0f});
     GR::Renderer::clear();
 
-    if (main_camera->m_activeTexture)
-        main_camera->m_activeTexture->bind();
-
-    GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
-    GR::Renderer::clear();
-
     SystemGroup::onUpdate(ts);
-
-    if (main_camera->m_activeTexture)
-        main_camera->m_activeTexture->unbind();
 }
 } // namespace dogb::GS

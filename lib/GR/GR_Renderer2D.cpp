@@ -145,11 +145,12 @@ grFlushAndReset()
 }
 
 void
-Renderer2D::beginScene(const Camera &camera)
+Renderer2D::beginScene(const Camera &camera, const glm::mat4& transform)
 {
-    glm::mat4 proj, view;
-    camera.calculateMatricies(proj, view);
-    glm::mat4 viewproj = proj * view;
+    glm::mat4 proj;
+    camera.calculateMatricies(proj);
+
+    glm::mat4 viewproj = proj * glm::inverse(transform);
 
     theRenderStorage.m_texShader->bind();
     theRenderStorage.m_texShader->setMat4(
@@ -509,7 +510,7 @@ Renderer2D::drawRotatedQuad(
 void
 Renderer2D::resetStats()
 {
-    memset(&theRenderStorage.m_stats, 0, sizeof(Statistics));
+    theRenderStorage.m_stats = Statistics();
 }
 const Renderer2D::Statistics &
 Renderer2D::statistics()
