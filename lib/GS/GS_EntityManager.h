@@ -9,9 +9,12 @@
 
 #include "GS_Editor.h"
 #include "GS_SystemGroup.h"
+#include "GS_GUITraits.h"
 
 #include <UT/UT_Assert.h>
 #include <UT/UT_Logger.h>
+
+#include <imgui.h>
 
 #include <rttr/type>
 
@@ -203,8 +206,22 @@ struct HasOnGUIMemFn<
 {
 };
 
+template <typename T, typename = void>
+struct HasGUITraits : std::false_type
+{};
+
+template <typename T>
+struct HasGUITraits<
+        T,
+        decltype(std::declval<T>().m_guiTraits, void())> : std::true_type
+{
+
+};
+
 template <typename T>
 constexpr bool HasOnGUIMemFn_v = HasOnGUIMemFn<T>::value;
+template <typename T>
+constexpr bool HasGUITraits_v = HasGUITraits<T>::value;
 
 template <typename T>
 void internalRemove(GS::EntityManager& mgr, GS::Entity& e)
@@ -215,14 +232,51 @@ void internalRemove(GS::EntityManager& mgr, GS::Entity& e)
 template <typename T>
 void internalGUI([[maybe_unused]] GS::EntityManager& mgr, GS::Entity& e)
 {
-    T &comp = e.getComponent<T>();
-    if constexpr (HasOnGUIMemFn_v<T>)
+    constexpr GUI_TRAITS traits = GUITypeTraits<T>();
+
+    // Check if we want to hide the component
+    if constexpr (traits & GUI_HIDE)
     {
-        comp.onGUI();
+        return;
     }
     else
     {
-        dogb::EditorGUI<T>(comp);
+        ImGui::PushID(static_cast<int>(rttr::type::get<T>().get_id()));
+
+        if (!(traits & GUI_NO_REMOVE))
+        {
+            if (ImGui::Button("-"))
+            {
+                mgr.removeComponent<T>(e);
+                ImGui::PopID();
+                return;
+            }
+            else
+            {
+                ImGui::SameLine();
+            }
+        }
+
+        if (ImGui::CollapsingHeader(T::theGUIName))
+        {
+            ImGui::Indent(30.0f);
+
+            ImGui::PushID("Widget");
+            T &comp = e.getComponent<T>();
+
+            if constexpr (HasOnGUIMemFn_v<T>)
+            {
+                comp.onGUI();
+            }
+            else
+            {
+                dogb::EditorGUI<T>(comp);
+            }
+            ImGui::PopID();
+
+            ImGui::Unindent(30.0f);
+        }
+        ImGui::PopID();
     }
 }
 

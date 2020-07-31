@@ -10,6 +10,8 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
+#include <rttr/type>
+
 namespace dogb::CE
 {
 class UUID : public boost::uuids::uuid
@@ -22,8 +24,10 @@ public:
 
 class Asset
 {
+    RTTR_ENABLE()
 public:
     Asset() : m_id() {}
+    virtual ~Asset() = default;
 
     [[nodiscard]] const UUID &id() const { return m_id; }
 

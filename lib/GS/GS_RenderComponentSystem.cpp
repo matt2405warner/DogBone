@@ -44,7 +44,7 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
         GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         GR::Renderer::clear();
 
-        GR::Renderer2D::beginScene(*camera.m_camera, glm::mat4(1.0f));
+        GR::Renderer2D::beginScene(*camera.m_camera, cam_transform);
 
         auto mesh_group =
                 mgr.registry().group<TransformComponent, MeshComponent>();

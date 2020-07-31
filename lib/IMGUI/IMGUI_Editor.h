@@ -16,23 +16,7 @@
 namespace dogb::IMGUI
 {
 
-class DB_IMGUI_API Editor : public GS::EditorBase
-{
-public:
-    static void initialize();
-
-private:
-    // Standard Types
-    static void drawInt32Clb(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    // GLM Types
-    static void drawGLMvec2(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    static void drawGLMVec3(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    static void drawGLMVec4(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    static void drawGLMMat4(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    // Color Types
-    static void drawColor3(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-    static void drawColor(rttr::instance& _obj, const rttr::type& t, const rttr::property& prop);
-};
+DB_IMGUI_API void EditorDrawTransform(glm::mat4& value);
 
 }
 

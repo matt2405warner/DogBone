@@ -4,12 +4,10 @@
 
 #include "GS_TransformComponent.h"
 
-#include <rttr/registration>
+#include <IMGUI/IMGUI_Editor.h>
 
-RTTR_REGISTRATION
+void
+dogb::GS::TransformComponent::onGUI()
 {
-    using namespace rttr;
-    rttr::registration::class_<dogb::GS::TransformComponent>("TransformComponent")
-            .constructor<>()
-            .property("m_transform", &dogb::GS::TransformComponent::m_transform);
+    IMGUI::EditorDrawTransform(m_transform);
 }

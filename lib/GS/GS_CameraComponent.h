@@ -15,14 +15,17 @@ namespace dogb::GS
 {
 class DB_GS_API CameraComponent
 {
-    RTTR_ENABLE()
 public:
+    static constexpr const char* theGUIName = "Camera";
+
     virtual ~CameraComponent()
     {
         // Disable the camera now that we are not using it.
         if (m_camera)
             m_camera->m_isDisabled = true;
     }
+
+    void onGUI();
 
     std::shared_ptr<GS::Camera> m_camera;
 };

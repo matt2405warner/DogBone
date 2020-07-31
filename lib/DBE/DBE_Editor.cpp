@@ -46,31 +46,7 @@ Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
             }
         }
 
-        ImGui::PushID(static_cast<int>(comp_id));
-
-        if (ImGui::Button("-"))
-        {
-            info.m_removeCallback(mgr, entity);
-            ImGui::PopID();
-            continue;
-        }
-        else
-        {
-            ImGui::SameLine();
-        }
-
-        if (ImGui::CollapsingHeader(info.m_name.c_str()))
-        {
-            ImGui::Indent(30.0f);
-
-            ImGui::PushID("Widget");
-            info.m_guiCallback(mgr, entity);
-            ImGui::PopID();
-
-            ImGui::Unindent(30.0f);
-        }
-
-        ImGui::PopID();
+        info.m_guiCallback(mgr, entity);
     }
 
     if (ImGui::Button("Add Component"))
@@ -81,10 +57,8 @@ Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
     if (ImGui::BeginPopup("AddComponent_Popup"))
     {
         ImGui::ListBoxHeader("##");
-        for (auto &&[id, type] : mgr.m_types)
+        for (auto &&[id, info] : mgr.m_types)
         {
-            (void)id;
-
             ImGui::PushID((int)id);
             // Check if we can add this component.
             bool is_selectable = !mgr.hasComponent(entity, id);
@@ -92,10 +66,10 @@ Editor::drawEntity(GS::EntityManager &mgr, GS::Entity &entity)
                                                   ImGuiSelectableFlags_None :
                                                   ImGuiSelectableFlags_Disabled;
             bool selected = false;
-            if (ImGui::Selectable(type.m_name.c_str(), &selected, flags))
+            if (ImGui::Selectable(info.m_name.c_str(), &selected, flags))
             {
                 // Add the component
-                type.m_createCallback(mgr, entity);
+                info.m_createCallback(mgr, entity);
             }
             ImGui::PopID();
         }

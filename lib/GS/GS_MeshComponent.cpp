@@ -4,15 +4,15 @@
 
 #include "GS_MeshComponent.h"
 
-#include <rttr/registration>
+#include <imgui.h>
 
-RTTR_REGISTRATION
+#include <glm/gtc/type_ptr.hpp>
+
+namespace dogb::GS
 {
-    using namespace rttr;
-    rttr::registration::class_<dogb::GS::MeshComponent>("Mesh")
-            .constructor<>()
-            .property("m_color", &dogb::GS::MeshComponent::m_color)
-                    (
-                            rttr::metadata("min_value", 0.0f),
-                            rttr::metadata("max_value", 1.0f));
+void
+dogb::GS::MeshComponent::onGUI()
+{
+    ImGui::ColorEdit4("color", glm::value_ptr(m_color.toVec4()));
+}
 }

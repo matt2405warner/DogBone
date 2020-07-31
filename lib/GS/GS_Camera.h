@@ -11,11 +11,16 @@
 
 #include <CE/CE_Asset.h>
 
+#include <rttr/type.h>
+
 namespace dogb::GS
 {
-class DB_GS_API Camera : public GR::Camera, CE::Asset
+class DB_GS_API Camera : public GR::Camera, public CE::Asset
 {
+    RTTR_ENABLE(GR::Camera, CE::Asset)
 public:
+    void onGUI();
+
     bool m_isDisabled = false;
 };
 }

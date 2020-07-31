@@ -41,6 +41,7 @@ set(headers
         GS_CameraComponent.h
         GS_RenderComponentSystem.h
         GS_Camera.h
+        GS_GUITraits.h
         )
 
 db_lib(
@@ -48,4 +49,5 @@ db_lib(
         HEADERS ${headers}
 )
 
-db_link_libraries(PUBLIC GR CONAN_PKG::entt)
+# At some point we need to have a clear line between runtime and editor.
+db_link_libraries(PUBLIC GR IMGUI CONAN_PKG::entt)

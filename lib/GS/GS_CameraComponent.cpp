@@ -3,13 +3,16 @@
 //
 
 #include "GS_CameraComponent.h"
+#include "GS_Editor.h"
 
-#include <rttr/registration>
-
-RTTR_REGISTRATION
+namespace dogb::GS
 {
-    using namespace rttr;
-    rttr::registration::class_<dogb::GS::CameraComponent>("CameraComponent")
-            .constructor<>()
-            .property("m_camera", &dogb::GS::CameraComponent::m_camera);
+void
+CameraComponent::onGUI()
+{
+    if (!m_camera)
+        return;
+
+    m_camera->onGUI();
+}
 }

@@ -4,8 +4,6 @@
 
 #include "IMGUI_Editor.h"
 
-#include <GR/GR_Color.h>
-
 #include <imgui.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -15,365 +13,36 @@
 
 namespace dogb::IMGUI
 {
-static int
-imgui_VariantToInt32(rttr::variant &v, int _default)
-{
-    int result = _default;
-    if (v.is_valid())
-    {
-        bool ok = false;
-        int value = v.to_int(&ok);
-        if (ok)
-            result = value;
-    }
-    return result;
-}
-static float
-imgui_VariantToFloat(rttr::variant &v, float _default)
-{
-    float result = _default;
-    if (v.is_valid())
-    {
-        bool ok = false;
-        float value = v.to_float(&ok);
-        if (ok)
-            result = value;
-    }
-    return result;
-}
-
 void
-Editor::initialize()
+EditorDrawTransform(glm::mat4 &value)
 {
-    theImpl = std::make_unique<dogb::IMGUI::Editor>();
+    bool modified = false;
 
-    auto editor = static_cast<IMGUI::Editor *>(theImpl.get());
-    // Setup all of our callbacks to draw the underlying types
-    editor->m_typeCallbacks[rttr::type::get<int>().get_id()] = &drawInt32Clb;
-    editor->m_typeCallbacks[rttr::type::get<glm::vec2>().get_id()] =
-            &drawGLMvec2;
-    editor->m_typeCallbacks[rttr::type::get<glm::vec3>().get_id()] =
-            &drawGLMVec3;
-    editor->m_typeCallbacks[rttr::type::get<glm::vec4>().get_id()] =
-            &drawGLMVec4;
-    editor->m_typeCallbacks[rttr::type::get<glm::mat4>().get_id()] =
-            &drawGLMMat4;
-    editor->m_typeCallbacks[rttr::type::get<GR::Color3>().get_id()] =
-            &drawColor3;
-    editor->m_typeCallbacks[rttr::type::get<GR::Color>().get_id()] =
-            &drawColor;
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
 
-    // Register our extra types
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::vec2);
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::vec3);
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::vec4);
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::mat2);
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::mat3);
-    RTTR_REGISTRATION_STANDARD_TYPE_VARIANTS(glm::mat4);
-}
+    // separate out the important data in the matrix
+    glm::decompose(value, scale, rotation, translation, skew, perspective);
 
-void
-Editor::drawInt32Clb(
-        rttr::instance &_obj,
-        const rttr::type &,
-        const rttr::property &prop)
-{
-    // For some reason using numeric limits causes imgui to freak out so we use
-    // completely arbitrary values here.
-    int min = -1000;
-    int max = 1000;
+    glm::vec3 euler_rotation = glm::eulerAngles(rotation);
 
-    if (prop.is_valid())
+    if (ImGui::DragFloat3("Position", glm::value_ptr(translation)))
+        modified |= true;
+    if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler_rotation)))
+        modified |= true;
+    if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
+        modified |= true;
+
+    if (modified)
     {
+        auto quat = glm::toQuat(glm::orientate3(euler_rotation));
 
-        int32_t i = prop.get_value(_obj).to_int32();
-        rttr::string_view view = prop.get_name();
-        bool value_changed = false;
-
-        auto min_meta = prop.get_metadata("min_value");
-        auto max_meta = prop.get_metadata("max_value");
-        if (min_meta.is_valid() && max_meta.is_valid())
-        {
-            min = imgui_VariantToInt32(min_meta, min);
-            max = imgui_VariantToInt32(max_meta, max);
-
-            if (ImGui::SliderInt(view.begin(), &i, min, max))
-                value_changed = true;
-        }
-        else
-        {
-            if (ImGui::DragInt(view.begin(), &i))
-                value_changed = true;
-        }
-
-        if (value_changed)
-            prop.set_value(_obj, i);
+        // Create back our transform matrix
+        value = glm::translate(glm::mat4(), translation) *
+              glm::toMat4(quat) * glm::scale(glm::mat4(), scale);
     }
 }
-void
-Editor::drawGLMvec2(
-        rttr::instance &_obj,
-        const rttr::type &,
-        const rttr::property &prop)
-{
-    // For some reason using numeric limits causes imgui to freak out so we use
-    // completely arbitrary values here.
-    float min = -1000;
-    float max = 1000;
-
-    if (prop.is_valid())
-    {
-        auto min_meta = prop.get_metadata("min_value");
-        auto max_meta = prop.get_metadata("max_value");
-
-        bool modified = false;
-        glm::vec2 v = prop.get_value(_obj).convert<glm::vec2>();
-        rttr::string_view view = prop.get_name();
-
-        ImGui::Text("%s:", view.begin());
-
-        if (min_meta.is_valid() && max_meta.is_valid())
-        {
-            min = imgui_VariantToFloat(min_meta, min);
-            max = imgui_VariantToFloat(max_meta, max);
-            if (ImGui::SliderFloat("x", &(v.x), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("y", &(v.y), min, max))
-                modified |= true;
-        }
-        else
-        {
-            if (ImGui::DragFloat("x", &(v.x)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("y", &(v.y)))
-                modified |= true;
-        }
-
-        if (modified)
-            prop.set_value(_obj, v);
-    }
-}
-void
-Editor::drawGLMVec3(
-        rttr::instance &_obj,
-        const rttr::type &,
-        const rttr::property &prop)
-{
-    // For some reason using numeric limits causes imgui to freak out so we use
-    // completely arbitrary values here.
-    float min = -1000;
-    float max = 1000;
-
-    if (prop.is_valid())
-    {
-        auto min_meta = prop.get_metadata("min_value");
-        auto max_meta = prop.get_metadata("max_value");
-
-        bool modified = false;
-        glm::vec3 v = prop.get_value(_obj).convert<glm::vec3>();
-        rttr::string_view view = prop.get_name();
-
-        ImGui::Text("%s:", view.begin());
-
-        if (min_meta.is_valid() && max_meta.is_valid())
-        {
-            min = imgui_VariantToFloat(min_meta, min);
-            max = imgui_VariantToFloat(max_meta, max);
-            if (ImGui::SliderFloat("x", &(v.x), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("y", &(v.y), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("z", &(v.z), min, max))
-                modified |= true;
-        }
-        else
-        {
-            if (ImGui::DragFloat("x", &(v.x)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("y", &(v.y)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("z", &(v.z)))
-                modified |= true;
-        }
-
-        if (modified)
-            prop.set_value(_obj, v);
-    }
-}
-
-void
-Editor::drawGLMVec4(
-        rttr::instance &_obj,
-        const rttr::type &,
-        const rttr::property &prop)
-{
-    // For some reason using numeric limits causes imgui to freak out so we use
-    // completely arbitrary values here.
-    float min = -1000;
-    float max = 1000;
-
-    if (prop.is_valid())
-    {
-        auto min_meta = prop.get_metadata("min_value");
-        auto max_meta = prop.get_metadata("max_value");
-
-        bool modified = false;
-        glm::vec4 v = prop.get_value(_obj).convert<glm::vec4>();
-        rttr::string_view view = prop.get_name();
-
-        ImGui::Text("%s:", view.begin());
-
-        if (min_meta.is_valid() && max_meta.is_valid())
-        {
-            min = imgui_VariantToFloat(min_meta, min);
-            max = imgui_VariantToFloat(max_meta, max);
-            if (ImGui::SliderFloat("x", &(v.x), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("y", &(v.y), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("z", &(v.z), min, max))
-                modified |= true;
-            if (ImGui::SliderFloat("w", &(v.w), min, max))
-                modified |= true;
-        }
-        else
-        {
-            if (ImGui::DragFloat("x", &(v.x)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("y", &(v.y)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("z", &(v.z)))
-                modified |= true;
-            ImGui::SameLine();
-            if (ImGui::DragFloat("w", &(v.w)))
-                modified |= true;
-        }
-
-        if (modified)
-            prop.set_value(_obj, v);
-    }
-}
-
-void
-Editor::drawGLMMat4(
-        rttr::instance &_obj,
-        const rttr::type &t,
-        const rttr::property &prop)
-{
-    if (prop.is_valid())
-    {
-        rttr::string_view view = prop.get_name();
-        ImGui::Text("%s:", view.begin());
-
-        bool modified = false;
-        glm::mat4 mat = prop.get_value(_obj).convert<glm::mat4>();
-
-        glm::vec3 scale;
-        glm::quat rotation;
-        glm::vec3 translation;
-        glm::vec3 skew;
-        glm::vec4 perspective;
-
-        // separate out the important data in the matrix
-        glm::decompose(mat, scale, rotation, translation, skew, perspective);
-
-        glm::vec3 euler_rotation = glm::eulerAngles(rotation);
-
-        if (ImGui::DragFloat3("Position", glm::value_ptr(translation)))
-            modified |= true;
-        if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler_rotation)))
-            modified |= true;
-        if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
-            modified |= true;
-
-        if (modified)
-        {
-            auto quat = glm::toQuat(glm::orientate3(euler_rotation));
-
-            // Create back our transform matrix
-            mat = glm::translate(glm::mat4(), translation) *
-                  glm::toMat4(quat) * glm::scale(glm::mat4(), scale);
-            prop.set_value(_obj, mat);
-        }
-    }
-    else if (t.is_valid())
-    {
-        glm::mat4 *mat = _obj.try_convert<glm::mat4>();
-        ImGui::Text("glm::mat4:");
-
-        bool modified = false;
-
-        glm::vec3 scale;
-        glm::quat rotation;
-        glm::vec3 translation;
-        glm::vec3 skew;
-        glm::vec4 perspective;
-
-        glm::decompose(*mat, scale, rotation, translation, skew, perspective);
-
-        glm::vec3 euler_rotation = glm::eulerAngles(rotation);
-
-        if (ImGui::DragFloat3("Position", glm::value_ptr(translation)))
-            modified |= true;
-        if (ImGui::DragFloat3("Rotation", glm::value_ptr(euler_rotation)))
-            modified |= true;
-        if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
-            modified |= true;
-
-        if (modified)
-        {
-            auto quat = glm::toQuat(glm::orientate3(euler_rotation));
-
-            // Create back our transform matrix
-            *mat = glm::translate(glm::mat4(), translation) *
-                  glm::toMat4(quat) * glm::scale(glm::mat4(), scale);
-        }
-    }
-}
-void
-Editor::drawColor3(
-        rttr::instance &_obj,
-        const rttr::type &t,
-        const rttr::property &prop)
-{
-    if (prop.is_valid())
-    {
-        GR::Color3 color = prop.get_value(_obj).convert<GR::Color3>();
-
-        rttr::string_view view = prop.get_name();
-        if (ImGui::ColorEdit3(view.begin(), glm::value_ptr(color.toVec3())))
-            prop.set_value(_obj, color);
-    }
-    else if (t.is_valid())
-    {
-        GR::Color3 *color = _obj.try_convert<GR::Color3>();
-        ImGui::ColorEdit3("Color", glm::value_ptr(color->toVec3()));
-    }
-}
-void
-Editor::drawColor(
-        rttr::instance &_obj,
-        const rttr::type &t,
-        const rttr::property &prop)
-{
-    if (prop.is_valid())
-    {
-        GR::Color color = prop.get_value(_obj).convert<GR::Color>();
-
-        rttr::string_view view = prop.get_name();
-        if (ImGui::ColorEdit3(view.begin(), glm::value_ptr(color.toVec4())))
-            prop.set_value(_obj, color);
-    }
-    else if (t.is_valid())
-    {
-        GR::Color *color = _obj.try_convert<GR::Color>();
-        ImGui::ColorEdit3("Color", glm::value_ptr(color->toVec4()));
-    }
-}
-
 } // namespace dogb::IMGUI

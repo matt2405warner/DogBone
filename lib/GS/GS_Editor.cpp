@@ -6,5 +6,5 @@
 
 namespace dogb::GS
 {
-std::unique_ptr<EditorBase> EditorBase::theImpl = nullptr;
+
 }

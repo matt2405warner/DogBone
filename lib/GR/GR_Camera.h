@@ -9,14 +9,18 @@
 
 #include "GR_Framebuffer.h"
 
+#include <rttr/type>
+
 #include <memory>
 
 namespace dogb::GR
 {
 class DB_GR_API Camera
 {
+    RTTR_ENABLE()
 public:
     Camera();
+    virtual ~Camera() = default;
 
     void calculateMatricies(glm::mat4& proj) const;
 

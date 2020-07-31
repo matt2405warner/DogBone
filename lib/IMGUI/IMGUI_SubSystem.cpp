@@ -13,7 +13,7 @@ namespace dogb::IMGUI
 void
 SubSystem::init()
 {
-    IMGUI::Editor::initialize();
+
 }
 
 void
