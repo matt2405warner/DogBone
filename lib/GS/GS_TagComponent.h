@@ -19,6 +19,8 @@ namespace dogb::GS
 struct DB_GS_API TagComponent
 {
 public:
+    static constexpr const char* theGUIName = "Tag";
+
     virtual ~TagComponent() = default;
 
     GUI_TRAITS m_guiTraits = GUI_HIDE;
