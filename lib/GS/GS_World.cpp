@@ -66,6 +66,10 @@ World::shutdown()
     m_systemSimGroup->onShutdown();
     m_systemPresGroup->onShutdown();
 
+    // I cant seem to find any way to clear all entities so for now we just
+    // reset the entire manager on shutdown.
+    m_entityManager = EntityManager();
+
     m_mainCamera = nullptr;
 }
 

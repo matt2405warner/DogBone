@@ -1,7 +1,6 @@
 project(DogBoneEditor)
 
 set(sources
-        ConsoleWindow.cpp
         EditorApp.cpp
         EditorWindow.cpp
         main.cpp
@@ -11,7 +10,6 @@ set(sources
         TestContext_3D.cpp
         )
 set(headers
-        ConsoleWindow.h
         EditorApp.h
         EditorWindow.h
         GameWindow.h

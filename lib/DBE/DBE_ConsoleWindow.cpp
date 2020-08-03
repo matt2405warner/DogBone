@@ -2,13 +2,11 @@
 // Created by matt on 2020-07-11.
 //
 
-#include "ConsoleWindow.h"
+#include "DBE_ConsoleWindow.h"
 
 #include <imgui.h>
 
-#include <iostream>
-
-namespace dogb
+namespace dogb::DBE
 {
 void
 ConsoleWindow::onStart()
@@ -18,30 +16,6 @@ ConsoleWindow::onStart()
     m_max_logs = 100;
 
     m_dockDirection = DockDown;
-
-#if 0
-    UT::Logger &logger = UT::Logger::get();
-    m_listenerID = logger.registerCallback(
-        [=](const std::string& log)
-        {
-            onLog(log);
-        },
-        [=]()
-        {
-            std::cout << std::flush;
-        });
-#endif
-    UT_LOG_TRACE("Console onStart");
-}
-
-void
-ConsoleWindow::onDestroy()
-{
-#if 0
-    UT::Logger& logger = UT::Logger::get();
-
-    logger.removeCallback(m_listenerID);
-#endif
 }
 
 void
@@ -66,15 +40,5 @@ ConsoleWindow::onGUI(const UT::Timestep&)
 
     ImGui::EndChild();
 }
-
-#if 0
-void
-ConsoleWindow::onLog(const std::string &log)
-{
-    if (m_logs.size() + 1 > m_max_logs)
-        m_logs.pop_front();
-    m_logs.emplace_back(log);
-}
-#endif
 
 } // namespace dogdb

@@ -4,7 +4,6 @@
 
 #include "EditorWindow.h"
 
-#include "ConsoleWindow.h"
 #include "GameWindow.h"
 #include "ProjectWindow.h"
 #include "TestContext_3D.h"
@@ -13,6 +12,7 @@
 #include <DBE/DBE_SceneWindow.h>
 #include <DBE/DBE_HierarchyWindow.h>
 #include <DBE/DBE_EditorIMGUIContext.h>
+#include <DBE/DBE_ConsoleWindow.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
 #include <IMGUI/IMGUI_SubSystemContext.h>
@@ -49,29 +49,22 @@ EditorWindow::initialize()
 
     // Add all of the standard editor GUI windows
     DBE::Inspector *inspector = imgui_ctx->createGUIWindow<DBE::Inspector>();
-    // imgui_ctx->dockGUIWindowRight(*inspector);
     inspector->show();
     ProjectWindow *proj_window = imgui_ctx->createGUIWindow<ProjectWindow>();
-
-    // imgui_ctx->dockGUIWindowLeft(*project);
     proj_window->show();
 
-    // std::optional<rttr::type> t(rttr::type::get<ProjectWindow>());
     DBE::HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<DBE::HierarchyWindow>();
     hierarchy->show();
 
     DBE::SceneWindow *scene_win =
             imgui_ctx->createGUIWindow<DBE::SceneWindow>(this);
     scene_win->m_cameraController.attach(*this);
-    // imgui_ctx->dockGUIWindowUp(*scene_win);
     scene_win->show();
 
-    // std::optional<rttr::type> t(rttr::type::get<SceneWindow>());
     GameWindow *game_win = imgui_ctx->createGUIWindow<GameWindow>();
     game_win->show();
 
-    ConsoleWindow *console_win = imgui_ctx->createGUIWindow<ConsoleWindow>();
-    // imgui_ctx->dockGUIWindowDown(*console_win);
+    DBE::ConsoleWindow *console_win = imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
     console_win->show();
 
 #ifdef USE_3D
@@ -92,11 +85,6 @@ EditorWindow::initialize()
     cam_comp.m_camera = world.mainCamera();
 
     world.m_selectedEntity = ent;
-}
-void
-EditorWindow::shutdown()
-{
-    DesktopWindow::shutdown();
 }
 
 } // namespace dogb

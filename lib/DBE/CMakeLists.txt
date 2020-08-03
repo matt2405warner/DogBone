@@ -6,6 +6,7 @@ set(sources
     DBE_SceneWindow.cpp
     DBE_HierarchyWindow.cpp
     DBE_EditorIMGUIContext.cpp
+    DBE_ConsoleWindow.cpp
 )
 
 set(headers
@@ -14,6 +15,7 @@ set(headers
     DBE_SceneWindow.h
     DBE_HierarchyWindow.h
     DBE_EditorIMGUIContext.h
+    DBE_ConsoleWindow.h
 )
 
 db_lib(

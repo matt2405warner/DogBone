@@ -23,7 +23,6 @@ public:
     }
 
     void initialize() override;
-    void shutdown() override ;
 
     ProjectWindow *m_projectWindow{};
 };
