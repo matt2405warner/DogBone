@@ -17,6 +17,8 @@ ConsoleWindow::onStart()
 
     m_max_logs = 100;
 
+    m_dockDirection = DockDown;
+
 #if 0
     UT::Logger &logger = UT::Logger::get();
     m_listenerID = logger.registerCallback(

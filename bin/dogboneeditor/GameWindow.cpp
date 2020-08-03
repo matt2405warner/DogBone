@@ -9,6 +9,8 @@ void
 GameWindow::onStart()
 {
     m_title = "Game";
+
+    m_dockDirection = DockNone;
 }
 
 void

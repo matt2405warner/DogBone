@@ -50,8 +50,8 @@ public:
         static_assert(
                 std::is_base_of_v<IMGUI::Window, T>,
                 "Cannot create GUI window if it does not derive from IMGUI::Window");
+
 #if 0
-        IMGUI::Window::DockDirection dock_dir;
         // Find who we are docking to and set it to the same dock space
         if (dock_to)
         {
@@ -76,9 +76,6 @@ public:
         std::unique_ptr<IMGUI::Window> &win =
                 m_windows.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
         win->m_context = this;
-#if 0
-        win->m_dockDirection = dock_dir;
-#endif
 
         win->onStart();
 
@@ -104,23 +101,18 @@ public:
         return nullptr;
     }
 
-#if 0
     void dockGUIWindowRight(IMGUI::Window &win);
     void dockGUIWindowLeft(IMGUI::Window &win);
     void dockGUIWindowUp(IMGUI::Window &win);
     void dockGUIWindowDown(IMGUI::Window &win);
-#endif
 
 protected:
     static void initStyle();
 
 private:
 
-#if 0
     // Translate a dock direction to an IMGUI id.
     ImGuiID getDockID(IMGUI::Window::DockDirection dir);
-#endif
-#if 0
     ImGuiID m_dockspaceID;
     ImGuiID m_dockLeftID;
     ImGuiID m_dockRightID;
@@ -128,7 +120,6 @@ private:
     ImGuiID m_dockDownID;
 
     bool m_dockspaceInitialized;
-#endif
     // Every window this context needs to draw
     std::vector<std::unique_ptr<IMGUI::Window>> m_windows;
     UT::Window *m_window{};

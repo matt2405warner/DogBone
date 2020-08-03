@@ -21,6 +21,7 @@ SceneWindow::onStart()
     m_title = "Scene";
 
     m_style.m_padding = ImVec2{0, 0};
+    m_dockDirection = DockNone;
 }
 
 void

@@ -3,7 +3,7 @@ catch2/2.11.0
 docopt.cpp/0.6.2
 fmt/6.1.2
 spdlog/1.5.0
-imgui/1.77
+dock_imgui/0.1@mattw/dogbone
 glfw/3.3.2@bincrafters/stable
 glad/0.1.33
 glm/0.9.8.5@g-truc/stable

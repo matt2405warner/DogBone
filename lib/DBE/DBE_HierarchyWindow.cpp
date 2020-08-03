@@ -20,6 +20,8 @@ HierarchyWindow::onStart()
     m_title = "Hierarchy";
 
     m_style.m_padding = ImVec2{0, 0};
+
+    m_dockDirection = DockLeft;
 }
 
 void

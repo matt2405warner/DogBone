@@ -24,8 +24,17 @@ class DB_IMGUI_API Window
 {
     friend class IMGUI::SubSystemContext;
 public:
+    enum DockDirection
+    {
+        DockNone,
+        DockLeft,
+        DockRight,
+        DockUp,
+        DockDown
+    };
+
     explicit Window()
-        : m_isOpen(false), m_initializedDock(false)
+        : m_isOpen(false), m_dockDirection(DockNone), m_initializedDock(false)
     {
     }
     virtual ~Window() = default;
@@ -78,17 +87,9 @@ protected:
 
     Style m_style;
 
-private:
-    enum DockDirection
-    {
-        DockNone,
-        DockLeft,
-        DockRight,
-        DockUp,
-        DockDown
-    };
-
     DockDirection m_dockDirection;
+private:
+
     bool m_initializedDock;
     IMGUI::SubSystemContext *m_context{};
 };

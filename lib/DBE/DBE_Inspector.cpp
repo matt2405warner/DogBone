@@ -19,6 +19,8 @@ void
 Inspector::onStart()
 {
     m_title = "Inspector";
+
+    m_dockDirection = DockRight;
 }
 
 void

@@ -24,6 +24,8 @@ void
 ProjectWindow::onStart()
 {
     m_title = "Project";
+
+    m_dockDirection= DockDown;
 }
 
 void

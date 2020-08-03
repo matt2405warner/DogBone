@@ -34,6 +34,8 @@ SubSystemContext::onShutdown()
         win->onDestroy();
     m_windows.clear();
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext(m_imguiContext);
     m_imguiContext = nullptr;
 }
@@ -62,9 +64,10 @@ SubSystemContext::onAttach()
             static_cast<float>(m_window->height()));
     io.DeltaTime = 1.0f / 60.0f;
 
-    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    // io.ConfigDockingWithShift = false;
+    io.ConfigDockingWithShift = false;
 
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
@@ -93,7 +96,6 @@ SubSystemContext::onAttach()
     io.KeyMap[ImGuiKey_Z] = KEY_Z;
 }
 
-#if 0
 ImGuiID
 SubSystemContext::getDockID(IMGUI::Window::DockDirection dir)
 {
@@ -119,7 +121,6 @@ SubSystemContext::getDockID(IMGUI::Window::DockDirection dir)
 
     return dock_id;
 }
-#endif
 
 void SubSystemContext::update(UT::Timestep ts)
 {
@@ -130,7 +131,7 @@ void SubSystemContext::update(UT::Timestep ts)
     ImGui::NewFrame();
 
     onGUI();
-#if 0
+
     ImGuiIO &io = ImGui::GetIO();
     float width = static_cast<float>(m_window->width());
     float height = static_cast<float>(m_window->height());
@@ -144,39 +145,31 @@ void SubSystemContext::update(UT::Timestep ts)
     ImGui::SetNextWindowViewport(viewport->ID);
 
     ImGui::SetNextWindowBgAlpha(0.0f);
-#endif
-#if 0
+
     window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
                     ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                     ImGuiWindowFlags_NoBringToFrontOnFocus |
                     ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
-#endif
 
-#if 0
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
     ImGui::Begin("DockspaceWindow", nullptr, window_flags);
     ImGui::PopStyleVar(3);
-#endif
 
-#if 0
     m_dockspaceID = ImGui::GetID("MyDockspace");
     ImGui::DockSpace(
-            m_dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruDockspace);
+            m_dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
     ImGui::End();
-#endif
 
-
-#if 0
     if (!m_dockspaceInitialized)
     {
         m_dockspaceInitialized = true;
         ImGui::DockBuilderRemoveNode(m_dockspaceID);
-        ImGui::DockBuilderAddNode(
-                m_dockspaceID, ImVec2(m_window->width(), m_window->height()));
+        ImGui::DockBuilderAddNode(m_dockspaceID, ImGuiDockNodeFlags_DockSpace);
+        ImGui::DockBuilderSetNodeSize(m_dockspaceID, viewport->Size);
 
         m_dockLeftID = ImGui::DockBuilderSplitNode(
                 m_dockspaceID, ImGuiDir_Left, 0.20f, NULL, &m_dockspaceID);
@@ -188,24 +181,19 @@ void SubSystemContext::update(UT::Timestep ts)
                 m_dockspaceID, ImGuiDir_Down, 0.20f, NULL, &m_dockspaceID);
         ImGui::DockBuilderFinish(m_dockspaceID);
     }
-#endif
     for (std::unique_ptr<IMGUI::Window> &win : m_windows)
     {
         if (!win->isOpen())
             continue;
-#if 0
         ImGuiID dock_id = getDockID(win->m_dockDirection);
-#endif
 
         win->onPreGUI();
         ImGui::Begin(win->title().c_str(), &win->m_isOpen);
-#if 0
         if (!win->m_initializedDock)
         {
             win->m_initializedDock = true;
             ImGui::DockBuilderDockWindow(win->title().c_str(), dock_id);
         }
-#endif
         win->onGUI(ts);
 
         ImGui::End();
@@ -216,8 +204,15 @@ void SubSystemContext::update(UT::Timestep ts)
     ImGui::EndFrame();
 
     ImGui::Render();
-
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        GLFWwindow * tmp_ctx = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(tmp_ctx);
+    }
 }
 
 void
@@ -234,7 +229,6 @@ SubSystemContext::initStyle()
     style.ScrollbarRounding = 0.0f;
 }
 
-#if 0
 void
 SubSystemContext::dockGUIWindowRight(IMGUI::Window &win)
 {
@@ -258,6 +252,5 @@ SubSystemContext::dockGUIWindowDown(IMGUI::Window &win)
 {
     win.m_dockDirection = IMGUI::Window::DockDirection::DockDown;
 }
-#endif
 
 } // namespace dogb::IMGUI
