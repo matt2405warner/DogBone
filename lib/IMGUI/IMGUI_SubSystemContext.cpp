@@ -229,28 +229,4 @@ SubSystemContext::initStyle()
     style.ScrollbarRounding = 0.0f;
 }
 
-void
-SubSystemContext::dockGUIWindowRight(IMGUI::Window &win)
-{
-    win.m_dockDirection = IMGUI::Window::DockDirection::DockRight;
-}
-
-void
-SubSystemContext::dockGUIWindowLeft(IMGUI::Window &win)
-{
-    win.m_dockDirection = IMGUI::Window::DockDirection::DockLeft;
-}
-
-void
-SubSystemContext::dockGUIWindowUp(IMGUI::Window &win)
-{
-    win.m_dockDirection = IMGUI::Window::DockDirection::DockUp;
-}
-
-void
-SubSystemContext::dockGUIWindowDown(IMGUI::Window &win)
-{
-    win.m_dockDirection = IMGUI::Window::DockDirection::DockDown;
-}
-
 } // namespace dogb::IMGUI

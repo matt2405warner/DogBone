@@ -38,28 +38,25 @@ HierarchyWindow::drawEntity(GS::Entity& entity, bool is_root)
         flags |= ImGuiTreeNodeFlags_Selected;
 
     if (!is_root)
-        ImGui::Indent();
+        ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
     GS::TransformComponent& transform = entity.getComponent<GS::TransformComponent>();
     if (transform.m_children.empty())
         flags |= ImGuiTreeNodeFlags_Leaf;
 
-    if (ImGui::TreeNodeEx(tag.m_name.c_str(), flags))
-    {
-        //ImGui::SameLine();
-        //IMGUI::InputText("", tag.m_name);
+    bool draw_children = ImGui::TreeNodeEx(tag.m_name.c_str(), flags);
 
-
-
-        for (auto&& child : transform.m_children)
-            drawEntity(child, false /*root*/);
-
-    }
     if (ImGui::IsItemClicked())
         world.m_selectedEntity = entity;
 
+    if (draw_children)
+    {
+        for (auto &&child : transform.m_children)
+            drawEntity(child, false /*root*/);
+    }
+
     if (!is_root)
-        ImGui::Unindent();
+        ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 }
 
 void

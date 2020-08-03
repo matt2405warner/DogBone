@@ -51,27 +51,6 @@ public:
                 std::is_base_of_v<IMGUI::Window, T>,
                 "Cannot create GUI window if it does not derive from IMGUI::Window");
 
-#if 0
-        // Find who we are docking to and set it to the same dock space
-        if (dock_to)
-        {
-            const rttr::type t = dock_to.value();
-
-            // Search all windows
-            for (auto iter = m_windows.begin(); iter != m_windows.end(); ++iter)
-            {
-                const std::unique_ptr<IMGUI::Window> &ptr = *iter;
-                const rttr::type win_t = rttr::type::get(*ptr);
-
-                if (t == win_t)
-                {
-                    dock_dir = (*iter)->m_dockDirection;
-                    break;
-                }
-            }
-        }
-#endif
-
         // Add the new window and set the dock direction if any
         std::unique_ptr<IMGUI::Window> &win =
                 m_windows.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
@@ -100,11 +79,6 @@ public:
 
         return nullptr;
     }
-
-    void dockGUIWindowRight(IMGUI::Window &win);
-    void dockGUIWindowLeft(IMGUI::Window &win);
-    void dockGUIWindowUp(IMGUI::Window &win);
-    void dockGUIWindowDown(IMGUI::Window &win);
 
 protected:
     static void initStyle();
