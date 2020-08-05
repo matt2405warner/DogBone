@@ -9,6 +9,7 @@
 
 #include "GS_CameraComponent.h"
 #include "GS_MeshComponent.h"
+#include "GS_Mesh2DComponent.h"
 #include "GS_TransformComponent.h"
 #include "GS_World.h"
 
@@ -44,19 +45,41 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
         GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         GR::Renderer::clear();
 
+        // ---------------------------------------------------------------------
+        // BEGIN 2D Meshes
+        // ---------------------------------------------------------------------
         GR::Renderer2D::beginScene(*camera.m_camera, cam_transform);
-
         auto mesh_group =
-                mgr.registry().group<TransformComponent, MeshComponent>();
+                mgr.registry().group<TransformComponent, Mesh2DComponent>();
         for (auto &mesh_entity : mesh_group)
         {
             auto &&[mesh_transform, mesh] =
-                    mesh_group.get<TransformComponent, MeshComponent>(
+                    mesh_group.get<TransformComponent, Mesh2DComponent>(
                             mesh_entity);
             GR::Renderer2D::drawQuad(mesh_transform, mesh.m_color.toVec4());
         }
-
         GR::Renderer2D::endScene();
+        // ---------------------------------------------------------------------
+        // END 2D Meshes
+        // ---------------------------------------------------------------------
+
+        // ---------------------------------------------------------------------
+        // BEGIN 3D Meshes
+        // ---------------------------------------------------------------------
+        GR::Renderer::beginScene(*camera.m_camera, cam_transform);
+        auto mesh_view =
+                mgr.registry().view<TransformComponent, MeshComponent>();
+        for (auto &mesh_entity : mesh_view)
+        {
+            auto &&[mesh_transform, mesh] =
+            mesh_view.get<TransformComponent, MeshComponent>(
+                    mesh_entity);
+            mesh.m_mesh.draw(mesh_transform);
+        }
+        GR::Renderer::endScene();
+        // ---------------------------------------------------------------------
+        // END 3D Meshes
+        // ---------------------------------------------------------------------
 
         if (camera.m_camera->m_activeTexture)
             camera.m_camera->m_activeTexture->unbind();

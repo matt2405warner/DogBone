@@ -20,7 +20,7 @@
 #include <GS/GS_SubSystem.h>
 #include <GS/GS_TransformComponent.h>
 #include <GS/GS_World.h>
-#include <GS/GS_MeshComponent.h>
+#include <GS/GS_Mesh2DComponent.h>
 #include <GS/GS_CameraComponent.h>
 
 #include <GR/GR_SubSystem.h>
@@ -76,7 +76,7 @@ EditorWindow::initialize()
 #endif
 
     auto ent = world.createEntity();
-    ent.addComponent<GS::MeshComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ent.addComponent<GS::Mesh2DComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
     // m_testEntity.addComponent<TestComponent>(5);
     world.createEntity();
     world.createEntity();

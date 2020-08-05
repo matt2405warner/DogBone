@@ -6,7 +6,7 @@ set(sources
         GS_SubSystemContext.cpp
         GS_Scene.cpp
         GS_TransformComponent.cpp
-        GS_MeshComponent.cpp
+        GS_Mesh2DComponent.cpp
         GS_Scene.cpp
         GS_Entity.cpp
         GS_EntityManager.cpp
@@ -19,6 +19,8 @@ set(sources
         GS_CameraComponent.cpp
         GS_RenderComponentSystem.cpp
         GS_Camera.cpp
+        GS_Mesh.cpp
+        GS_MeshComponent.cpp
         )
 
 set(headers
@@ -27,7 +29,7 @@ set(headers
         GS_SubSystemContext.h
         GS_Scene.h
         GS_TransformComponent.h
-        GS_MeshComponent.h
+        GS_Mesh2DComponent.h
         GS_Scene.h
         GS_Entity.h
         GS_EntityManager.h
@@ -42,6 +44,8 @@ set(headers
         GS_RenderComponentSystem.h
         GS_Camera.h
         GS_GUITraits.h
+        GS_Mesh.h
+        GS_MeshComponent.h
         )
 
 db_lib(
