@@ -49,12 +49,12 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
         // BEGIN 2D Meshes
         // ---------------------------------------------------------------------
         GR::Renderer2D::beginScene(*camera.m_camera, cam_transform);
-        auto mesh_group =
-                mgr.registry().group<TransformComponent, Mesh2DComponent>();
-        for (auto &mesh_entity : mesh_group)
+        auto mesh2d_view =
+                mgr.registry().view<TransformComponent, Mesh2DComponent>();
+        for (auto &mesh_entity : mesh2d_view)
         {
             auto &&[mesh_transform, mesh] =
-                    mesh_group.get<TransformComponent, Mesh2DComponent>(
+                    mesh2d_view.get<TransformComponent, Mesh2DComponent>(
                             mesh_entity);
             GR::Renderer2D::drawQuad(mesh_transform, mesh.m_color.toVec4());
         }
