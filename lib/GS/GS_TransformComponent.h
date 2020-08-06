@@ -10,6 +10,7 @@
 #include "GS_Entity.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <rttr/type>
 
@@ -23,18 +24,16 @@ struct DB_GS_API TransformComponent
 public:
     static constexpr const char* theGUIName = "Transform";
 
-    TransformComponent() = default;
-    TransformComponent(const glm::mat4& transform) :
-        m_transform(transform)
-    {}
+    TransformComponent();
     virtual ~TransformComponent() = default;
-
-    operator glm::mat4 & () { return m_transform; }
-    operator const glm::mat4 & () const { return m_transform; }
 
     void onGUI();
 
-    glm::mat4 m_transform{1.0f};
+    [[nodiscard]] glm::mat4 transform() const;
+
+    glm::vec3 m_position;
+    glm::quat m_rotation;
+    glm::vec3 m_scale;
 
     Entity m_root;
     Entity m_parent;

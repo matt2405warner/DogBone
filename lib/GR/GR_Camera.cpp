@@ -12,7 +12,10 @@ namespace dogb::GR
 {
 Camera::Camera() :
     m_orthographic(true),
-    m_rect(0.0f),
+    m_near(-1.0f),
+    m_far(1.0f),
+    m_orthographicSize(10.0f),
+    m_aspect(1.78f),
     m_activeTexture(nullptr)
 {}
 void
@@ -20,11 +23,23 @@ Camera::calculateMatricies(glm::mat4 &proj) const
 {
     if (m_orthographic)
     {
-        proj = glm::ortho(m_rect.x, m_rect.y, m_rect.z, m_rect.w, -1.0f, 1.0f);
+        float left= -m_orthographicSize * m_aspect * 0.5f;
+        float right = m_orthographicSize * m_aspect * 0.5f;
+        float bottom = -m_orthographicSize * 0.5f;
+        float top = m_orthographicSize * 0.5f;
+
+        proj = glm::ortho(left, right, bottom, top, m_near, m_far);
     }
     else
     {
         UT_ASSERT_MSG(false, "Unsupported camera type..");
     }
 }
+
+void
+Camera::setViewportSize(uint32_t width, uint32_t height)
+{
+    m_aspect = (float)width / (float)height;
+}
+
 }

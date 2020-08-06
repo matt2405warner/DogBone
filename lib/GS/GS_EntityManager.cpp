@@ -17,7 +17,11 @@ rttr::type EntityManager::Info::theInvalid = rttr::type::get<void>();
 void
 Entity::addChildEntity(const Entity& child)
 {
-    TransformComponent& transform = manager().getComponent<TransformComponent>(*this);
+    UT_ASSERT(m_manager);
+    if (!m_manager)
+        return;
+
+    TransformComponent& transform = m_manager->get().getComponent<TransformComponent>(*this);
 
     for (auto&& e : transform.m_children)
     {
@@ -25,7 +29,7 @@ Entity::addChildEntity(const Entity& child)
             return;
     }
 
-    TransformComponent& child_transform = manager().getComponent<TransformComponent>(child);
+    TransformComponent& child_transform = m_manager->get().getComponent<TransformComponent>(child);
     child_transform.m_parent = *this;
     child_transform.m_root = transform.m_root;
 
@@ -35,34 +39,33 @@ Entity::addChildEntity(const Entity& child)
 const Entity &
 Entity::parent()
 {
-    TransformComponent& transformComponent = manager().getComponent<TransformComponent>(*this);
+    UT_ASSERT(m_manager);
+    TransformComponent& transformComponent = m_manager->get().getComponent<TransformComponent>(*this);
     return transformComponent.m_parent;
 }
 
 const Entity &
 Entity::root()
 {
-    TransformComponent& transformComponent = manager().getComponent<TransformComponent>(*this);
+    UT_ASSERT(m_manager);
+    TransformComponent& transformComponent = m_manager->get().getComponent<TransformComponent>(*this);
     return transformComponent.m_root;
 }
 
 const std::vector<Entity> &
 Entity::children()
 {
-    TransformComponent& transformComponent = manager().getComponent<TransformComponent>(*this);
+    UT_ASSERT(m_manager);
+    TransformComponent& transformComponent = m_manager->get().getComponent<TransformComponent>(*this);
     return transformComponent.m_children;
-}
-
-EntityManager &
-Entity::manager()
-{
-    return GS::World::instance().m_entityManager;
 }
 
 Entity
 EntityManager::createEntity()
 {
     Entity entity{m_registry.create()};
+    entity.m_manager = *this;
+
     // Every component must! have a transform component
     TransformComponent& transform = addComponent<TransformComponent>(entity);
     // The root is our self but the parent is no one. This allows us to traverse

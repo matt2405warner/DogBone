@@ -26,6 +26,8 @@
 
 namespace dogb::GS
 {
+class EntityManager;
+
 class DB_GS_API ComponentSystem
 {
     RTTR_ENABLE()
@@ -38,10 +40,10 @@ public:
     virtual void onCreate() {};
     virtual void onDestroy() {};
 #endif
-    virtual void onPreUpdate(const UT::Timestep &) {}
-    virtual void onUpdate(const UT::Timestep &){};
-    virtual void onPostUpdate(const UT::Timestep &) {}
-    virtual void onShutdown() {}
+    virtual void onPreUpdate(const UT::Timestep &, EntityManager &) {}
+    virtual void onUpdate(const UT::Timestep &, EntityManager &) {}
+    virtual void onPostUpdate(const UT::Timestep &, EntityManager &) {}
+    virtual void onShutdown(EntityManager &) {}
 
     [[nodiscard]] SystemGroupType systemGroup() const { return m_sysGroupType; }
 

@@ -63,7 +63,8 @@ void
 HierarchyWindow::onGUI(const UT::Timestep &)
 {
     GS::World &world = GS::World::instance();
-    GS::EntityManager &mgr = world.m_entityManager;
+    UT_ASSERT(world.m_activeScene);
+    GS::EntityManager &mgr = world.m_activeScene->m_entityManager;
 
     std::set<GS::Entity> root_entities;
     mgr.registry().each([&](entt::entity entity) {
@@ -96,7 +97,7 @@ HierarchyWindow::onGUI(const UT::Timestep &)
             }
             else if (ImGui::Selectable("Remove Entity"))
             {
-                world.m_entityManager.destroy(world.m_selectedEntity);
+                mgr.destroy(world.m_selectedEntity);
             }
 
             ImGui::ListBoxFooter();

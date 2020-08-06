@@ -246,7 +246,8 @@ DesktopWindow::initialize()
     glfwWindowHint(GLFW_DECORATED, m_useTitlebar);
 
     m_handle = CE::WindowPtr(glfwCreateWindow(
-            m_width, m_height, m_title.c_str(), nullptr, nullptr));
+            static_cast<int>(m_width), static_cast<int>(m_height),
+            m_title.c_str(), nullptr, nullptr));
 
     glfwMakeContextCurrent(m_handle.get());
 
@@ -269,8 +270,8 @@ DesktopWindow::initialize()
 
     // Set win size
     glfwSetWindowSizeLimits(
-            m_handle.get(), m_minWidth, m_minHeight, GLFW_DONT_CARE,
-            GLFW_DONT_CARE);
+            m_handle.get(), static_cast<int>(m_minWidth),
+            static_cast<int>(m_minHeight), GLFW_DONT_CARE, GLFW_DONT_CARE);
 }
 
 void
@@ -293,8 +294,8 @@ DesktopWindow::onResize(I32 width, I32 height)
     }
     m_minimized = false;
 
-    m_width = width;
-    m_height = height;
+    m_width = static_cast<U32>(width);
+    m_height = static_cast<U32>(height);
 
     m_resizeSignal(width, height);
 
@@ -318,7 +319,7 @@ DesktopWindow::close()
     UT::AppInterface::mainApp()->quitApp();
 }
 
-void DesktopWindow::update(UT::Timestep )
+void DesktopWindow::update(UT::Timestep)
 {
     UT_PROFILE_FUNCTION();
 

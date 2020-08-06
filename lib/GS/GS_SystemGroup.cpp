@@ -4,6 +4,9 @@
 
 #include "GS_SystemGroup.h"
 
+#include "GS_World.h"
+#include "GS_EntityManager.h"
+
 #include <UT/UT_Assert.h>
 
 namespace dogb::GS
@@ -40,28 +43,48 @@ SystemGroup::addSystem(std::unique_ptr<ComponentSystem> sys)
 void
 SystemGroup::onPreUpdate(const UT::Timestep & ts)
 {
+    World &world = World::instance();
+    auto active_scene = world.m_activeScene;
+    UT_ASSERT(active_scene);
+    EntityManager &mgr = active_scene->m_entityManager;
+
     for (auto&& sys : m_systems)
-        sys->onPreUpdate(ts);
+        sys->onPreUpdate(ts, mgr);
 }
 
 void
 SystemGroup::onUpdate(const UT::Timestep& ts)
 {
+    World &world = World::instance();
+    auto active_scene = world.m_activeScene;
+    UT_ASSERT(active_scene);
+    EntityManager &mgr = active_scene->m_entityManager;
+
     for (auto&& sys : m_systems)
-        sys->onUpdate(ts);
+        sys->onUpdate(ts, mgr);
 }
 
 void
 SystemGroup::onPostUpdate(const UT::Timestep &ts)
 {
+    World &world = World::instance();
+    auto active_scene = world.m_activeScene;
+    UT_ASSERT(active_scene);
+    EntityManager &mgr = active_scene->m_entityManager;
+
     for (auto&& sys : m_systems)
-        sys->onPostUpdate(ts);
+        sys->onPostUpdate(ts, mgr);
 }
 void
 SystemGroup::onShutdown()
 {
+    World &world = World::instance();
+    auto active_scene = world.m_activeScene;
+    UT_ASSERT(active_scene);
+    EntityManager &mgr = active_scene->m_entityManager;
+
     for (auto&& sys : m_systems)
-        sys->onShutdown();
+        sys->onShutdown(mgr);
 }
 
 } // namespace dogb::GS

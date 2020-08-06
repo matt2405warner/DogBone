@@ -24,7 +24,7 @@ Inspector::onStart()
 }
 
 void
-Inspector::onGUI(const UT::Timestep&)
+Inspector::onGUI(const UT::Timestep &)
 {
     UT::Window *window = imguiContext()->window();
     if (window == nullptr)
@@ -33,8 +33,10 @@ Inspector::onGUI(const UT::Timestep&)
         return;
     }
 
-    GS::World& world = GS::World::instance();
+    GS::World &world = GS::World::instance();
+    UT_ASSERT(world.m_activeScene);
 
-    DBE::Editor::drawEntity(world.m_entityManager, world.m_selectedEntity);
+    DBE::Editor::drawEntity(
+            world.m_activeScene->m_entityManager, world.m_selectedEntity);
 }
-}
+} // namespace dogb::DBE

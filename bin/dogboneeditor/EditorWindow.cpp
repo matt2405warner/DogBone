@@ -6,24 +6,19 @@
 
 #include "GameWindow.h"
 #include "ProjectWindow.h"
-#include "TestContext_3D.h"
 
+#include <DBE/DBE_ConsoleWindow.h>
+#include <DBE/DBE_EditorIMGUIContext.h>
+#include <DBE/DBE_HierarchyWindow.h>
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
-#include <DBE/DBE_HierarchyWindow.h>
-#include <DBE/DBE_EditorIMGUIContext.h>
-#include <DBE/DBE_ConsoleWindow.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
-#include <IMGUI/IMGUI_SubSystemContext.h>
 
-#include <GS/GS_SubSystem.h>
-#include <GS/GS_TransformComponent.h>
-#include <GS/GS_World.h>
-#include <GS/GS_Mesh2DComponent.h>
 #include <GS/GS_CameraComponent.h>
-
-#include <GR/GR_SubSystem.h>
+#include <GS/GS_CameraController.h>
+#include <GS/GS_Mesh2DComponent.h>
+#include <GS/GS_World.h>
 
 #include <UT/UT_Assert.h>
 
@@ -37,11 +32,12 @@ EditorWindow::initialize()
     GR::DesktopWindow::initialize();
 
     GR::Framebuffer::Specification spec;
-    spec.m_width = static_cast<uint32_t>(m_width);
-    spec.m_height = static_cast<uint32_t>(m_height);
+    spec.m_width = m_width;
+    spec.m_height = m_height;
 
     GS::World &world = GS::World::instance();
     world.mainCamera()->m_activeTexture = GR::Framebuffer::create(spec);
+    world.mainCamera()->setViewportSize(m_width, m_height);
 
     auto imgui_ctx =
             addContext<IMGUI::SubSystem, DBE::EditorIMGUIContext>(this);
@@ -53,18 +49,19 @@ EditorWindow::initialize()
     ProjectWindow *proj_window = imgui_ctx->createGUIWindow<ProjectWindow>();
     proj_window->show();
 
-    DBE::HierarchyWindow *hierarchy = imgui_ctx->createGUIWindow<DBE::HierarchyWindow>();
+    DBE::HierarchyWindow *hierarchy =
+            imgui_ctx->createGUIWindow<DBE::HierarchyWindow>();
     hierarchy->show();
 
     DBE::SceneWindow *scene_win =
-            imgui_ctx->createGUIWindow<DBE::SceneWindow>(this);
-    scene_win->m_cameraController.attach(*this);
+            imgui_ctx->createGUIWindow<DBE::SceneWindow>();
     scene_win->show();
 
     GameWindow *game_win = imgui_ctx->createGUIWindow<GameWindow>();
     game_win->show();
 
-    DBE::ConsoleWindow *console_win = imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
+    DBE::ConsoleWindow *console_win =
+            imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
     console_win->show();
 
 #ifdef USE_3D
@@ -81,8 +78,9 @@ EditorWindow::initialize()
     world.createEntity();
     world.createEntity();
     auto cam_ent = world.createEntity();
-    GS::CameraComponent& cam_comp = cam_ent.addComponent<GS::CameraComponent>();
+    GS::CameraComponent &cam_comp = cam_ent.addComponent<GS::CameraComponent>();
     cam_comp.m_camera = world.mainCamera();
+    cam_ent.addComponent<GS::CameraController>();
 
     world.m_selectedEntity = ent;
 }

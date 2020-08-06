@@ -22,6 +22,8 @@ public:
     void onGUI();
 
     bool m_isDisabled = false;
+    bool m_fixedAspectRatio = false;
+    glm::vec4 m_background = {0.3f, 0.3f, 0.9f, 1.0f};
 };
 }
 

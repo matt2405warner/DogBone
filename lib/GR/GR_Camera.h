@@ -24,8 +24,13 @@ public:
 
     void calculateMatricies(glm::mat4& proj) const;
 
+    void setViewportSize(uint32_t width, uint32_t height);
+
     bool m_orthographic = true;
-    glm::vec4 m_rect;
+    float m_near;
+    float m_far;
+    float m_orthographicSize;
+    float m_aspect;
     std::shared_ptr<Framebuffer> m_activeTexture;
 };
 }

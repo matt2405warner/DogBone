@@ -10,10 +10,10 @@ static U32 theIDs = 0;
 
 WindowProperties::WindowProperties(
         const String &title,
-        I32 width,
-        I32 height,
-        I32 min_width,
-        I32 min_height,
+        U32 width,
+        U32 height,
+        U32 min_width,
+        U32 min_height,
         bool vsync,
         bool has_title_bar)
     : m_title(title)

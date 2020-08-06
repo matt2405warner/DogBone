@@ -23,18 +23,18 @@ struct DB_UT_API WindowProperties
     WindowProperties() = default;
     WindowProperties(
             const String &title,
-            I32 width,
-            I32 height,
-            I32 min_width,
-            I32 min_height,
+            U32 width,
+            U32 height,
+            U32 min_width,
+            U32 min_height,
             bool has_title_bar,
             bool vsyc);
 
     String m_title;
-    I32 m_width{};
-    I32 m_height{};
-    I32 m_minWidth{};
-    I32 m_minHeight{};
+    U32 m_width{};
+    U32 m_height{};
+    U32 m_minWidth{};
+    U32 m_minHeight{};
     bool m_hasTitlebar{};
     bool m_vsync{};
 };
@@ -47,10 +47,10 @@ public:
     explicit Window(const WindowProperties &props);
     virtual ~Window() = default;
 
-    [[nodiscard]] I32 width() const { return m_width; }
-    [[nodiscard]] I32 height() const { return m_height; }
-    [[nodiscard]] I32 minWidth() const { return m_minWidth; }
-    [[nodiscard]] I32 minHeight() const { return m_minHeight; }
+    [[nodiscard]] U32 width() const { return m_width; }
+    [[nodiscard]] U32 height() const { return m_height; }
+    [[nodiscard]] U32 minWidth() const { return m_minWidth; }
+    [[nodiscard]] U32 minHeight() const { return m_minHeight; }
 
     [[nodiscard]] const String &title() const { return m_title; }
     [[nodiscard]] bool isUsingVSync() const { return m_usingVSync; }
@@ -73,10 +73,10 @@ public:
 
 protected:
     String m_title;
-    I32 m_width;
-    I32 m_height;
-    I32 m_minWidth;
-    I32 m_minHeight;
+    U32 m_width;
+    U32 m_height;
+    U32 m_minWidth;
+    U32 m_minHeight;
     bool m_usingVSync;
     bool m_useTitlebar;
     bool m_open;

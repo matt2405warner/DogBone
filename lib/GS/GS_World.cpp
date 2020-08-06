@@ -34,6 +34,7 @@ World::update(const UT::Timestep &ts)
 void
 World::init()
 {
+    m_activeScene = std::make_shared<GS::Scene>();
     m_mainCamera = std::make_shared<GS::Camera>();
 
     m_systemInitGroup = std::make_shared<SystemGroup>(SystemGroupType::INIT);
@@ -68,7 +69,7 @@ World::shutdown()
 
     // I cant seem to find any way to clear all entities so for now we just
     // reset the entire manager on shutdown.
-    m_entityManager = EntityManager();
+    m_activeScene = nullptr;
 
     m_mainCamera = nullptr;
 }
@@ -76,7 +77,7 @@ World::shutdown()
 Entity
 World::createEntity()
 {
-    return m_entityManager.createEntity();
+    return m_activeScene->createEntity();
 }
 std::shared_ptr<SystemGroup>
 World::getSystemGroup(SystemGroupType type)

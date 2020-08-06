@@ -11,6 +11,7 @@
 #include "GS_SystemGroup.h"
 #include "GS_Entity.h"
 #include "GS_Camera.h"
+#include "GS_Scene.h"
 
 namespace dogb::GS
 {
@@ -26,9 +27,9 @@ public:
     void update(const UT::Timestep& ts);
     Entity createEntity();
 
-    EntityManager m_entityManager;
     Entity m_selectedEntity;
 
+    std::shared_ptr<GS::Scene> m_activeScene;
     std::shared_ptr<SystemGroup> getSystemGroup(SystemGroupType type);
 
     std::shared_ptr<GS::Camera> mainCamera() { return m_mainCamera; }

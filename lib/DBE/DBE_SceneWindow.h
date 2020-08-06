@@ -32,12 +32,11 @@ namespace dogb::DBE
 class DB_DBE_API SceneWindow : public IMGUI::Window
 {
 public:
-    explicit SceneWindow(UT::Window* window);
+    explicit SceneWindow();
 
     void onStart() override;
     void onGUI(const UT::Timestep& ts) override;
 
-    GS::CameraController m_cameraController;
     glm::vec2 m_viewportSize;
 };
 

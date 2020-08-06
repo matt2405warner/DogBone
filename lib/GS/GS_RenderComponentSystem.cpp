@@ -23,16 +23,13 @@ RenderComponentSystem::RenderComponentSystem()
 }
 
 void
-RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
+RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, EntityManager& mgr)
 {
-    World &world = World::instance();
-    EntityManager &mgr = world.m_entityManager;
-
     auto camera_group =
             mgr.registry().view<CameraComponent, TransformComponent>();
     for (auto &camera_entity : camera_group)
     {
-        auto &&[camera, cam_transform] =
+        auto &&[camera, cam_t] =
                 camera_group.get<CameraComponent, TransformComponent>(
                         camera_entity);
 
@@ -42,9 +39,10 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
         if (camera.m_camera->m_activeTexture)
             camera.m_camera->m_activeTexture->bind();
 
-        GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+        GR::Renderer::setClearColor(camera.m_camera->m_background);
         GR::Renderer::clear();
 
+        glm::mat4 cam_transform = cam_t.transform();
         // ---------------------------------------------------------------------
         // BEGIN 2D Meshes
         // ---------------------------------------------------------------------
@@ -56,7 +54,7 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
             auto &&[mesh_transform, mesh] =
                     mesh2d_view.get<TransformComponent, Mesh2DComponent>(
                             mesh_entity);
-            GR::Renderer2D::drawQuad(mesh_transform, mesh.m_color.toVec4());
+            GR::Renderer2D::drawQuad(mesh_transform.transform(), mesh.m_color.toVec4());
         }
         GR::Renderer2D::endScene();
         // ---------------------------------------------------------------------
@@ -74,7 +72,7 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &)
             auto &&[mesh_transform, mesh] =
             mesh_view.get<TransformComponent, MeshComponent>(
                     mesh_entity);
-            mesh.m_mesh.draw(mesh_transform);
+            mesh.m_mesh.draw(mesh_transform.transform());
         }
         GR::Renderer::endScene();
         // ---------------------------------------------------------------------

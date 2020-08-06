@@ -21,6 +21,14 @@ class Entity;
 class Scene
 {
 public:
+    void onViewportResize(uint32_t width, uint32_t height);
+
+    Entity createEntity();
+
+    EntityManager m_entityManager;
+
+    uint32_t m_viewportWidth = 0;
+    uint32_t m_viewportHeight = 0;
 };
 
 }

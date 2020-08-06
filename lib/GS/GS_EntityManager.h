@@ -38,7 +38,7 @@ public:
     Entity() = default;
     explicit Entity(entt::entity handle) : m_handle(handle) {}
 
-    explicit operator bool() const { return m_handle != entt::null; }
+    explicit operator bool() const { return m_handle != entt::null && m_manager; }
     explicit operator IdType() const { return m_handle; }
 
     bool operator<(const Entity &entity) const
@@ -80,7 +80,7 @@ public:
     const std::vector<Entity> &children();
 
 private:
-    static EntityManager &manager();
+    std::optional<std::reference_wrapper<EntityManager>> m_manager;
 
     friend class EntityManager;
 
@@ -319,27 +319,37 @@ template <typename T, typename... Args>
 T &
 Entity::addComponent(Args &&... args)
 {
-    return manager().addComponent<T>(*this, std::forward<Args>(args)...);
+    UT_ASSERT(m_manager);
+    return m_manager->get().addComponent<T>(*this, std::forward<Args>(args)...);
 }
 template <typename T>
 T &
 Entity::getComponent()
 {
-    return manager().getComponent<T>(*this);
+    UT_ASSERT(m_manager);
+    return m_manager->get().getComponent<T>(*this);
 }
 
 template <typename T>
 bool
 Entity::hasComponent()
 {
-    return manager().hasComponent<T>(*this);
+    UT_ASSERT(m_manager);
+    if (!m_manager)
+        return false;
+
+    return m_manager->get().hasComponent<T>(*this);
 }
 
 template <typename T>
 void
 Entity::removeComponent()
 {
-    manager().removeComponent<T>(*this);
+    UT_ASSERT(m_manager);
+    if (!m_manager)
+        return;
+
+    m_manager->get().removeComponent<T>(*this);
 }
 
 } // namespace dogb::GS
