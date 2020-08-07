@@ -235,10 +235,10 @@ grSubmitRender(
     if (use_texture)
     {
         // Check if we already have this texture bound to a slot.
-        CE::UUID tex_id = tex->id();
+        CE::UUID tex_id = tex->assetId();
         for (uint32_t i = 1; i < theRenderStorage.m_textureSlotIndex; i++)
         {
-            if (theRenderStorage.m_textureSlots[i]->id() == tex_id)
+            if (theRenderStorage.m_textureSlots[i]->assetId() == tex_id)
             {
                 tex_slot = static_cast<float>(i);
                 break;

@@ -15,13 +15,17 @@ Mesh::draw(const glm::mat4 &transform)
 {
     UT_PROFILE_FUNCTION();
 
-    m_shader->bind();
-    m_texture->bind();
+    GS::Material& _mat = *m_material;
+    _mat.m_shader->bind();
 
-    GR::Renderer::submit(m_shader.get(), m_VAO, transform);
+    _mat.uploadValues();
+    _mat.bindTextures();
 
-    m_texture->unbind();
-    m_shader->unbind();
+    GR::Renderer::submit(_mat.m_shader.get(), m_VAO, transform);
+
+    _mat.unbindTextures();
+
+    _mat.m_shader->unbind();
 }
 
 } // namespace dogb::GS

@@ -3,3 +3,13 @@
 //
 
 #include "GR_Color.h"
+
+namespace dogb::GR
+{
+Color &
+Color::operator=(const dogb::GR::Color::parent &v)
+{
+    parent::operator=(v);
+    return *this;
+}
+}

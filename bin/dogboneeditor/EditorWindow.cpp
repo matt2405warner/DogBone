@@ -20,13 +20,12 @@
 #include <GS/GS_Mesh2DComponent.h>
 #include <GS/GS_MeshComponent.h>
 #include <GS/GS_World.h>
+#include <GS/GS_Material.h>
 
 #include <UT/UT_Assert.h>
 
 namespace dogb
 {
-//#define USE_3D
-
 void
 EditorWindow::initialize()
 {
@@ -65,14 +64,6 @@ EditorWindow::initialize()
             imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
     console_win->show();
 
-#ifdef USE_3D
-    auto ctx = addContext<GS::SubSystem, TestContext_3D>(scene_win);
-#endif
-
-#ifdef USE_3D
-    proj_window->m_ctx = ctx.get();
-#endif
-
     auto ent = world.createEntity();
     ent.addComponent<GS::Mesh2DComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
     // m_testEntity.addComponent<TestComponent>(5);
@@ -85,8 +76,44 @@ EditorWindow::initialize()
 
     auto ent_3d = world.createEntity();
     GS::MeshComponent& mesh_comp = ent_3d.addComponent<GS::MeshComponent>();
-    mesh_comp.m_mesh.m_texture = GR::Texture2D::create("../assets/textures/Checkerboard.png");
-    mesh_comp.m_mesh.m_shader = m_shaderLibrary.load("../assets/shaders/Texture.glsl");
+
+    auto material = std::make_shared<GS::Material>();
+    material->m_mainTexture = GR::Texture2D::create("../assets/textures/stones.jpg");
+
+    material->m_shader = m_shaderLibrary.load("../assets/shaders/Test3D.glsl");
+
+    mesh_comp.m_mesh.m_material = material;
+    mesh_comp.m_mesh.m_VAO = GR::VertexArray::create();
+
+    /* clang-format off */
+    float sqr_vertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+            0.5f,  -0.5f, 0.0f, 1.0f, 0.0f,
+            0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
+            -0.5,  0.5f,  0.0f, 0.0f, 1.0f
+    };
+    /* clang-format on */
+    std::shared_ptr<GR::VertexBuffer> sqr_vb(
+            GR::VertexBuffer::create(sqr_vertices, sizeof(sqr_vertices)));
+    GR::BufferLayout sqr_layout{
+            {GR::ShaderDataType::Float3, "a_Position"},
+            {GR::ShaderDataType::Float2, "a_TexCoord"}};
+    sqr_vb->setLayout(sqr_layout);
+    mesh_comp.m_mesh.m_VAO->addVertexBuffer(sqr_vb);
+    uint32_t sqr_indices[6] = {0, 1, 2, 2, 3, 0};
+    std::shared_ptr<GR::IndexBuffer> sqr_ibuffer(GR::IndexBuffer::create(
+            sqr_indices, sizeof(sqr_indices) / sizeof(uint32_t)));
+    mesh_comp.m_mesh.m_VAO->setIndexBuffer(sqr_ibuffer);
+
+    // Test Mesh Comp2
+    auto material2 = std::make_shared<GS::Material>();
+    material2->m_mainTexture = GR::Texture2D::create("../assets/textures/Checkerboard.png");
+    material2->m_shader = material->m_shader;
+    auto ent_3d_2 = world.createEntity();
+    GS::MeshComponent& mesh_comp_2 = ent_3d_2.addComponent<GS::MeshComponent>();
+    mesh_comp_2.m_mesh.m_VAO = mesh_comp.m_mesh.m_VAO;
+    mesh_comp_2.m_mesh.m_material = material2;
+
 
     world.m_selectedEntity = ent;
 }

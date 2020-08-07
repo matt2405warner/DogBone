@@ -24,9 +24,11 @@ GLRenderer::drawIndexed(const std::shared_ptr<VertexArray> vao, uint32_t count)
     if (count == 0)
         count = vao->indexBuffer()->count();
 
+    vao->bind();
     glDrawElements(
             GL_TRIANGLES, static_cast<GLsizei>(count),
             GL_UNSIGNED_INT, nullptr);
+    vao->unbind();
 }
 
 void

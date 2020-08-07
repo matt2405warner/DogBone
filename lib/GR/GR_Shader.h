@@ -64,6 +64,8 @@ private:
     std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaders;
 };
 
+using ShaderPtr = std::shared_ptr<GR::Shader>;
+
 } // namespace dogb::GR
 
 #endif // DOGBONE_GR_SHADER_H

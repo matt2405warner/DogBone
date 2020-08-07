@@ -18,7 +18,7 @@ namespace dogb::GS
 struct DB_GS_API Mesh2DComponent
 {
 public:
-    static constexpr const char* theGUIName = "Mesh";
+    static constexpr const char* theGUIName = "Mesh 2D";
 
     Mesh2DComponent() { UT_LOG_INFO("Create Mesh"); }
     Mesh2DComponent(const glm::vec4 &color) : m_color(color) { UT_LOG_INFO("Create mesh from value"); }

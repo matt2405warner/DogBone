@@ -7,6 +7,8 @@
 
 #include "GS_API.h"
 
+#include "GS_Material.h"
+
 #include <GR/GR_VertexArray.h>
 #include <GR/GR_RenderBuffer.h>
 #include <GR/GR_Shader.h>
@@ -20,9 +22,7 @@ class DB_GS_API Mesh
 {
 public:
     std::shared_ptr<GR::VertexArray> m_VAO;
-    // Eventually this will be a material
-    std::shared_ptr<GR::Texture> m_texture;
-    std::shared_ptr<GR::Shader> m_shader;
+    GS::MaterialPtr m_material;
 
     void draw(const glm::mat4& transform);
 };

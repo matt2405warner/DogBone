@@ -35,9 +35,14 @@ public:
 
     using parent::parent;
     Color() = default;
+
+    Color(const Color& color) = default;
     explicit Color(const parent& v) : parent(v) {}
 
     virtual ~Color() = default;
+
+    Color& operator=(const Color& color) = default;
+    Color& operator=(const parent& v);
 
     [[nodiscard]] const glm::vec4 & toVec4() const { return *this; }
     glm::vec4 & toVec4() { return *this; }

@@ -22,6 +22,7 @@ set(sources
         GS_Mesh.cpp
         GS_MeshComponent.cpp
         GS_CameraControllerSystem.cpp
+        GS_Material.cpp
         )
 
 set(headers
@@ -48,6 +49,7 @@ set(headers
         GS_Mesh.h
         GS_MeshComponent.h
         GS_CameraControllerSystem.h
+        GS_Material.h
         )
 
 db_lib(

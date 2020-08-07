@@ -11,9 +11,13 @@ namespace dogb::GS
 void
 MeshComponent::onGUI()
 {
-    if (m_mesh.m_texture)
+    if (!m_mesh.m_material)
+        return;
+
+    GS::Material& _mat = *m_mesh.m_material;
+    if (_mat.m_mainTexture)
     {
-        uint32_t tex_id = m_mesh.m_texture->renderID();
+        uint32_t tex_id = _mat.m_mainTexture->renderId();
 
         ImVec2 viewport_size = ImGui::GetContentRegionAvail();
 
@@ -26,6 +30,7 @@ MeshComponent::onGUI()
 
         viewport_size.y = viewport_size.x;
 
+        ImGui::Text("Main Texture:");
         ImGui::Image(
                 reinterpret_cast<void *>(tex_id),
                 viewport_size, ImVec2{0, 1},

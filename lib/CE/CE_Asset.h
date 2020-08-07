@@ -29,7 +29,7 @@ public:
     Asset() : m_id() {}
     virtual ~Asset() = default;
 
-    [[nodiscard]] const UUID &id() const { return m_id; }
+    [[nodiscard]] const UUID &assetId() const { return m_id; }
 
     bool operator<(const Asset &asset) const { return m_id < asset.m_id; }
     bool operator>(const Asset &asset) const { return m_id > asset.m_id; }

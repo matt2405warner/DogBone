@@ -22,11 +22,9 @@ Renderer::submit(Shader *shader, std::shared_ptr<VertexArray> vao, const glm::ma
     if (!shader || !vao)
         return;
 
-    shader->bind();
     shader->setMat4("u_ViewProj", theSceneCtx.m_viewProjMatrix);
     shader->setMat4("u_Transform", transform);
 
-    vao->bind();
     theApi->drawIndexed(vao, vao->indexBuffer()->count());
 }
 
