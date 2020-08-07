@@ -12,6 +12,7 @@
 #include <DBE/DBE_HierarchyWindow.h>
 #include <DBE/DBE_Inspector.h>
 #include <DBE/DBE_SceneWindow.h>
+#include <DBE/DBE_Editor.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
 
@@ -30,6 +31,30 @@ void
 EditorWindow::initialize()
 {
     GR::DesktopWindow::initialize();
+
+    DBE::Editor::addMenuCallback("File/Test", [](){
+    });
+    DBE::Editor::addMenuCallback("Entity/Create Empty", []() {
+        GS::World &world = GS::World::instance();
+        GS::Entity e = world.createEntity();
+        if (world.m_selectedEntity)
+        {
+            world.m_selectedEntity.addChildEntity(e);
+        }
+        else
+        {
+            world.m_selectedEntity = e;
+        }
+    });
+    DBE::Editor::addMenuCallback("Component/Add Component", [](){
+
+    });
+    DBE::Editor::addMenuCallback("Window/Show/Scene Window", [](){
+
+    });
+    DBE::Editor::addMenuCallback("Help/About", [](){
+
+    });
 
     GR::Framebuffer::Specification spec;
     spec.m_width = m_width;
