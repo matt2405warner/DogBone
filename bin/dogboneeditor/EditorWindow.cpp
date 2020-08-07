@@ -18,6 +18,7 @@
 #include <GS/GS_CameraComponent.h>
 #include <GS/GS_CameraController.h>
 #include <GS/GS_Mesh2DComponent.h>
+#include <GS/GS_MeshComponent.h>
 #include <GS/GS_World.h>
 
 #include <UT/UT_Assert.h>
@@ -81,6 +82,11 @@ EditorWindow::initialize()
     GS::CameraComponent &cam_comp = cam_ent.addComponent<GS::CameraComponent>();
     cam_comp.m_camera = world.mainCamera();
     cam_ent.addComponent<GS::CameraController>();
+
+    auto ent_3d = world.createEntity();
+    GS::MeshComponent& mesh_comp = ent_3d.addComponent<GS::MeshComponent>();
+    mesh_comp.m_mesh.m_texture = GR::Texture2D::create("../assets/textures/Checkerboard.png");
+    mesh_comp.m_mesh.m_shader = m_shaderLibrary.load("../assets/shaders/Texture.glsl");
 
     world.m_selectedEntity = ent;
 }

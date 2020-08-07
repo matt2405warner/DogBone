@@ -26,6 +26,7 @@ public:
     [[nodiscard]] U32 height() const override { return m_height; }
     void bind(U32 slot = 0) const override;
     void unbind() const override ;
+    [[nodiscard]] U32 renderID() const override { return m_ID; }
 
 private:
     std::string m_path;

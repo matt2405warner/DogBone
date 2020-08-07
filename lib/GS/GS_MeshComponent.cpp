@@ -3,3 +3,33 @@
 //
 
 #include "GS_MeshComponent.h"
+
+#include <imgui.h>
+
+namespace dogb::GS
+{
+void
+MeshComponent::onGUI()
+{
+    if (m_mesh.m_texture)
+    {
+        uint32_t tex_id = m_mesh.m_texture->renderID();
+
+        ImVec2 viewport_size = ImGui::GetContentRegionAvail();
+
+        static constexpr int min_size = 40;
+        static constexpr int max_size = 100;
+        if (viewport_size.x < min_size)
+            viewport_size.x = min_size;
+        else if (viewport_size.x > max_size)
+            viewport_size.x = max_size;
+
+        viewport_size.y = viewport_size.x;
+
+        ImGui::Image(
+                reinterpret_cast<void *>(tex_id),
+                viewport_size, ImVec2{0, 1},
+                ImVec2{1, 0});
+    }
+}
+} // namespace dogb::GS

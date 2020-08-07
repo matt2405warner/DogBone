@@ -19,7 +19,7 @@ public:
     MeshComponent() = default;
     virtual ~MeshComponent() = default;
 
-    void onGUI() {}
+    void onGUI();
 
     Mesh m_mesh;
 };

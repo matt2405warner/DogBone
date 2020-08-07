@@ -7,6 +7,7 @@
 
 #include <GR/GR_DesktopWindow.h>
 #include <GR/GR_Framebuffer.h>
+#include <GR/GR_Shader.h>
 
 #include <GS/GS_CameraController.h>
 
@@ -25,6 +26,7 @@ public:
     void initialize() override;
 
     ProjectWindow *m_projectWindow{};
+    GR::ShaderLibrary m_shaderLibrary;
 };
 
 } // namespace dogb
