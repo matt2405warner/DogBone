@@ -11,6 +11,7 @@ rttr/0.9.6
 stb/20190512@conan/stable
 boost/1.72.0
 entt/3.4.0
+yaml-cpp/0.6.3
 
 [generators]
 cmake
