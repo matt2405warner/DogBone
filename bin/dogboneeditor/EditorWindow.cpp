@@ -25,6 +25,9 @@
 
 #include <UT/UT_Assert.h>
 
+DBE_REGISTER_MENU("File/Test", [](){})
+DBE_REGISTER_MENU("Component/Add Component", [](){})
+
 namespace dogb
 {
 void
@@ -32,8 +35,6 @@ EditorWindow::initialize()
 {
     GR::DesktopWindow::initialize();
 
-    DBE::Editor::addMenuCallback("File/Test", [](){
-    });
     DBE::Editor::addMenuCallback("Entity/Create Empty", []() {
         GS::World &world = GS::World::instance();
         GS::Entity e = world.createEntity();
@@ -46,9 +47,7 @@ EditorWindow::initialize()
             world.m_selectedEntity = e;
         }
     });
-    DBE::Editor::addMenuCallback("Component/Add Component", [](){
 
-    });
     DBE::Editor::addMenuCallback("Window/Show/Scene Window", [](){
 
     });

@@ -122,7 +122,7 @@ Editor::drawMenus_(const std::vector<Editor::EditorMenu> &menus)
     }
 }
 
-void
+bool
 Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
 {
     std::size_t idx = path.find_first_of('/');
@@ -144,7 +144,7 @@ Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
 
     // There should be a minimum of 2 elements
     if (elements.size() < 2)
-        return;
+        return false;
 
     auto& _menus = instance().m_menus;
 
@@ -167,11 +167,11 @@ Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
             for (auto &menu : current_menu->m_items)
             {
                 if (menu.m_name == el)
-                    return;
+                    return false;
             }
 
             current_menu->m_items.emplace_back(el, clb);
-            return;
+            return true;
         }
 
         bool found = false;
@@ -201,6 +201,8 @@ Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
             }
         }
     }
+
+    return true;
 }
 
 } // namespace dogb::DBE
