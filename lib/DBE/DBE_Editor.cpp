@@ -13,6 +13,20 @@
 
 namespace dogb::DBE
 {
+Editor::Editor()
+{
+    // The layout of the menu items should be static across editor startups
+    // The current layout is:
+    //  File | Entity | Component | Window | Help
+    //
+    // NB: All other menu items are added after this.
+    m_menus.emplace_back("File");
+    m_menus.emplace_back("Entity");
+    m_menus.emplace_back("Component");
+    m_menus.emplace_back("Window");
+    m_menus.emplace_back("Help");
+}
+
 Editor &
 Editor::instance()
 {
@@ -148,16 +162,28 @@ Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
 
     auto& _menus = instance().m_menus;
 
-    std::size_t elem_offset = 0;
-    if (_menus.empty())
+    EditorMenu* current_menu = nullptr;
+
+    // Find the top level menu that already exists.
+    for (auto&& menu : _menus)
+    {
+        if (menu.m_name == elements[0])
+        {
+            current_menu = &menu;
+            break;
+        }
+    }
+
+    // If we did not find the top level menu item then add it in now and set
+    // our current menu item to the newly added top level menu item.
+    if (current_menu == nullptr)
     {
         // Add the first element and then add in the rest of the elements
         _menus.emplace_back(elements[0]);
-        elem_offset = 1;
+        current_menu = &_menus.back();
     }
 
-    EditorMenu* current_menu = &_menus[0];
-    for (std::size_t i = elem_offset; i < elements.size(); ++i)
+    for (std::size_t i = 1; i < elements.size(); ++i)
     {
         auto &el = elements[i];
 
@@ -189,7 +215,7 @@ Editor::addMenuCallback(const std::string &path, std::function<void()> clb)
         // harder to follow and skip having a root.
         if (!found)
         {
-            if (i == 0)
+            if (i == 0 && !current_menu->m_items.empty())
             {
                 current_menu = &_menus.emplace_back(el);
             }

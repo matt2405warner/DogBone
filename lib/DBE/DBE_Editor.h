@@ -29,6 +29,8 @@ public:
             std::function<void()> clb);
 
 private:
+    Editor();
+
     static Editor &instance();
 
     struct EditorMenu
@@ -55,8 +57,6 @@ private:
 /* clang-format off */
 #define __DBE_PASTE_MACRO1(x, y) x##y
 #define __DBE_PASTE_MACRO(x, y) __DBE_PASTE_MACRO1(x, y)
-#define __DBE_I1(x) x
-#define __DBE_I2(x) __DBE_I1(x)
 /* clang-format on */
 
 #define DBE_REGISTER_MENU(name, clb)  \
