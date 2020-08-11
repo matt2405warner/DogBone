@@ -31,11 +31,14 @@ namespace dogb::DBE
 
 class DB_DBE_API SceneWindow : public IMGUI::Window
 {
+    RTTR_ENABLE(IMGUI::Window)
 public:
     explicit SceneWindow();
 
     void onStart() override;
     void onGUI(const UT::Timestep& ts) override;
+
+    static void menuItem();
 
     glm::vec2 m_viewportSize;
 };

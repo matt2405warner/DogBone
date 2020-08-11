@@ -4,7 +4,13 @@
 
 #include "DBE_SceneWindow.h"
 
+#include "DBE_Editor.h"
+
+#include <IMGUI/IMGUI_SubSystem.h>
+
 #include <GS/GS_World.h>
+
+DBE_REGISTER_MENU("Window/Scene", &dogb::DBE::SceneWindow::menuItem)
 
 namespace dogb::DBE
 {
@@ -54,4 +60,15 @@ SceneWindow::onGUI(const UT::Timestep &)
             ImVec2{m_viewportSize.x, m_viewportSize.y}, ImVec2{0, 1},
             ImVec2{1, 0});
 }
+
+void
+SceneWindow::menuItem()
+{
+    UT::Engine& engine = UT::Engine::get();
+
+    IMGUI::SubSystem* sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+    SceneWindow* window = sys->getWindow<SceneWindow>();
+    window->show();
+}
+
 } // namespace dogb::DBE

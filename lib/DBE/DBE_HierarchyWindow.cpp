@@ -4,13 +4,20 @@
 
 #include "DBE_HierarchyWindow.h"
 
+#include <DBE/DBE_Editor.h>
+
 #include <GS/GS_TagComponent.h>
 #include <GS/GS_TransformComponent.h>
 #include <GS/GS_World.h>
 
 #include <IMGUI/IMGUI_Std.h>
+#include <IMGUI/IMGUI_SubSystem.h>
+
+#include <UT/UT_Engine.h>
 
 #include <set>
+
+DBE_REGISTER_MENU("Window/Hierarchy", &dogb::DBE::HierarchyWindow::menuItem)
 
 namespace dogb::DBE
 {
@@ -107,5 +114,14 @@ HierarchyWindow::onGUI(const UT::Timestep &)
     }
 
     //ImGui::ListBoxFooter();
+}
+void
+HierarchyWindow::menuItem()
+{
+    UT::Engine& engine = UT::Engine::get();
+
+    IMGUI::SubSystem* sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+    HierarchyWindow* window = sys->getWindow<HierarchyWindow>();
+    window->show();
 }
 } // namespace dogb::DBE

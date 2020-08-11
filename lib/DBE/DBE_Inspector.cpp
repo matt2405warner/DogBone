@@ -6,12 +6,14 @@
 
 #include "DBE_Editor.h"
 
-#include <IMGUI/IMGUI_SubSystemContext.h>
+#include <IMGUI/IMGUI_SubSystem.h>
 
 #include <GS/GS_World.h>
 
 #include <UT/UT_Logger.h>
 #include <UT/UT_Window.h>
+
+DBE_REGISTER_MENU("Window/Inspector", &dogb::DBE::Inspector::menuItem)
 
 namespace dogb::DBE
 {
@@ -38,5 +40,14 @@ Inspector::onGUI(const UT::Timestep &)
 
     DBE::Editor::drawEntity(
             world.m_activeScene->m_entityManager, world.m_selectedEntity);
+}
+void
+Inspector::menuItem()
+{
+    UT::Engine& engine = UT::Engine::get();
+
+    IMGUI::SubSystem* sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
+    Inspector* window = sys->getWindow<Inspector>();
+    window->show();
 }
 } // namespace dogb::DBE

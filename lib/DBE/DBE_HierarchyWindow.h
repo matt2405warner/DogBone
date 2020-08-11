@@ -19,10 +19,12 @@ namespace dogb::DBE
 
 class DB_DBE_API HierarchyWindow : public IMGUI::Window
 {
+    RTTR_ENABLE(IMGUI::Window)
 public:
     void onStart() override ;
     void onGUI(const UT::Timestep& ts);
 
+    static void menuItem();
 private:
     void drawEntity(GS::Entity& entity, bool is_root);
 };

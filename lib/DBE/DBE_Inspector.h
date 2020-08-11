@@ -11,9 +11,12 @@ namespace dogb::DBE
 {
 class Inspector : public IMGUI::Window
 {
+    RTTR_ENABLE(IMGUI::Window)
 public:
     void onStart() override;
     void onGUI(const UT::Timestep& ts) override;
+
+    static void menuItem();
 };
 }
 

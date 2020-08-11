@@ -48,9 +48,6 @@ EditorWindow::initialize()
         }
     });
 
-    DBE::Editor::addMenuCallback("Window/Show/Scene Window", [](){
-
-    });
     DBE::Editor::addMenuCallback("Help/About", [](){
 
     });

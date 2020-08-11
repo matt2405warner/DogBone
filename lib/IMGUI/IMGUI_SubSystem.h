@@ -37,6 +37,21 @@ public:
         m_contexts.emplace_back(ctx);
     }
 
+    template <typename T>
+    T* getWindow() const
+    {
+        static_assert(
+                std::is_base_of_v<IMGUI::Window, T>,
+                "Cannot get GUI window if it does not derive from IMGUI::Window");
+
+        for (auto&& ctx : m_contexts)
+        {
+            IMGUI::Window* window = ctx->getGUIWindow<T>();
+            if (window != nullptr)
+                return window;
+        }
+        return nullptr;
+    }
 private:
     std::vector<std::shared_ptr<context_t>> m_contexts;
 };

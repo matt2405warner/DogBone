@@ -22,6 +22,8 @@ class SubSystemContext;
 
 class DB_IMGUI_API Window
 {
+    RTTR_ENABLE()
+
     friend class IMGUI::SubSystemContext;
 public:
     enum DockDirection
@@ -69,6 +71,7 @@ public:
     }
 
     void show() { m_isOpen = true; }
+    void hide() { m_isOpen = false; }
     [[nodiscard]] bool isOpen() const { return m_isOpen; }
 
     const std::string &title() { return m_title; }
