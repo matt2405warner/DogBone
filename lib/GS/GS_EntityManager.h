@@ -38,7 +38,7 @@ public:
     Entity() = default;
     explicit Entity(entt::entity handle) : m_handle(handle) {}
 
-    explicit operator bool() const { return m_handle != entt::null && m_manager; }
+    explicit operator bool() const;
     explicit operator IdType() const { return m_handle; }
 
     bool operator<(const Entity &entity) const
@@ -75,9 +75,9 @@ public:
     void clear() { m_handle = entt::null; }
 
     void addChildEntity(const Entity &child);
-    const Entity &parent();
-    const Entity &root();
-    const std::vector<Entity> &children();
+    Entity &parent();
+    Entity &root();
+    std::vector<Entity> &children();
 
 private:
     std::optional<std::reference_wrapper<EntityManager>> m_manager;
@@ -189,12 +189,7 @@ public:
         return m_registry.valid(static_cast<Entity::IdType>(e));
     }
 
-    void destroy(Entity &e)
-    {
-        entt::entity entity = static_cast<entt::entity>(e);
-        m_registry.destroy(entity);
-        e.m_handle = entt::null;
-    }
+    void destroy(Entity &e);
 
     Registry &registry() { return m_registry; }
 
@@ -350,6 +345,12 @@ Entity::removeComponent()
         return;
 
     m_manager->get().removeComponent<T>(*this);
+}
+
+inline
+Entity::operator bool() const
+{
+    return m_handle != entt::null && m_manager && m_manager->get().isValid(*this);
 }
 
 } // namespace dogb::GS

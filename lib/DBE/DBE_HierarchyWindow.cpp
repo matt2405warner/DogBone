@@ -34,6 +34,9 @@ HierarchyWindow::onStart()
 void
 HierarchyWindow::drawEntity(GS::Entity& entity, bool is_root)
 {
+    if (!entity)
+        return;
+
     GS::World &world = GS::World::instance();
 
     GS::TagComponent& tag = entity.getComponent<GS::TagComponent>();

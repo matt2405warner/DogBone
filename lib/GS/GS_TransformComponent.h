@@ -31,6 +31,8 @@ public:
 
     [[nodiscard]] glm::mat4 transform() const;
 
+    void removeChild(const Entity& e);
+
     glm::vec3 m_position;
     glm::quat m_rotation;
     glm::vec3 m_scale;

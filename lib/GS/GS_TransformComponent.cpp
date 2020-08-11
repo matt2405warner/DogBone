@@ -57,5 +57,17 @@ TransformComponent::transform() const
     return glm::translate(glm::mat4(), m_position) * glm::toMat4(m_rotation) *
            glm::scale(glm::mat4(), m_scale);
 }
+void
+TransformComponent::removeChild(const Entity &e)
+{
+    for (auto it = m_children.begin(); it != m_children.end(); it++)
+    {
+        if ((*it) == e)
+        {
+            it = m_children.erase(it);
+            break;
+        }
+    }
+}
 
 } // namespace dogb::GS
