@@ -38,6 +38,11 @@ public:
     bool getTexture(const std::string &name, GR::TexturePtr &texture);
     bool getVector(const std::string &name, glm::vec4 &vector);
 
+    explicit operator bool() const
+    {
+        return m_shader && m_mainTexture;
+    }
+
     // Send the material values to the shader.
     void uploadValues();
     // Bind all of our textures.

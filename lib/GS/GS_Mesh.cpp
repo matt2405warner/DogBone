@@ -15,7 +15,16 @@ Mesh::draw(const glm::mat4 &transform)
 {
     UT_PROFILE_FUNCTION();
 
+    // TODO: Ideally this will show a standard material on creation instead of
+    //  just showing nothing.
+    if (!m_material)
+        return;
+
     GS::Material& _mat = *m_material;
+
+    if (!_mat)
+        return;
+
     _mat.m_shader->bind();
 
     _mat.uploadValues();
