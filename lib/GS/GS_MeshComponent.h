@@ -22,6 +22,9 @@ public:
     void onGUI();
 
     Mesh m_mesh;
+
+private:
+    void selectFileCallback_(const std::string& file);
 };
 }
 

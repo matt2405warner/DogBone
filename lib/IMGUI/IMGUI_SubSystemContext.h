@@ -8,6 +8,7 @@
 #include "IMGUI_API.h"
 
 #include "IMGUI_Window.h"
+#include "IMGUI_Modal.h"
 
 #include <UT/UT_SubSystemContext.h>
 #include <UT/UT_Timestep.h>
@@ -74,16 +75,19 @@ public:
             const rttr::type win_t = rttr::type::get(*ptr);
 
             if (t == win_t)
-                return ptr.get();
+                return reinterpret_cast<T*>(ptr.get());
         }
 
         return nullptr;
     }
 
+    Modal* addModal(std::unique_ptr<Modal> modal);
+
 protected:
     static void initStyle();
 
 private:
+    void renderModals();
 
     // Translate a dock direction to an IMGUI id.
     ImGuiID getDockID(IMGUI::Window::DockDirection dir);
@@ -98,6 +102,8 @@ private:
     std::vector<std::unique_ptr<IMGUI::Window>> m_windows;
     UT::Window *m_window{};
     ImGuiContext *m_imguiContext{};
+
+    std::vector<std::unique_ptr<Modal>> m_modals;
 };
 } // namespace dogb::IMGUI
 

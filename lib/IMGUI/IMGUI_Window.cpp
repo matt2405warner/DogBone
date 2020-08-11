@@ -12,8 +12,8 @@
 
 namespace dogb::IMGUI
 {
-IMGUI::SubSystemContext *
-IMGUI::Window::imguiContext() const
+SubSystemContext *
+Window::imguiContext() const
 {
     return m_context;
 }

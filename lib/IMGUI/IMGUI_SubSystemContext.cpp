@@ -201,6 +201,8 @@ void SubSystemContext::update(UT::Timestep ts)
         win->onPostGUI();
     }
 
+    renderModals();
+
     ImGui::EndFrame();
 
     ImGui::Render();
@@ -227,6 +229,36 @@ SubSystemContext::initStyle()
     style.FrameRounding = 0.0f;
     style.GrabRounding = 0.0f;
     style.ScrollbarRounding = 0.0f;
+}
+
+Modal*
+SubSystemContext::addModal(std::unique_ptr<Modal> modal)
+{
+    return m_modals.emplace_back(std::move(modal)).get();
+}
+
+void
+SubSystemContext::renderModals()
+{
+    // Render and clear out all the old modals
+    for (auto it = m_modals.begin(); it != m_modals.end(); )
+    {
+        std::unique_ptr<Modal>& modal = (*it);
+        if (!modal)
+        {
+            it = m_modals.erase(it);
+            continue;
+        }
+
+        modal->render();
+
+        if (!modal->isOpen())
+        {
+            it = m_modals.erase(it);
+        }
+        else
+            it++;
+    }
 }
 
 } // namespace dogb::IMGUI

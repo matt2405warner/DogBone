@@ -13,7 +13,7 @@ namespace dogb::IMGUI
 void
 SubSystem::init()
 {
-
+    m_currentCtx = nullptr;
 }
 
 void
@@ -21,6 +21,7 @@ SubSystem::update(const UT::Timestep& timestep)
 {
     for (auto &ctx : m_contexts)
     {
+        m_currentCtx = ctx.get();
         ctx->update(timestep);
     }
 }
@@ -32,6 +33,15 @@ SubSystem::shutdown()
 
     ImGui_ImplGlfw_Shutdown();
     ImGui_ImplOpenGL3_Shutdown();
+}
+
+Modal*
+SubSystem::addModal(std::unique_ptr<Modal> modal)
+{
+    if (m_currentCtx == nullptr)
+        return nullptr;
+
+    return m_currentCtx->addModal(std::move(modal));
 }
 
 } // namespace dogb::IMGUI

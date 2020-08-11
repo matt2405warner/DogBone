@@ -46,13 +46,16 @@ public:
 
         for (auto&& ctx : m_contexts)
         {
-            IMGUI::Window* window = ctx->getGUIWindow<T>();
+            T* window = ctx->getGUIWindow<T>();
             if (window != nullptr)
                 return window;
         }
         return nullptr;
     }
+
+    Modal* addModal(std::unique_ptr<Modal> modal);
 private:
+    context_t * m_currentCtx;
     std::vector<std::shared_ptr<context_t>> m_contexts;
 };
 } // namespace dogb::IMGUI

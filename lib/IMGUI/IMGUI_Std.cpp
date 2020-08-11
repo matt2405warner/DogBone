@@ -99,4 +99,33 @@ InputTextWithHint(
             label, hint, (char *)str.c_str(), str.capacity() + 1, flags,
             InputTextCallback, &cb_user_data);
 }
+
+bool
+ComboBox(
+        const char* label,
+        std::vector<std::string>::size_type & current_index,
+        const std::vector<std::string>& values)
+{
+    if (current_index >= values.size() || values.empty())
+        return false;
+
+    if (!ImGui::BeginCombo(label, values[current_index].c_str()))
+    {
+        return false;
+    }
+
+    std::vector<std::string>::size_type idx = 0;
+    for (auto&& v : values)
+    {
+        if (ImGui::Selectable(v.c_str(), idx == current_index))
+        {
+            current_index = idx;
+        }
+        idx++;
+    }
+
+    ImGui::EndCombo();
+
+    return true;
+}
 }

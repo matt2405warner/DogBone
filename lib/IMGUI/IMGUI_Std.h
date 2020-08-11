@@ -10,6 +10,7 @@
 #include <imgui.h>
 
 #include <string>
+#include <vector>
 
 namespace dogb::IMGUI
 {
@@ -33,6 +34,11 @@ DB_IMGUI_API bool InputTextWithHint(
         ImGuiInputTextFlags = 0,
         ImGuiInputTextCallback callback = nullptr,
         void *user_data = nullptr);
+DB_IMGUI_API bool ComboBox(
+        const char* label,
+        std::vector<std::string>::size_type &current_idx,
+        const std::vector<std::string>& items
+        );
 } // namespace dogb::IMGUI
 
 #endif // DOGBONE_IMGUI_STD_H
