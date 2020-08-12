@@ -11,13 +11,13 @@
 #include <GR/GR_RenderBuffer.h>
 #include <GR/GR_Renderer.h>
 #include <GR/GR_Shader.h>
-#include <GR/GR_VertexArray.h>
 #include <GR/GR_SubSystem.h>
+#include <GR/GR_VertexArray.h>
 
 #include <IMGUI/IMGUI_SubSystem.h>
 
-#include <GS/GS_SubSystem.h>
 #include <GS/GS_Scene.h>
+#include <GS/GS_SubSystem.h>
 
 #include <CE/CE_Input.h>
 
@@ -54,16 +54,16 @@ EditorApp::initialize(int argc, char *argv[])
     UT::Logger &logger = UT::Logger::get();
     logger.setLog(std::move(log));
 
-    GS::SubSystem& gs_system = GS::SubSystem::instance();
+    GS::SubSystem &gs_system = GS::SubSystem::instance();
     gs_system.init();
 
-    WindowProperties props("Hello World", 1080, 920, 800, 600, true, true);
+    WindowProperties props("DogBone Editor", 1080, 920, 800, 600, true, true);
     createWindow<EditorWindow>(props);
 
-    GR::SubSystem& gr_system = GR::SubSystem::instance();
+    GR::SubSystem &gr_system = GR::SubSystem::instance();
     gr_system.init();
 
-    IMGUI::SubSystem& imgui_system = IMGUI::SubSystem::instance();
+    IMGUI::SubSystem &imgui_system = IMGUI::SubSystem::instance();
     imgui_system.init();
 
     return 0;
@@ -74,20 +74,14 @@ EditorApp::exec()
 {
     Application::exec();
 
-    entt::registry registry;
-    auto entity = registry.create();
-    (void)entity;
-
-    GR::ShaderLibrary shader_library;
-
     EditorWindow *window = dynamic_cast<EditorWindow *>(m_mainWindow.get());
     GR::Renderer::use(window);
 
     float last_time = 0;
 
-    GS::SubSystem& gs_system = GS::SubSystem::instance();
-    GR::SubSystem& gr_system = GR::SubSystem::instance();
-    IMGUI::SubSystem& imgui_system = IMGUI::SubSystem::instance();
+    GS::SubSystem &gs_system = GS::SubSystem::instance();
+    GR::SubSystem &gr_system = GR::SubSystem::instance();
+    IMGUI::SubSystem &imgui_system = IMGUI::SubSystem::instance();
 
     while (isRunning())
     {
