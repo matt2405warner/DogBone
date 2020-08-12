@@ -54,19 +54,17 @@ EditorApp::initialize(int argc, char *argv[])
     UT::Logger &logger = UT::Logger::get();
     logger.setLog(std::move(log));
 
-    UT::Engine& engine = UT::Engine::get();
-
-    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
-    gs_system->init();
+    GS::SubSystem& gs_system = GS::SubSystem::instance();
+    gs_system.init();
 
     WindowProperties props("Hello World", 1080, 920, 800, 600, true, true);
     createWindow<EditorWindow>(props);
 
-    GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
-    gr_system->init();
+    GR::SubSystem& gr_system = GR::SubSystem::instance();
+    gr_system.init();
 
-    IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    imgui_system->init();
+    IMGUI::SubSystem& imgui_system = IMGUI::SubSystem::instance();
+    imgui_system.init();
 
     return 0;
 }
@@ -80,14 +78,16 @@ EditorApp::exec()
     auto entity = registry.create();
     (void)entity;
 
-    UT::Engine& engine = UT::Engine::get();
-
     GR::ShaderLibrary shader_library;
 
     EditorWindow *window = dynamic_cast<EditorWindow *>(m_mainWindow.get());
     GR::Renderer::use(window);
 
     float last_time = 0;
+
+    GS::SubSystem& gs_system = GS::SubSystem::instance();
+    GR::SubSystem& gr_system = GR::SubSystem::instance();
+    IMGUI::SubSystem& imgui_system = IMGUI::SubSystem::instance();
 
     while (isRunning())
     {
@@ -101,16 +101,13 @@ EditorApp::exec()
         {
             m_mainWindow->preUpdate();
 
-            GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
-            gs_system->update(timestep);
+            gs_system.update(timestep);
 
-            IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-            imgui_system->update(timestep);
+            imgui_system.update(timestep);
 
             m_mainWindow->postUpdate();
 
-            GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
-            gr_system->update(timestep);
+            gr_system.update(timestep);
         }
 
         window->update(timestep);
@@ -121,14 +118,11 @@ EditorApp::exec()
         // timestep.milliseconds());
     }
 
-    GS::SubSystem* gs_system = engine.getOrCreateSubSystem<GS::SubSystem>();
-    gs_system->shutdown();
+    gs_system.shutdown();
 
-    IMGUI::SubSystem* imgui_system = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    imgui_system->shutdown();
+    imgui_system.shutdown();
 
-    GR::SubSystem* gr_system = engine.getOrCreateSubSystem<GR::SubSystem>();
-    gr_system->shutdown();
+    gr_system.shutdown();
 
     return 0;
 }

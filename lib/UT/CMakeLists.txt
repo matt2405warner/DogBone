@@ -7,8 +7,6 @@ set(sources
         UT_IDManager.cpp
         UT_Window.cpp
         UT_SubSystem.cpp
-        UT_SubSystemContext.cpp
-        UT_Engine.cpp
         UT_EventDispatcher.cpp
         UT_Timestep.cpp
         UT_Profiler.cpp
@@ -21,8 +19,6 @@ set(headers
         UT_IDManager.h
         UT_Window.h
         UT_SubSystem.h
-        UT_SubSystemContext.h
-        UT_Engine.h
         UT_EventDispatcher.h
         UT_Timestep.h
         UT_Profiler.h

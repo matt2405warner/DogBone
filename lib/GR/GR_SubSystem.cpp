@@ -25,5 +25,11 @@ SubSystem::shutdown()
 {
     GR::Renderer2D::shutdown();
 }
+SubSystem &
+SubSystem::instance()
+{
+    static SubSystem _instance;
+    return _instance;
+}
 
 }

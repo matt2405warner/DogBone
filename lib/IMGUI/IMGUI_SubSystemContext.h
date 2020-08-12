@@ -10,7 +10,6 @@
 #include "IMGUI_Window.h"
 #include "IMGUI_Modal.h"
 
-#include <UT/UT_SubSystemContext.h>
 #include <UT/UT_Timestep.h>
 
 #include <imgui.h>
@@ -29,17 +28,17 @@ class Window;
 
 namespace dogb::IMGUI
 {
-class DB_IMGUI_API SubSystemContext : public UT::SubSystemContext
+class DB_IMGUI_API SubSystemContext
 {
     friend class SubSystem;
 
 public:
     explicit SubSystemContext(UT::Window* window);
-    ~SubSystemContext() override;
+    virtual ~SubSystemContext() ;
     void onAttach();
     void onShutdown();
 
-    void update(UT::Timestep timestep) override;
+    void update(UT::Timestep timestep) ;
     virtual void onGUI() {}
 
     void setWindow(UT::Window *window) { m_window = window; }

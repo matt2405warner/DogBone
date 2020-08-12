@@ -44,10 +44,7 @@ Inspector::onGUI(const UT::Timestep &)
 void
 Inspector::menuItem()
 {
-    UT::Engine& engine = UT::Engine::get();
-
-    IMGUI::SubSystem* sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    Inspector* window = sys->getWindow<Inspector>();
+    Inspector* window = IMGUI::SubSystem::instance().getWindow<Inspector>();
     window->show();
 }
 } // namespace dogb::DBE

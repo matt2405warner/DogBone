@@ -6,8 +6,6 @@
 
 #include "IMGUI_SubSystem.h"
 
-#include <UT/UT_Engine.h>
-
 #include <rttr/registration>
 
 namespace dogb::IMGUI

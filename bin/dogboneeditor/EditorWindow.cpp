@@ -60,8 +60,8 @@ EditorWindow::initialize()
     world.mainCamera()->m_activeTexture = GR::Framebuffer::create(spec);
     world.mainCamera()->setViewportSize(m_width, m_height);
 
-    auto imgui_ctx =
-            addContext<IMGUI::SubSystem, DBE::EditorIMGUIContext>(this);
+    auto imgui_ctx = std::make_shared<DBE::EditorIMGUIContext>(this);
+    IMGUI::SubSystem::instance().attach(imgui_ctx);
     UT_ASSERT(imgui_ctx != nullptr);
 
     // Add all of the standard editor GUI windows

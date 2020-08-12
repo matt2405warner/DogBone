@@ -54,9 +54,7 @@ FileBrowser::openBrowser(const std::string &directory, SelectClb clb)
             new FileBrowser(directory, std::move(clb)));
     browser->open();
 
-    UT::Engine &engine = UT::Engine::get();
-    IMGUI::SubSystem *sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    return static_cast<FileBrowser *>(sys->addModal(std::move(browser)));
+    return static_cast<FileBrowser*>(IMGUI::SubSystem::instance().addModal(std::move(browser)));
 }
 
 void

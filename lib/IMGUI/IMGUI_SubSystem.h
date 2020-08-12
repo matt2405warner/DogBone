@@ -9,8 +9,6 @@
 
 #include "IMGUI_SubSystemContext.h"
 
-#include <UT/UT_Engine.h>
-#include <UT/UT_SubSystem.h>
 #include <UT/UT_Timestep.h>
 
 #include <rttr/type.h>
@@ -21,15 +19,17 @@
 
 namespace dogb::IMGUI
 {
-class DB_IMGUI_API SubSystem : public UT::SubSystem
+class DB_IMGUI_API SubSystem
 {
 public:
     using context_t = IMGUI::SubSystemContext;
 
-    void init() override;
-    void shutdown() override;
+    static SubSystem& instance();
 
-    void update(const UT::Timestep &timestep) override;
+    void init();
+    void shutdown();
+
+    void update(const UT::Timestep &timestep) ;
 
     void attach(std::shared_ptr<context_t> ctx)
     {
@@ -55,6 +55,8 @@ public:
 
     Modal* addModal(std::unique_ptr<Modal> modal);
 private:
+    SubSystem() = default;
+
     context_t * m_currentCtx;
     std::vector<std::shared_ptr<context_t>> m_contexts;
 };

@@ -13,11 +13,6 @@ SubSystem::init() {
     World::instance().init();
 
     m_activeScene = std::make_shared<GS::Scene>();
-
-    for (auto&& ctx : m_contexts)
-    {
-        ctx->onInit();
-    }
 }
 
 void
@@ -29,10 +24,11 @@ void
 SubSystem::shutdown()
 {
     World::instance().shutdown();
-
-    for (auto&& ctx : m_contexts)
-        ctx->onShutdown();
-
-    m_contexts.clear();
+}
+SubSystem &
+SubSystem::instance()
+{
+    static SubSystem _instance;
+    return _instance;
 }
 }

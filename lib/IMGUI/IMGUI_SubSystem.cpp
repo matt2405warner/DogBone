@@ -43,5 +43,11 @@ SubSystem::addModal(std::unique_ptr<Modal> modal)
 
     return m_currentCtx->addModal(std::move(modal));
 }
+SubSystem &
+SubSystem::instance()
+{
+    static SubSystem _instance;
+    return _instance;
+}
 
 } // namespace dogb::IMGUI

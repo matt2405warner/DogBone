@@ -3,7 +3,6 @@ project(GS)
 set(sources
         GS_CameraController.cpp
         GS_SubSystem.cpp
-        GS_SubSystemContext.cpp
         GS_Scene.cpp
         GS_TransformComponent.cpp
         GS_Mesh2DComponent.cpp
@@ -28,7 +27,6 @@ set(sources
 set(headers
         GS_CameraController.h
         GS_SubSystem.h
-        GS_SubSystemContext.h
         GS_Scene.h
         GS_TransformComponent.h
         GS_Mesh2DComponent.h

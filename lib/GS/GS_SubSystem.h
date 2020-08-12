@@ -7,8 +7,6 @@
 
 #include "GS_API.h"
 
-#include "GS_SubSystemContext.h"
-
 #include "GS_Scene.h"
 
 #include <UT/UT_Timestep.h>
@@ -19,21 +17,18 @@
 
 namespace dogb::GS
 {
-class SubSystem : public UT::SubSystem
+class SubSystem
 {
 public:
-    using context_t = GS::SubSystemContext;
+    static SubSystem& instance();
+    void init();
+    void shutdown();
 
-    void init() override;
-    void shutdown() override;
-
-    void update(const UT::Timestep &timestep) override;
-
-    void attach(std::shared_ptr<context_t> ctx) { ctx->onAttach(); m_contexts.emplace_back(ctx); }
+    void update(const UT::Timestep &timestep);
 
     std::shared_ptr<Scene> m_activeScene;
 private:
-    std::vector<std::shared_ptr<context_t>> m_contexts;
+    SubSystem() =default;
 };
 }
 

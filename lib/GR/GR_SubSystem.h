@@ -7,19 +7,22 @@
 
 #include "GR_API.h"
 
-#include <UT/UT_SubSystem.h>
-#include <UT/UT_SubSystemContext.h>
 #include <UT/UT_Window.h>
 
 namespace dogb::GR
 {
 
-class DB_GR_API SubSystem : public UT::SubSystem
+class DB_GR_API SubSystem
 {
 public:
-    void init() override;
-    void shutdown() override ;
-    void update(const UT::Timestep& ) override;
+    static SubSystem& instance();
+
+    void init() ;
+    void shutdown()  ;
+    void update(const UT::Timestep& ) ;
+
+private:
+    SubSystem() = default;
 };
 
 }

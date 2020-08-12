@@ -64,10 +64,7 @@ SceneWindow::onGUI(const UT::Timestep &)
 void
 SceneWindow::menuItem()
 {
-    UT::Engine& engine = UT::Engine::get();
-
-    IMGUI::SubSystem* sys = engine.getOrCreateSubSystem<IMGUI::SubSystem>();
-    SceneWindow* window = sys->getWindow<SceneWindow>();
+    SceneWindow* window = IMGUI::SubSystem::instance().getWindow<SceneWindow>();
     window->show();
 }
 

@@ -7,9 +7,7 @@
 
 #include "UT_API.h"
 
-#include "UT_Engine.h"
 #include "UT_Logger.h"
-#include "UT_SubSystemContext.h"
 #include "UT_Timestep.h"
 
 #include <SYS/SYS_Types.h>
@@ -81,39 +79,6 @@ protected:
     bool m_useTitlebar;
     bool m_open;
 
-    template <typename SSTy, typename CtxTy, typename ... Args>
-    std::shared_ptr<CtxTy> addContext(Args&& ...args)
-    {
-        static_assert(
-                std::is_base_of_v<UT::SubSystemContext, CtxTy>,
-                "Context to create must derive from rne::UT::SubSystemContext");
-        static_assert(
-                std::is_base_of_v<UT::SubSystem, SSTy>,
-                "SubSystem Type must derive from rne::UT::SubSystem");
-        static_assert(
-                std::is_member_function_pointer_v<decltype(&SSTy::attach)>,
-                "SubSystem Type must have 'attach()' member function");
-
-        SSTy *system = UT::Engine::get().getOrCreateSubSystem<SSTy>();
-        if (system == nullptr)
-        {
-            UT_LOG_ERROR("Failed to create subsystem");
-            return nullptr;
-        }
-        UT_LOG_DEBUG("Creating context");
-        auto ctx = std::make_shared<CtxTy>(std::forward<Args>(args)...);
-        if (!ctx)
-        {
-            UT_LOG_ERROR("Failed to create subsystem context");
-            return nullptr;
-        }
-        system->attach(ctx);
-        m_contexts.emplace_back(ctx);
-
-        return ctx;
-    }
-
-    std::vector<std::weak_ptr<SubSystemContext>> m_contexts;
 private:
     IDType m_windowID;
 };
