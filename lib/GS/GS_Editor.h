@@ -9,6 +9,8 @@
 
 #include <rttr/type>
 
+#include <glm/glm.hpp>
+
 #include <UT/UT_Assert.h>
 #include <iostream>
 #include <type_traits>
@@ -21,7 +23,6 @@ EditorGUI(T &)
 {
     UT_ASSERT_MSG(false, "GUI interface not implemented for type");
 }
-
 } // namespace dogb
 
 #endif // DOGBONE_GS_EDITOR_H

@@ -147,10 +147,7 @@ grFlushAndReset()
 void
 Renderer2D::beginScene(const Camera &camera, const glm::mat4& transform)
 {
-    glm::mat4 proj;
-    camera.calculateMatricies(proj);
-
-    glm::mat4 viewproj = proj * glm::inverse(transform);
+    glm::mat4 viewproj = camera.projection() * glm::inverse(transform);
 
     theRenderStorage.m_texShader->bind();
     theRenderStorage.m_texShader->setMat4(

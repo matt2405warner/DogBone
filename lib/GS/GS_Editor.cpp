@@ -4,7 +4,7 @@
 
 #include "GS_Editor.h"
 
-namespace dogb::GS
+namespace dogb
 {
 
 }

@@ -11,6 +11,7 @@
 
 #include <rttr/type>
 
+#include <UT/UT_Assert.h>
 #include <memory>
 
 namespace dogb::GR
@@ -19,19 +20,15 @@ class DB_GR_API Camera
 {
     RTTR_ENABLE()
 public:
-    Camera();
+    Camera() = default;
+    explicit Camera(const glm::mat4& projection) :
+        m_projection(projection)
+    {}
     virtual ~Camera() = default;
 
-    void calculateMatricies(glm::mat4& proj) const;
-
-    void setViewportSize(uint32_t width, uint32_t height);
-
-    bool m_orthographic = true;
-    float m_near;
-    float m_far;
-    float m_orthographicSize;
-    float m_aspect;
-    std::shared_ptr<Framebuffer> m_activeTexture;
+    [[nodiscard]] const glm::mat4& projection() const { return m_projection; }
+protected:
+    glm::mat4 m_projection;
 };
 }
 

@@ -33,8 +33,8 @@ public:
 
     void removeChild(const Entity& e);
 
-    glm::vec3 m_position;
-    glm::quat m_rotation;
+    glm::vec3 m_translation;
+    glm::vec3 m_rotation;
     glm::vec3 m_scale;
 
     Entity m_root;

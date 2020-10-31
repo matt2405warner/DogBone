@@ -41,35 +41,35 @@ CameraControllerSystem::onUpdate(
 
         float move_speed = controller.m_moveSpeed;
 
-        glm::vec3 rotation = glm::eulerAngles(transform.m_rotation);
+        glm::vec3 rotation = glm::degrees(transform.m_rotation);
 
         if (IsKeyPressed(KeyType::KEY_A))
         {
-            transform.m_position.x -= glm::cos(glm::radians(rotation.x)) *
+            transform.m_translation.x -= glm::cos(glm::radians(rotation.x)) *
                                       move_speed * ts;
-            transform.m_position.y -= glm::sin(glm::radians(rotation.y)) *
+            transform.m_translation.y -= glm::sin(glm::radians(rotation.y)) *
                                       move_speed * ts;
         }
         else if (IsKeyPressed(KeyType::KEY_D))
         {
-            transform.m_position.x += glm::cos(glm::radians(rotation.x)) *
+            transform.m_translation.x += glm::cos(glm::radians(rotation.x)) *
                                       move_speed * ts;
-            transform.m_position.y += glm::sin(glm::radians(rotation.y)) *
+            transform.m_translation.y += glm::sin(glm::radians(rotation.y)) *
                                       move_speed * ts;
         }
 
         if (IsKeyPressed(KeyType::KEY_W))
         {
-            transform.m_position.x += -glm::sin(glm::radians(rotation.x)) *
+            transform.m_translation.x += -glm::sin(glm::radians(rotation.x)) *
                                       move_speed * ts;
-            transform.m_position.y += glm::cos(glm::radians(rotation.y)) *
+            transform.m_translation.y += glm::cos(glm::radians(rotation.y)) *
                                       move_speed * ts;
         }
         else if (IsKeyPressed(KeyType::KEY_S))
         {
-            transform.m_position.x -= -glm::sin(glm::radians(rotation.x)) *
+            transform.m_translation.x -= -glm::sin(glm::radians(rotation.x)) *
                                       move_speed * ts;
-            transform.m_position.y -= glm::cos(glm::radians(rotation.y)) *
+            transform.m_translation.y -= glm::cos(glm::radians(rotation.y)) *
                                       move_speed * ts;
         }
 

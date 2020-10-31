@@ -16,8 +16,8 @@
 namespace dogb::IMGUI
 {
 
-DB_IMGUI_API void EditorDrawTransform(glm::mat4& value);
-
+DB_IMGUI_API void EditorDrawTransform(glm::vec3& position, glm::vec3& rotation, glm::vec3& scale);
+DB_IMGUI_API void EditorDrawVec3Control(const std::string& label, glm::vec3& value, float reset_value = 0.0f, float column_width = 100.0f);
 }
 
 
