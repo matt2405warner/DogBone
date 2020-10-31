@@ -7,6 +7,7 @@
 #include "GS_CameraComponent.h"
 #include "GS_CameraController.h"
 #include "GS_TransformComponent.h"
+#include "GS_Scene.h"
 
 #include <CE/CE_Input.h>
 
@@ -22,8 +23,9 @@ CameraControllerSystem::CameraControllerSystem()
 void
 CameraControllerSystem::onUpdate(
         const dogb::UT::Timestep &timestep,
-        EntityManager &mgr)
+        const SceneSPtr& scene)
 {
+    EntityManager& mgr = scene->m_entityManager;
     auto view = mgr.registry()
                         .view<CameraComponent, TransformComponent,
                               CameraController>();

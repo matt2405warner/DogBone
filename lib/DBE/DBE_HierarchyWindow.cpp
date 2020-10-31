@@ -114,7 +114,8 @@ HierarchyWindow::onGUI(const UT::Timestep &)
         ImGui::EndPopup();
     }
 
-    //ImGui::ListBoxFooter();
+    if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+        world.m_selectedEntity = {};
 }
 void
 HierarchyWindow::menuItem()

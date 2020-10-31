@@ -14,6 +14,8 @@
 
 #include <entt/entt.hpp>
 
+#include <memory>
+
 namespace dogb::GS
 {
 class Entity;
@@ -30,6 +32,8 @@ public:
     uint32_t m_viewportWidth = 0;
     uint32_t m_viewportHeight = 0;
 };
+
+using SceneSPtr = std::shared_ptr<Scene>;
 
 }
 

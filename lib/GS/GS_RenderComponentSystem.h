@@ -16,7 +16,7 @@ class DB_GS_API RenderComponentSystem : public ComponentSystem
     DB_COMPONENT_SYS_ENABLE()
 public:
     RenderComponentSystem();
-    void onUpdate(const UT::Timestep &ts, EntityManager& mgr) override;
+    void onUpdate(const UT::Timestep &ts, const std::shared_ptr<Scene>& scene) override;
 };
 }
 

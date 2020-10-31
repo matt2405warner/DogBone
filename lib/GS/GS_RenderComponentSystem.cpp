@@ -12,6 +12,7 @@
 #include "GS_Mesh2DComponent.h"
 #include "GS_TransformComponent.h"
 #include "GS_World.h"
+#include "GS_Scene.h"
 
 DB_COMPONENT_SYS_REGISTRATION(dogb::GS::RenderComponentSystem)
 
@@ -23,8 +24,9 @@ RenderComponentSystem::RenderComponentSystem()
 }
 
 void
-RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, EntityManager& mgr)
+RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, const SceneSPtr& scene)
 {
+    EntityManager& mgr = scene->m_entityManager;
     auto camera_group =
             mgr.registry().view<CameraComponent, TransformComponent>();
     for (auto &camera_entity : camera_group)

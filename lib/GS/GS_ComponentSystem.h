@@ -14,6 +14,8 @@
 #include <rttr/registration>
 #include <rttr/type>
 
+#include <memory>
+
 #define DB_COMPONENT_SYS_REGISTRATION(_cls_)                                   \
     RTTR_REGISTRATION                                                          \
     {                                                                          \
@@ -27,6 +29,7 @@
 namespace dogb::GS
 {
 class EntityManager;
+class Scene;
 
 class DB_GS_API ComponentSystem
 {
@@ -40,10 +43,10 @@ public:
     virtual void onCreate() {};
     virtual void onDestroy() {};
 #endif
-    virtual void onPreUpdate(const UT::Timestep &, EntityManager &) {}
-    virtual void onUpdate(const UT::Timestep &, EntityManager &) {}
-    virtual void onPostUpdate(const UT::Timestep &, EntityManager &) {}
-    virtual void onShutdown(EntityManager &) {}
+    virtual void onPreUpdate(const UT::Timestep &, const std::shared_ptr<Scene>& ) {}
+    virtual void onUpdate(const UT::Timestep &, const std::shared_ptr<Scene>& ) {}
+    virtual void onPostUpdate(const UT::Timestep &, const std::shared_ptr<Scene>& ) {}
+    virtual void onShutdown(const std::shared_ptr<Scene>& ) {}
 
     [[nodiscard]] SystemGroupType systemGroup() const { return m_sysGroupType; }
 

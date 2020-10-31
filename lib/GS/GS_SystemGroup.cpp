@@ -46,10 +46,9 @@ SystemGroup::onPreUpdate(const UT::Timestep & ts)
     World &world = World::instance();
     auto active_scene = world.m_activeScene;
     UT_ASSERT(active_scene);
-    EntityManager &mgr = active_scene->m_entityManager;
 
     for (auto&& sys : m_systems)
-        sys->onPreUpdate(ts, mgr);
+        sys->onPreUpdate(ts, active_scene);
 }
 
 void
@@ -58,10 +57,9 @@ SystemGroup::onUpdate(const UT::Timestep& ts)
     World &world = World::instance();
     auto active_scene = world.m_activeScene;
     UT_ASSERT(active_scene);
-    EntityManager &mgr = active_scene->m_entityManager;
 
     for (auto&& sys : m_systems)
-        sys->onUpdate(ts, mgr);
+        sys->onUpdate(ts, active_scene);
 }
 
 void
@@ -70,10 +68,9 @@ SystemGroup::onPostUpdate(const UT::Timestep &ts)
     World &world = World::instance();
     auto active_scene = world.m_activeScene;
     UT_ASSERT(active_scene);
-    EntityManager &mgr = active_scene->m_entityManager;
 
     for (auto&& sys : m_systems)
-        sys->onPostUpdate(ts, mgr);
+        sys->onPostUpdate(ts, active_scene);
 }
 void
 SystemGroup::onShutdown()
@@ -81,10 +78,9 @@ SystemGroup::onShutdown()
     World &world = World::instance();
     auto active_scene = world.m_activeScene;
     UT_ASSERT(active_scene);
-    EntityManager &mgr = active_scene->m_entityManager;
 
     for (auto&& sys : m_systems)
-        sys->onShutdown(mgr);
+        sys->onShutdown(active_scene);
 }
 
 } // namespace dogb::GS

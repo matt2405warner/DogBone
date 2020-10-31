@@ -37,6 +37,9 @@ public:
 
     Entity() = default;
     explicit Entity(entt::entity handle) : m_handle(handle) {}
+    explicit Entity(entt::entity handle, EntityManager& mgr) :
+        m_manager(mgr), m_handle(handle)
+    {}
 
     explicit operator bool() const;
     explicit operator IdType() const { return m_handle; }

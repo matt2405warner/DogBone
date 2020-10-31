@@ -23,4 +23,4 @@ db_lib(
         HEADERS ${headers}
 )
 
-db_link_libraries(PUBLIC GR GS IMGUI)
+db_link_libraries(PUBLIC GR GS IMGUI DBS)
