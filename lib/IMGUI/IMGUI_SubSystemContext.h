@@ -82,8 +82,9 @@ public:
 
     Modal* addModal(std::unique_ptr<Modal> modal);
 
+    void setDarkTheme();
 protected:
-    static void initStyle();
+    static void initFonts();
 
 private:
     void renderModals();

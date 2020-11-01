@@ -15,6 +15,7 @@
 #include <UT/UT_Logger.h>
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include <rttr/type>
 
@@ -90,12 +91,13 @@ private:
     IdType m_handle = entt::null;
 };
 
+template <typename T>
+void DrawComponent(GS::EntityManager &mgr, GS::Entity &e);
+
 namespace details
 {
 template <typename T>
 void internalRemove(GS::EntityManager &mgr, GS::Entity &e);
-template <typename T>
-void internalGUI(GS::EntityManager &mgr, GS::Entity &e);
 template <typename T>
 void internalCreate(GS::EntityManager &mgr, GS::Entity &e);
 } // namespace details
@@ -137,7 +139,7 @@ public:
                     // should
                     //      ifdef this so that its not included in an actual
                     //      runtime.
-                    .m_guiCallback = details::internalGUI<T>,
+                    .m_guiCallback = DrawComponent<T>,
                     .m_type = rttr::type::get<T>(),
             };
 
@@ -243,7 +245,16 @@ internalRemove(GS::EntityManager &mgr, GS::Entity &e)
 
 template <typename T>
 void
-internalGUI([[maybe_unused]] GS::EntityManager &mgr, GS::Entity &e)
+internalCreate(GS::EntityManager &mgr, GS::Entity &e)
+{
+    mgr.addComponent<T>(e);
+}
+
+} // namespace details
+
+template <typename T>
+void
+DrawComponent([[maybe_unused]] GS::EntityManager &mgr, GS::Entity &e)
 {
     constexpr GUI_TRAITS traits = GUITypeTraits<T>();
 
@@ -254,41 +265,33 @@ internalGUI([[maybe_unused]] GS::EntityManager &mgr, GS::Entity &e)
     }
     else
     {
-        ImGui::PushID(static_cast<int>(rttr::type::get<T>().get_id()));
+        ImVec2 region = ImGui::GetContentRegionAvail();
+        const bool no_remove = traits & GUI_NO_REMOVE;
 
-        bool no_remove = traits & GUI_NO_REMOVE;
+        const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4, 4});
+        const float line_height = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        ImGui::Separator();
+        const bool open = ImGui::TreeNodeEx(T::theGUIName, flags, T::theGUIName);
+        ImGui::PopStyleVar();
 
-        // If we dont want to remove the component then grey it out.
-        if (no_remove)
+        bool remove_component = false;
+
+        if (!no_remove)
         {
-            ImVec4 grey{0.2f, 0.2f, 0.2f, 1.0f};
-            ImGui::PushStyleColor(ImGuiCol_Button, grey);
-            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, grey);
-            ImGui::PushStyleColor(ImGuiCol_ButtonActive, grey);
+            ImGui::SameLine(region.x - line_height * 0.5f);
+
+            if (ImGui::Button("-", {line_height, line_height}))
+            {
+                remove_component = true;
+            }
         }
 
-        if (ImGui::Button("-") && !no_remove)
+        if (open)
         {
-            mgr.removeComponent<T>(e);
-            ImGui::PopID();
-            return;
-        }
-        else
-        {
-            ImGui::SameLine();
-        }
-
-        if (no_remove)
-            ImGui::PopStyleColor(3);
-
-        if (ImGui::CollapsingHeader(T::theGUIName))
-        {
-            ImGui::Indent(30.0f);
-
-            ImGui::PushID("Widget");
             T &comp = e.getComponent<T>();
 
-            if constexpr (HasOnGUIMemFn_v<T>)
+            if constexpr (details::HasOnGUIMemFn_v<T>)
             {
                 comp.onGUI();
             }
@@ -296,22 +299,14 @@ internalGUI([[maybe_unused]] GS::EntityManager &mgr, GS::Entity &e)
             {
                 dogb::EditorGUI<T>(comp);
             }
-            ImGui::PopID();
 
-            ImGui::Unindent(30.0f);
+            ImGui::TreePop();
         }
-        ImGui::PopID();
+
+        if (remove_component)
+            e.removeComponent<T>();
     }
 }
-
-template <typename T>
-void
-internalCreate(GS::EntityManager &mgr, GS::Entity &e)
-{
-    mgr.addComponent<T>(e);
-}
-
-} // namespace details
 
 template <typename T, typename... Args>
 T &

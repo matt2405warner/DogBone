@@ -21,7 +21,6 @@ namespace dogb::DBE
 class DB_DBE_API Editor
 {
 public:
-    static void drawEntity(GS::EntityManager &mgr, GS::Entity &entity);
     static void drawMenus();
 
     static bool addMenuCallback(

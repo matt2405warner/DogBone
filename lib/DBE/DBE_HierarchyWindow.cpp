@@ -44,6 +44,7 @@ HierarchyWindow::drawEntity(GS::Entity& entity, bool is_root)
 
     if (world.m_selectedEntity == entity)
         flags |= ImGuiTreeNodeFlags_Selected;
+    flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
     if (!is_root)
         ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());

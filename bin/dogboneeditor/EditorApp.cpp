@@ -57,7 +57,7 @@ EditorApp::initialize(int argc, char *argv[])
     GS::SubSystem &gs_system = GS::SubSystem::instance();
     gs_system.init();
 
-    WindowProperties props("DogBone Editor", 1080, 920, 800, 600, true, true);
+    WindowProperties props("DogBone Editor", 1600, 900, 800, 600, true, true);
     createWindow<EditorWindow>(props);
 
     GR::SubSystem &gr_system = GR::SubSystem::instance();
