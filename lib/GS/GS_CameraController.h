@@ -7,6 +7,9 @@
 
 #include "GS_API.h"
 
+#include "GS_YAML.h"
+#include "GS_ComponentTypeRegistry.h"
+
 #include <UT/UT_Timestep.h>
 
 namespace dogb::GS
@@ -15,11 +18,13 @@ namespace dogb::GS
 struct DB_GS_API CameraController
 {
 public:
-    static constexpr const char* theGUIName = "Camera Controller";
+    REFLECT_COMPONENT(CameraController, "Camera Controller")
 
     CameraController();
 
     void onGUI();
+    void serialize(GS_YAML::Emitter& emitter) const;
+    void deserialize(GS_YAML::Node& node);
 
     float m_moveSpeed;
     float m_rotateSpeed;

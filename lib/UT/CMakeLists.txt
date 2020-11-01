@@ -3,6 +3,7 @@ project(UT)
 set(sources
         UT_Assert.cpp
         UT_Application.cpp
+        UT_Debug.cpp
         UT_Logger.cpp
         UT_IDManager.cpp
         UT_Window.cpp
@@ -15,6 +16,7 @@ set(sources
 set(headers
         UT_Assert.h
         UT_Application.h
+        UT_Debug.h
         UT_Logger.h
         UT_IDManager.h
         UT_Window.h

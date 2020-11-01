@@ -8,6 +8,8 @@
 #include "GS_API.h"
 
 #include "GS_Material.h"
+#include "GS_YAML.h"
+#include "GS_ComponentTypeRegistry.h"
 
 #include <GR/GR_VertexArray.h>
 #include <GR/GR_RenderBuffer.h>

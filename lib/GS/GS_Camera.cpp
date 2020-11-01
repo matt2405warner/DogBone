@@ -33,6 +33,7 @@ void
 Camera::onGUI()
 {
     ImGui::Checkbox("Disabled", &m_isDisabled);
+    ImGui::Checkbox("Primary", &m_primary);
     ImGui::ColorEdit4("Background", glm::value_ptr(m_background));
 
     const char *perspective = "Perspective";

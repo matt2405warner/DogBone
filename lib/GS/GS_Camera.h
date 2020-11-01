@@ -75,13 +75,27 @@ public:
     }
     [[nodiscard]] float fov() const
     {
-        UT_ASSERT(!isOrthographic());
         return m_fov;
+    }
+    [[nodiscard]] float perspectiveNear() const
+    {
+        return m_near;
+    }
+    [[nodiscard]] float perspectiveFar() const
+    {
+        return m_far;
     }
     [[nodiscard]] float orthoSize() const
     {
-        UT_ASSERT(isOrthographic());
         return m_orthographicSize;
+    }
+    [[nodiscard]] float orthoNear() const
+    {
+        return m_orthoNear;
+    }
+    [[nodiscard]] float orthoFar() const
+    {
+        return m_orthoFar;
     }
 
     std::shared_ptr<GR::Framebuffer> m_activeTexture;
@@ -89,6 +103,7 @@ public:
     bool m_isDisabled = false;
     bool m_fixedAspectRatio = false;
     glm::vec4 m_background = {0.3f, 0.3f, 0.9f, 1.0f};
+    bool m_primary = false;
 
 protected:
     bool m_orthographic = true;

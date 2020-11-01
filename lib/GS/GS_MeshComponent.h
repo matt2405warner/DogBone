@@ -14,11 +14,13 @@ namespace dogb::GS
 struct DB_GS_API MeshComponent
 {
 public:
-    static constexpr const char* theGUIName = "Mesh";
+    REFLECT_COMPONENT(MeshComponent, "Mesh")
 
     MeshComponent() = default;
     virtual ~MeshComponent() = default;
 
+    void serialize(GS_YAML::Emitter& emitter) const;
+    void deserialize(GS_YAML::Node& node);
     void onGUI();
 
     Mesh m_mesh;

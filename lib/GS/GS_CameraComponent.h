@@ -8,6 +8,8 @@
 #include "GS_API.h"
 
 #include "GS_Camera.h"
+#include "GS_YAML.h"
+#include "GS_ComponentTypeRegistry.h"
 
 #include <rttr/type>
 
@@ -16,15 +18,13 @@ namespace dogb::GS
 class DB_GS_API CameraComponent
 {
 public:
-    static constexpr const char* theGUIName = "Camera";
+    REFLECT_COMPONENT(CameraComponent, "Camera")
 
-    virtual ~CameraComponent()
-    {
-        // Disable the camera now that we are not using it.
-        if (m_camera)
-            m_camera->m_isDisabled = true;
-    }
+    CameraComponent();
+    virtual ~CameraComponent() = default;
 
+    void serialize(GS_YAML::Emitter& emitter) const;
+    void deserialize(GS_YAML::Node& node);
     void onGUI();
 
     std::shared_ptr<GS::Camera> m_camera;

@@ -27,9 +27,9 @@ Scene::onViewportResize(uint32_t width, uint32_t height)
     }
 }
 Entity
-Scene::createEntity()
+Scene::createEntity(const std::string& name)
 {
-    return m_entityManager.createEntity();
+    return m_entityManager.createEntity(name);
 }
 
 } // namespace dogb::GS

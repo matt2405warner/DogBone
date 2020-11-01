@@ -8,10 +8,12 @@
 #include "GS_API.h"
 
 #include "GS_GUITraits.h"
+#include "GS_TransformComponent.h"
 
 #include <rttr/type>
 
 #include <string>
+#include <yaml-cpp/yaml.h>
 
 namespace dogb::GS
 {
@@ -19,9 +21,14 @@ namespace dogb::GS
 struct DB_GS_API TagComponent
 {
 public:
-    static constexpr const char* theGUIName = "Tag";
+    REFLECT_COMPONENT(TagComponent, "Tag")
 
     virtual ~TagComponent() = default;
+
+    void serialize(YAML::Emitter& emitter) const
+    {
+        emitter << YAML::Key << "name" << YAML::Value << m_name;
+    }
 
     GUI_TRAITS m_guiTraits = GUI_HIDE;
 

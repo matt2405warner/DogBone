@@ -22,6 +22,7 @@
 #include <GS/GS_MeshComponent.h>
 #include <GS/GS_World.h>
 #include <GS/GS_Material.h>
+#include <GS/GS_SceneSerializer.h>
 
 #include <UT/UT_Assert.h>
 
@@ -52,14 +53,6 @@ EditorWindow::initialize()
 
     });
 
-    GR::Framebuffer::Specification spec;
-    spec.m_width = m_width;
-    spec.m_height = m_height;
-
-    GS::World &world = GS::World::instance();
-    world.mainCamera()->m_activeTexture = GR::Framebuffer::create(spec);
-    world.mainCamera()->setViewportSize(m_width, m_height);
-
     auto imgui_ctx = std::make_shared<DBE::EditorIMGUIContext>(this);
     IMGUI::SubSystem::instance().attach(imgui_ctx);
     UT_ASSERT(imgui_ctx != nullptr);
@@ -85,6 +78,8 @@ EditorWindow::initialize()
             imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
     console_win->show();
 
+    GS::World &world = GS::World::instance();
+#if 0
     auto ent = world.createEntity();
     ent.addComponent<GS::Mesh2DComponent>(glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
     // m_testEntity.addComponent<TestComponent>(5);
@@ -92,7 +87,8 @@ EditorWindow::initialize()
     world.createEntity();
     auto cam_ent = world.createEntity();
     GS::CameraComponent &cam_comp = cam_ent.addComponent<GS::CameraComponent>();
-    cam_comp.m_camera = world.mainCamera();
+    cam_comp.m_camera->m_primary = true;
+    cam_comp.m_camera->m_activeTexture = GS::Editor::instance().framebuffer();
     cam_ent.addComponent<GS::CameraController>();
 
     auto ent_3d = world.createEntity();
@@ -137,6 +133,11 @@ EditorWindow::initialize()
 
 
     world.m_selectedEntity = ent;
+#endif
+
+    GS::SceneSerializer serializer(world.m_activeScene);
+    //serializer.serialize("../assets/scenes/test.dbscene");
+    serializer.deserialize("../assets/scenes/test.dbscene");
 }
 
 } // namespace dogb

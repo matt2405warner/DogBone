@@ -10,9 +10,11 @@
 #include "GS_Editor.h"
 #include "GS_GUITraits.h"
 #include "GS_SystemGroup.h"
+#include "GS_YAML.h"
 
 #include <UT/UT_Assert.h>
 #include <UT/UT_Logger.h>
+#include <UT/UT_Debug.h>
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -72,6 +74,8 @@ public:
     template <typename T>
     T &getComponent();
     template <typename T>
+    const T& getComponent() const;
+    template <typename T>
     bool hasComponent();
     template <typename T>
     void removeComponent();
@@ -91,8 +95,76 @@ private:
     IdType m_handle = entt::null;
 };
 
+namespace details
+{
+#define DEFINE_HAS_MEM_FUN(cls, F)                                             \
+    template <typename T, typename = void>                                     \
+    struct cls : std::false_type                                               \
+    {                                                                          \
+    };                                                                         \
+                                                                               \
+    template <typename T>                                                      \
+    struct cls<                                                                \
+            T,                                                                 \
+            std::enable_if_t<std::is_member_function_pointer_v<decltype(F)>>>  \
+        : std::true_type                                                       \
+    {                                                                          \
+    };
+DEFINE_HAS_MEM_FUN(HasOnGUIMemFn, &T::onGUI)
+DEFINE_HAS_MEM_FUN(HasSerializeMemFn, &T::serialize)
+DEFINE_HAS_MEM_FUN(HasDeserializeMemFn, &T::deserialize)
+
+template <typename T, typename = void>
+struct HasGUITraits : std::false_type
+{
+};
+
+template <typename T>
+struct HasGUITraits<T, decltype(std::declval<T>().m_guiTraits, void())>
+        : std::true_type
+{
+};
+
+template <typename T>
+constexpr bool HasOnGUIMemFn_v = HasOnGUIMemFn<T>::value;
+template <typename T>
+constexpr bool HasSerializeMemFn_v = HasSerializeMemFn<T>::value;
+template <typename T>
+constexpr bool HasDeserializeMemFn_v = HasDeserializeMemFn<T>::value;
+template <typename T>
+constexpr bool HasGUITraits_v = HasGUITraits<T>::value;
+}
+
 template <typename T>
 void DrawComponent(GS::EntityManager &mgr, GS::Entity &e);
+
+template <typename T>
+void SerializeComponent(YAML::Emitter& emitter, const GS::Entity& e)
+{
+    UTformatDebug("Serialize type: '{}'", T::theTypename);
+    emitter << YAML::Key << T::theTypename;
+    emitter << YAML::BeginMap; // Begin: Component
+    if constexpr (details::HasSerializeMemFn_v<T>)
+    {
+        const T &comp = e.getComponent<T>();
+        comp.serialize(emitter);
+    }
+    emitter << YAML::EndMap; // End: Component
+}
+
+template <typename T>
+void DeserializeComponent(YAML::Node& node, GS::Entity& e)
+{
+    auto data = node[T::theTypename];
+    if (!data)
+        return;
+
+    T& comp = e.addComponent<T>();
+    if constexpr (details::HasDeserializeMemFn_v<T>)
+    {
+        comp.deserialize(data);
+    }
+}
 
 namespace details
 {
@@ -105,47 +177,13 @@ void internalCreate(GS::EntityManager &mgr, GS::Entity &e);
 class DB_GS_API EntityManager
 {
 public:
-    struct DB_GS_API Info
-    {
-        using Callback = std::function<void(GS::EntityManager &, GS::Entity &)>;
-
-        std::string m_name;
-        Callback m_createCallback;
-        Callback m_removeCallback;
-        Callback m_guiCallback;
-        // Hold a garbage type
-        rttr::type m_type = theInvalid;
-
-    private:
-        static rttr::type theInvalid;
-    };
-
-    Entity createEntity();
+    Entity createEntity(const std::string& name = std::string());
 
     using Registry = entt::registry;
 
     template <typename T, typename... Args>
     T &addComponent(Entity &entity, Args &&... args)
     {
-        // Create the callbacks for this new component type.
-        if (auto it = m_types.find(entt::type_info<T>::id());
-            it == m_types.end())
-        {
-            Info info{
-                    .m_name = T::theGUIName,
-                    .m_createCallback = details::internalCreate<T>,
-                    .m_removeCallback = details::internalRemove<T>,
-                    // NB: We only need these two for editor related things. We
-                    // should
-                    //      ifdef this so that its not included in an actual
-                    //      runtime.
-                    .m_guiCallback = DrawComponent<T>,
-                    .m_type = rttr::type::get<T>(),
-            };
-
-            m_types.emplace(entt::type_info<T>::id(), info);
-        }
-
         T &comp = m_registry.emplace<T>(
                 static_cast<Entity::IdType>(entity),
                 std::forward<Args>(args)...);
@@ -153,14 +191,7 @@ public:
         return comp;
     }
 
-    void addComponent(Entity &entity, entt::id_type id)
-    {
-        // Find our component type and add the component
-        if (auto it = m_types.find(id); it == m_types.end())
-        {
-            it->second.m_createCallback(*this, entity);
-        }
-    }
+    void addComponent(Entity &entity, entt::id_type id);
 
     template <typename T>
     T &getComponent(const Entity &entity)
@@ -169,12 +200,12 @@ public:
     }
 
     template <typename T>
-    bool hasComponent(const Entity &e)
+    bool hasComponent(const Entity &e) const
     {
         return m_registry.has<T>(static_cast<Entity::IdType>(e));
     }
 
-    bool hasComponent(Entity &e, const entt::id_type &comp_type)
+    bool hasComponent(const Entity &e, const entt::id_type &comp_type) const
     {
         std::array<entt::id_type, 1> arr{comp_type};
         return m_registry.runtime_view(arr.cbegin(), arr.cend())
@@ -198,43 +229,12 @@ public:
 
     Registry &registry() { return m_registry; }
 
-    std::unordered_map<entt::id_type, Info> m_types;
-
 private:
     entt::registry m_registry;
 };
 
 namespace details
 {
-template <typename T, typename = void>
-struct HasOnGUIMemFn : std::false_type
-{
-};
-
-template <typename T>
-struct HasOnGUIMemFn<
-        T,
-        std::enable_if_t<
-                std::is_member_function_pointer_v<decltype(&T::onGUI)>>>
-    : std::true_type
-{
-};
-
-template <typename T, typename = void>
-struct HasGUITraits : std::false_type
-{
-};
-
-template <typename T>
-struct HasGUITraits<T, decltype(std::declval<T>().m_guiTraits, void())>
-    : std::true_type
-{
-};
-
-template <typename T>
-constexpr bool HasOnGUIMemFn_v = HasOnGUIMemFn<T>::value;
-template <typename T>
-constexpr bool HasGUITraits_v = HasGUITraits<T>::value;
 
 template <typename T>
 void
@@ -318,6 +318,14 @@ Entity::addComponent(Args &&... args)
 template <typename T>
 T &
 Entity::getComponent()
+{
+    UT_ASSERT(m_manager);
+    return m_manager->get().getComponent<T>(*this);
+}
+
+template <typename T>
+const T &
+Entity::getComponent() const
 {
     UT_ASSERT(m_manager);
     return m_manager->get().getComponent<T>(*this);

@@ -11,8 +11,6 @@ namespace dogb::GS
 void
 SubSystem::init() {
     World::instance().init();
-
-    m_activeScene = std::make_shared<GS::Scene>();
 }
 
 void

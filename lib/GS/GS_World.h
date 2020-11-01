@@ -25,17 +25,15 @@ public:
     void shutdown();
 
     void update(const UT::Timestep& ts);
-    Entity createEntity();
+    Entity createEntity(const std::string& name = std::string());
 
     Entity m_selectedEntity;
 
     std::shared_ptr<GS::Scene> m_activeScene;
-    std::shared_ptr<SystemGroup> getSystemGroup(SystemGroupType type);
-
-    std::shared_ptr<GS::Camera> mainCamera() { return m_mainCamera; }
-private:
     std::shared_ptr<GS::Camera> m_mainCamera;
 
+    std::shared_ptr<SystemGroup> getSystemGroup(SystemGroupType type);
+private:
     std::shared_ptr<SystemGroup> m_systemInitGroup;
     std::shared_ptr<SystemGroup> m_systemSimGroup;
     std::shared_ptr<SystemGroup> m_systemPresGroup;

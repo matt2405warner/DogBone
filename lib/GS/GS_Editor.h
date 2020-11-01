@@ -7,13 +7,11 @@
 
 #include "GS_API.h"
 
-#include <rttr/type>
+#include "GS_Camera.h"
 
-#include <glm/glm.hpp>
+#include <GR/GR_Framebuffer.h>
 
 #include <UT/UT_Assert.h>
-#include <iostream>
-#include <type_traits>
 
 namespace dogb
 {
@@ -23,6 +21,26 @@ EditorGUI(T &)
 {
     UT_ASSERT_MSG(false, "GUI interface not implemented for type");
 }
+
+namespace GS
+{
+class DB_GS_API Editor
+{
+public:
+    static Editor &instance();
+
+    void initialize();
+    void shutdown();
+
+    [[nodiscard]] std::shared_ptr<GR::Framebuffer> framebuffer() const
+    {
+        return m_frameBuffer;
+    }
+private:
+    std::shared_ptr<GR::Framebuffer> m_frameBuffer;
+};
+}
+
 } // namespace dogb
 
 #endif // DOGBONE_GS_EDITOR_H

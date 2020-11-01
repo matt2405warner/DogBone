@@ -25,7 +25,7 @@ class Scene
 public:
     void onViewportResize(uint32_t width, uint32_t height);
 
-    Entity createEntity();
+    Entity createEntity(const std::string& name = std::string());
 
     EntityManager m_entityManager;
 

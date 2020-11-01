@@ -45,7 +45,7 @@ SceneWindow::onGUI(const UT::Timestep &)
 
         uint32_t width = static_cast<uint32_t>(m_viewportSize.x);
         uint32_t height = static_cast<uint32_t>(m_viewportSize.y);
-        world.mainCamera()->m_activeTexture->resize(width, height);
+        world.m_mainCamera->m_activeTexture->resize(width, height);
 
         auto scene = world.m_activeScene;
         UT_ASSERT(scene);
@@ -53,7 +53,7 @@ SceneWindow::onGUI(const UT::Timestep &)
     }
 
     uint32_t tex_id =
-            world.mainCamera()->m_activeTexture->colorAttachmentRendererID();
+            world.m_mainCamera->m_activeTexture->colorAttachmentRendererID();
 
     ImGui::Image(
             reinterpret_cast<void *>(tex_id),

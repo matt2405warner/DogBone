@@ -4,6 +4,7 @@
 
 #include "GS_EntityManager.h"
 
+#include "GS_ComponentTypeRegistry.h"
 #include "GS_TagComponent.h"
 #include "GS_TransformComponent.h"
 #include "GS_World.h"
@@ -12,8 +13,6 @@
 
 namespace dogb::GS
 {
-rttr::type EntityManager::Info::theInvalid = rttr::type::get<void>();
-
 void
 Entity::addChildEntity(const Entity &child)
 {
@@ -66,7 +65,7 @@ Entity::children()
 }
 
 Entity
-EntityManager::createEntity()
+EntityManager::createEntity(const std::string& name)
 {
     Entity entity{m_registry.create()};
     entity.m_manager = *this;
@@ -78,7 +77,10 @@ EntityManager::createEntity()
     transform.m_root = entity;
 
     TagComponent &tag = addComponent<TagComponent>(entity);
-    tag.m_name = fmt::format("Entity {}", entity.m_handle);
+    if (name.empty())
+        tag.m_name = fmt::format("Entity {}", entity.m_handle);
+    else
+        tag.m_name = name;
     return entity;
 }
 
@@ -93,6 +95,12 @@ EntityManager::destroy(Entity &e)
 
     m_registry.destroy(entity);
     e.m_handle = entt::null;
+}
+
+void
+EntityManager::addComponent(Entity &entity, entt::id_type id)
+{
+    ComponentTypeRegistry::addComponent(*this, entity, id);
 }
 
 } // namespace dogb::GS

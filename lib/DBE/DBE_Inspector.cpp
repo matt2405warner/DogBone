@@ -61,19 +61,18 @@ Inspector::onGUI(const UT::Timestep &)
 
     if (ImGui::BeginPopup("AddComponent_Popup"))
     {
-        for (auto &&[id, info] : mgr.m_types)
-        {
+        GS::ComponentTypeRegistry::each([&](auto id, const auto &info) {
             // Check if we can add this component.
             bool is_selectable = !mgr.hasComponent(entity, id);
             if (!is_selectable)
-                continue;
+                return;
 
             if (ImGui::MenuItem(info.m_name.c_str()))
             {
                 info.m_createCallback(mgr, entity);
                 ImGui::CloseCurrentPopup();
             }
-        }
+        });
         ImGui::EndPopup();
     }
     ImGui::PopItemWidth();
@@ -81,14 +80,13 @@ Inspector::onGUI(const UT::Timestep &)
     // Always draw the Transform component first
     GS::DrawComponent<GS::TransformComponent>(mgr, entity);
 
-    for (auto &[comp_id, info] : mgr.m_types)
-    {
-        if (!mgr.hasComponent(entity, comp_id))
-            continue;
+    GS::ComponentTypeRegistry::each([&](auto id, const auto &info) {
+        if (!mgr.hasComponent(entity, id))
+            return;
 
         // The transform component is handed by itself.
         if (info.m_type == rttr::type::get<GS::TransformComponent>())
-            continue;
+            return;
 
         if (info.m_type.is_valid())
         {
@@ -97,16 +95,16 @@ Inspector::onGUI(const UT::Timestep &)
             if (hide.is_valid())
             {
                 UT_ASSERT_MSG(
-                        hide.can_convert<bool>(),
+                        hide.template can_convert<bool>(),
                         "GUI_HIDE is a bool property");
-                bool should_hide = hide.convert<bool>();
+                bool should_hide = hide.template convert<bool>();
                 if (should_hide)
-                    continue;
+                    return;
             }
         }
 
         info.m_guiCallback(mgr, entity);
-    }
+    });
 }
 void
 Inspector::menuItem()

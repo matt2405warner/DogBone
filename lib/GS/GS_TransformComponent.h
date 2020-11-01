@@ -8,6 +8,8 @@
 #include "GS_API.h"
 
 #include "GS_Entity.h"
+#include "GS_YAML.h"
+#include "GS_ComponentTypeRegistry.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -22,12 +24,14 @@ namespace dogb::GS
 struct DB_GS_API TransformComponent
 {
 public:
-    static constexpr const char* theGUIName = "Transform";
+    REFLECT_COMPONENT(TransformComponent, "Transform")
 
     TransformComponent();
     virtual ~TransformComponent() = default;
 
     void onGUI();
+    void serialize(GS_YAML::Emitter& emitter) const;
+    void deserialize(GS_YAML::Node& node);
 
     [[nodiscard]] glm::mat4 transform() const;
 

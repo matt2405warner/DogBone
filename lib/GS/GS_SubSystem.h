@@ -26,7 +26,6 @@ public:
 
     void update(const UT::Timestep &timestep);
 
-    std::shared_ptr<Scene> m_activeScene;
 private:
     SubSystem() =default;
 };

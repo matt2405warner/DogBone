@@ -18,6 +18,7 @@
 
 #include <GS/GS_Scene.h>
 #include <GS/GS_SubSystem.h>
+#include <GS/GS_Editor.h>
 
 #include <CE/CE_Input.h>
 
@@ -59,6 +60,9 @@ EditorApp::initialize(int argc, char *argv[])
 
     WindowProperties props("DogBone Editor", 1600, 900, 800, 600, true, true);
     createWindow<EditorWindow>(props);
+
+    // Initialize our editor.
+    GS::Editor::instance().initialize();
 
     GR::SubSystem &gr_system = GR::SubSystem::instance();
     gr_system.init();
@@ -115,6 +119,8 @@ EditorApp::exec()
     gs_system.shutdown();
 
     imgui_system.shutdown();
+
+    GS::Editor::instance().shutdown();
 
     gr_system.shutdown();
 

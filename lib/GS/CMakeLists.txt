@@ -22,6 +22,9 @@ set(sources
         GS_MeshComponent.cpp
         GS_CameraControllerSystem.cpp
         GS_Material.cpp
+        GS_SceneSerializer.cpp
+        GS_YAML.cpp
+        GS_ComponentTypeRegistry.cpp
         )
 
 set(headers
@@ -48,6 +51,9 @@ set(headers
         GS_MeshComponent.h
         GS_CameraControllerSystem.h
         GS_Material.h
+        GS_SceneSerializer.h
+        GS_YAML.h
+        GS_ComponentTypeRegistry.h
         )
 
 db_lib(

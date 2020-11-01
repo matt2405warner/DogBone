@@ -8,6 +8,8 @@
 
 #include <imgui.h>
 
+AUTOREGISTER_TYPE(MeshComponent)
+
 namespace dogb::GS
 {
 void
@@ -51,6 +53,16 @@ void
 MeshComponent::selectFileCallback_(const std::string &file)
 {
     m_mesh.m_material->m_mainTexture = GR::Texture2D::create(file);
+}
+void
+MeshComponent::serialize(GS_YAML::Emitter &) const
+{
+    // TODO: serialize a material!!!
+}
+void
+MeshComponent::deserialize(GS_YAML::Node &)
+{
+    // TODO: deserialize a material!!!
 }
 
 } // namespace dogb::GS

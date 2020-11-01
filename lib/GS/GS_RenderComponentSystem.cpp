@@ -11,8 +11,9 @@
 #include "GS_MeshComponent.h"
 #include "GS_Mesh2DComponent.h"
 #include "GS_TransformComponent.h"
-#include "GS_World.h"
 #include "GS_Scene.h"
+#include "GS_Editor.h"
+#include "GS_World.h"
 
 DB_COMPONENT_SYS_REGISTRATION(dogb::GS::RenderComponentSystem)
 
@@ -24,11 +25,40 @@ RenderComponentSystem::RenderComponentSystem()
 }
 
 void
+RenderComponentSystem::onPreUpdate(
+        const UT::Timestep &,
+        const std::shared_ptr<Scene> &scene)
+{
+    // Configure the main camera
+    EntityManager& mgr = scene->m_entityManager;
+    auto camera_group =
+            mgr.registry().view<CameraComponent, TransformComponent>();
+
+    for (auto &camera_entity : camera_group)
+    {
+        auto &&[camera, cam_t] =
+                camera_group.get<CameraComponent, TransformComponent>(
+                        camera_entity);
+
+        if (!camera.m_camera || camera.m_camera->m_isDisabled)
+            continue;
+
+        if (camera.m_camera->m_primary)
+        {
+            camera.m_camera->m_activeTexture = Editor::instance().framebuffer();
+            World::instance().m_mainCamera = camera.m_camera;
+            break;
+        }
+    }
+}
+
+void
 RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, const SceneSPtr& scene)
 {
     EntityManager& mgr = scene->m_entityManager;
     auto camera_group =
             mgr.registry().view<CameraComponent, TransformComponent>();
+
     for (auto &camera_entity : camera_group)
     {
         auto &&[camera, cam_t] =

@@ -36,7 +36,6 @@ class DB_GS_API ComponentSystem
     RTTR_ENABLE()
 
     friend class SystemGroup;
-
 public:
     virtual ~ComponentSystem() = default;
 #if 0

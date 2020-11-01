@@ -34,8 +34,8 @@ World::update(const UT::Timestep &ts)
 void
 World::init()
 {
-    m_activeScene = std::make_shared<GS::Scene>();
-    m_mainCamera = std::make_shared<GS::Camera>();
+    m_activeScene = std::make_shared<Scene>();
+    m_mainCamera = nullptr;
 
     m_systemInitGroup = std::make_shared<SystemGroup>(SystemGroupType::INIT);
     m_systemSimGroup = std::make_shared<SystemGroup>(SystemGroupType::SIMULATION);
@@ -75,10 +75,11 @@ World::shutdown()
 }
 
 Entity
-World::createEntity()
+World::createEntity(const std::string& name)
 {
-    return m_activeScene->createEntity();
+    return m_activeScene->createEntity(name);
 }
+
 std::shared_ptr<SystemGroup>
 World::getSystemGroup(SystemGroupType type)
 {

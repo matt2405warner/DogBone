@@ -11,6 +11,8 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+AUTOREGISTER_TYPE(TransformComponent)
+
 namespace dogb::GS
 {
 TransformComponent::TransformComponent()
@@ -44,6 +46,21 @@ TransformComponent::removeChild(const Entity &e)
             break;
         }
     }
+}
+void
+TransformComponent::serialize(YAML::Emitter &emitter) const
+{
+    // TODO: we need to capture the transform hierarchy
+    emitter << YAML::Key << "m_translation" << YAML::Value << m_translation;
+    emitter << YAML::Key << "m_rotation" << YAML::Value << m_rotation;
+    emitter << YAML::Key << "m_scale" << YAML::Value << m_scale;
+}
+void
+TransformComponent::deserialize(GS_YAML::Node &node)
+{
+    m_translation = node["m_translation"].as<glm::vec3>();
+    m_rotation = node["m_rotation"].as<glm::vec3 >();
+    m_scale = node["m_scale"].as<glm::vec3>();
 }
 
 } // namespace dogb::GS

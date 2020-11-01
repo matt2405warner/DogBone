@@ -3,3 +3,5 @@
 //
 
 #include "GS_TagComponent.h"
+
+AUTOREGISTER_TYPE(TagComponent)
