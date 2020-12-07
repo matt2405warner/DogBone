@@ -11,6 +11,7 @@ set(sources
         UT_EventDispatcher.cpp
         UT_Timestep.cpp
         UT_Profiler.cpp
+        UT_FileDialog.cpp
         )
 
 set(headers
@@ -24,6 +25,7 @@ set(headers
         UT_EventDispatcher.h
         UT_Timestep.h
         UT_Profiler.h
+        UT_FileDialog.h
         )
 
 db_lib(

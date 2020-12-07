@@ -29,6 +29,8 @@ void
 SceneWindow::onGUI(const UT::Timestep &)
 {
     GS::World &world = GS::World::instance();
+    if (!world.m_mainCamera)
+        return;
 
     // bool is_focused = ImGui::IsWindowFocused();
 
@@ -45,6 +47,7 @@ SceneWindow::onGUI(const UT::Timestep &)
 
         uint32_t width = static_cast<uint32_t>(m_viewportSize.x);
         uint32_t height = static_cast<uint32_t>(m_viewportSize.y);
+
         world.m_mainCamera->m_activeTexture->resize(width, height);
 
         auto scene = world.m_activeScene;

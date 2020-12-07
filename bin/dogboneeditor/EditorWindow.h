@@ -14,6 +14,10 @@
 namespace dogb
 {
 class ProjectWindow;
+namespace DBE
+{
+class SceneWindow;
+}
 
 class EditorWindow : public GR::DesktopWindow
 {
@@ -26,6 +30,7 @@ public:
     void initialize() override;
 
     ProjectWindow *m_projectWindow{};
+    DBE::SceneWindow *m_sceneWindow{};
     GR::ShaderLibrary m_shaderLibrary;
 };
 
