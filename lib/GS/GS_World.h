@@ -30,7 +30,6 @@ public:
     Entity m_selectedEntity;
 
     std::shared_ptr<GS::Scene> m_activeScene;
-    std::shared_ptr<GS::Camera> m_mainCamera;
 
     std::shared_ptr<SystemGroup> getSystemGroup(SystemGroupType type);
 private:

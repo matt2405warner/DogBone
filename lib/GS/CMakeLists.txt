@@ -26,6 +26,7 @@ set(sources
         GS_YAML.cpp
         GS_ComponentTypeRegistry.cpp
         GS_Math.cpp
+        GS_EditorCamera.cpp
         )
 
 set(headers
@@ -56,6 +57,7 @@ set(headers
         GS_YAML.h
         GS_ComponentTypeRegistry.h
         GS_Math.h
+        GS_EditorCamera.h
         )
 
 db_lib(

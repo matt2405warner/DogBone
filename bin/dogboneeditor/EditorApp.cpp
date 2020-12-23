@@ -43,6 +43,9 @@ EditorApp::initialize(int argc, char *argv[])
 
     using namespace dogb::UT;
 
+    // NB: Make sure the editor is run as the editor and not runtime.
+    GS::Editor::setEditor(true);
+
     auto sink = std::make_shared<UT::logger_sink_mt>();
     auto log = std::make_shared<spdlog::logger>("EditorApp", sink);
 

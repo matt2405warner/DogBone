@@ -8,6 +8,7 @@
 #include "GS_API.h"
 
 #include "GS_Camera.h"
+#include "GS_EditorCamera.h"
 
 #include <GR/GR_Framebuffer.h>
 
@@ -36,8 +37,23 @@ public:
     {
         return m_frameBuffer;
     }
+
+    static void setEditor(bool is_editor)
+    {
+        instance().m_isEditor = is_editor;
+    }
+    static bool isEditor()
+    {
+        return instance().m_isEditor;
+    }
+    static EditorCamera& camera()
+    {
+        return instance().m_camera;
+    }
 private:
     std::shared_ptr<GR::Framebuffer> m_frameBuffer;
+    EditorCamera m_camera;
+    bool m_isEditor;
 };
 }
 

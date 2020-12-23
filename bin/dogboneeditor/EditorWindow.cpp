@@ -40,9 +40,6 @@ EditorWindow::initialize()
     DBE::Editor::addMenuCallback("File/New Scene...", [this]() {
         GS::World &world = GS::World::instance();
         world.m_activeScene = std::make_shared<GS::Scene>();
-        // This is only a hack until there is a proper editor camera and
-        // game camera.
-        world.m_mainCamera = nullptr;
         world.m_activeScene->onViewportResize(
                 static_cast<uint32_t>(m_sceneWindow->m_viewportSize.x),
                 static_cast<uint32_t>(m_sceneWindow->m_viewportSize.y));
@@ -56,7 +53,6 @@ EditorWindow::initialize()
             UT_LOG_INFO("Load Path: '{}'", path.value());
             GS::World &world = GS::World::instance();
             world.m_activeScene = std::make_shared<GS::Scene>();
-            world.m_mainCamera = nullptr;
             world.m_activeScene->onViewportResize(
                     static_cast<uint32_t>(m_sceneWindow->m_viewportSize.x),
                     static_cast<uint32_t>(m_sceneWindow->m_viewportSize.y));
@@ -157,6 +153,21 @@ EditorWindow::initializeHotKeys()
                     std::placeholders::_1));
 
     m_hotkeyManager.setGlobalConfiguration(global_configuration);
+}
+
+void
+EditorWindow::onMouseScrolled(float x_offset, float y_offset)
+{
+    DesktopWindow::onMouseScrolled(x_offset, y_offset);
+
+    GS::Editor::camera().onMouseScroll(x_offset, y_offset);
+}
+void
+EditorWindow::update(UT::Timestep ts)
+{
+    DesktopWindow::update(ts);
+
+    GS::Editor::camera().onUpdate(ts);
 }
 
 } // namespace dogb

@@ -35,7 +35,6 @@ void
 World::init()
 {
     m_activeScene = std::make_shared<Scene>();
-    m_mainCamera = nullptr;
 
     m_systemInitGroup = std::make_shared<SystemGroup>(SystemGroupType::INIT);
     m_systemSimGroup = std::make_shared<SystemGroup>(SystemGroupType::SIMULATION);
@@ -70,8 +69,6 @@ World::shutdown()
     // I cant seem to find any way to clear all entities so for now we just
     // reset the entire manager on shutdown.
     m_activeScene = nullptr;
-
-    m_mainCamera = nullptr;
 }
 
 Entity

@@ -17,6 +17,7 @@
 #include <CE/CE_Input.h>
 
 #include <GR/GR_DesktopWindow.h>
+#include <GR/GR_Framebuffer.h>
 
 #include <ImGuizmo.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -40,10 +41,8 @@ void
 SceneWindow::onGUI(const UT::Timestep &)
 {
     GS::World &world = GS::World::instance();
-    if (!world.m_mainCamera)
-        return;
 
-    // bool is_focused = ImGui::IsWindowFocused();
+    //const bool is_focused = ImGui::IsWindowFocused();
 
     ImVec2 viewport_size = ImGui::GetContentRegionAvail();
 
@@ -59,16 +58,17 @@ SceneWindow::onGUI(const UT::Timestep &)
         uint32_t width = static_cast<uint32_t>(m_viewportSize.x);
         uint32_t height = static_cast<uint32_t>(m_viewportSize.y);
 
-        world.m_mainCamera->m_activeTexture->resize(width, height);
+        GS::Editor::instance().framebuffer()->resize(width, height);
+        GS::Editor::camera().setViewportSize(
+                static_cast<float>(width), static_cast<float>(height));
 
         auto scene = world.m_activeScene;
         UT_ASSERT(scene);
         scene->onViewportResize(width, height);
     }
 
-    uint32_t tex_id =
-            world.m_mainCamera->m_activeTexture->colorAttachmentRendererID();
-
+    auto frame_buffer = GS::Editor::instance().framebuffer();
+    uint32_t tex_id = frame_buffer->colorAttachmentRendererID();
     ImGui::Image(
             reinterpret_cast<void *>(tex_id),
             ImVec2{m_viewportSize.x, m_viewportSize.y}, ImVec2{0, 1},
@@ -92,17 +92,14 @@ SceneWindow::onGUI(const UT::Timestep &)
         auto height = ImGui::GetWindowHeight();
         ImGuizmo::SetRect(pos.x, pos.y, width, height);
 
-        auto scene = world.m_activeScene;
-        auto entity = scene->getPrimaryCameraEntity();
-        auto camera = entity.getComponent<GS::CameraComponent>().m_camera;
-        const glm::mat4& projection = camera->projection();
-        glm::mat4 camera_view = glm::inverse(entity.getComponent<GS::TransformComponent>().transform());
+        const glm::mat4& camera_projection = GS::Editor::camera().projection();
+        glm::mat4 camera_view = GS::Editor::camera().viewMatrix();
 
         auto& tc = selected_entity.getComponent<GS::TransformComponent>();
         glm::mat4 transform = tc.transform();
 
         ImGuizmo::Manipulate(
-                glm::value_ptr(camera_view), glm::value_ptr(projection),
+                glm::value_ptr(camera_view), glm::value_ptr(camera_projection),
                 (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL,
                 glm::value_ptr(transform), nullptr,
                 snap ? snap_values : nullptr);

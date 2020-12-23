@@ -8,11 +8,11 @@
 #include <GR/GR_Renderer2D.h>
 
 #include "GS_CameraComponent.h"
-#include "GS_MeshComponent.h"
-#include "GS_Mesh2DComponent.h"
-#include "GS_TransformComponent.h"
-#include "GS_Scene.h"
 #include "GS_Editor.h"
+#include "GS_Mesh2DComponent.h"
+#include "GS_MeshComponent.h"
+#include "GS_Scene.h"
+#include "GS_TransformComponent.h"
 #include "GS_World.h"
 
 DB_COMPONENT_SYS_REGISTRATION(dogb::GS::RenderComponentSystem)
@@ -25,37 +25,55 @@ RenderComponentSystem::RenderComponentSystem()
 }
 
 void
-RenderComponentSystem::onPreUpdate(
-        const UT::Timestep &,
-        const std::shared_ptr<Scene> &scene)
+RenderComponentSystem::onUpdate(
+        const dogb::UT::Timestep &,
+        const SceneSPtr &scene)
 {
-    // Configure the main camera
-    EntityManager& mgr = scene->m_entityManager;
-    auto camera_group =
-            mgr.registry().view<CameraComponent, TransformComponent>();
+    EntityManager &mgr = scene->m_entityManager;
 
-    for (auto &camera_entity : camera_group)
+    // If its being run within the editor then render the editor camera in
+    // addition to the other camera if any.
+    if (Editor::isEditor())
     {
-        auto &&[camera, cam_t] =
-                camera_group.get<CameraComponent, TransformComponent>(
-                        camera_entity);
+        auto frame_buffer = GS::Editor::instance().framebuffer();
+        frame_buffer->bind();
 
-        if (!camera.m_camera || camera.m_camera->m_isDisabled)
-            continue;
+        GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+        GR::Renderer::clear();
 
-        if (camera.m_camera->m_primary)
+        // ---------------------------------------------------------------------
+        // 2D Editor View
+        // ---------------------------------------------------------------------
+        GR::Renderer2D::beginScene(Editor::camera().viewProjection());
+        auto mesh2d_view =
+                mgr.registry().view<TransformComponent, Mesh2DComponent>();
+        for (auto &mesh_entity : mesh2d_view)
         {
-            camera.m_camera->m_activeTexture = Editor::instance().framebuffer();
-            World::instance().m_mainCamera = camera.m_camera;
-            break;
+            auto &&[mesh_transform, mesh] =
+            mesh2d_view.get<TransformComponent, Mesh2DComponent>(
+                    mesh_entity);
+            GR::Renderer2D::drawQuad(
+                    mesh_transform.transform(), mesh.m_color.toVec4());
         }
-    }
-}
+        GR::Renderer2D::endScene();
+        // ---------------------------------------------------------------------
+        // 3D Editor View
+        // ---------------------------------------------------------------------
+        GR::Renderer::beginScene(Editor::camera().viewProjection());
+        auto mesh_view =
+                mgr.registry().view<TransformComponent, MeshComponent>();
+        for (auto &mesh_entity : mesh_view)
+        {
+            auto &&[mesh_transform, mesh] =
+            mesh_view.get<TransformComponent, MeshComponent>(
+                    mesh_entity);
+            mesh.m_mesh.draw(mesh_transform.transform());
+        }
+        GR::Renderer::endScene();
 
-void
-RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, const SceneSPtr& scene)
-{
-    EntityManager& mgr = scene->m_entityManager;
+        frame_buffer->unbind();
+    }
+
     auto camera_group =
             mgr.registry().view<CameraComponent, TransformComponent>();
 
@@ -86,7 +104,8 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, const SceneSPtr& sce
             auto &&[mesh_transform, mesh] =
                     mesh2d_view.get<TransformComponent, Mesh2DComponent>(
                             mesh_entity);
-            GR::Renderer2D::drawQuad(mesh_transform.transform(), mesh.m_color.toVec4());
+            GR::Renderer2D::drawQuad(
+                    mesh_transform.transform(), mesh.m_color.toVec4());
         }
         GR::Renderer2D::endScene();
         // ---------------------------------------------------------------------
@@ -102,8 +121,8 @@ RenderComponentSystem::onUpdate(const dogb::UT::Timestep &, const SceneSPtr& sce
         for (auto &mesh_entity : mesh_view)
         {
             auto &&[mesh_transform, mesh] =
-            mesh_view.get<TransformComponent, MeshComponent>(
-                    mesh_entity);
+                    mesh_view.get<TransformComponent, MeshComponent>(
+                            mesh_entity);
             mesh.m_mesh.draw(mesh_transform.transform());
         }
         GR::Renderer::endScene();

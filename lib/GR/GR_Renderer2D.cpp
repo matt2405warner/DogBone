@@ -149,12 +149,19 @@ Renderer2D::beginScene(const Camera &camera, const glm::mat4& transform)
 {
     glm::mat4 viewproj = camera.projection() * glm::inverse(transform);
 
+    beginScene(viewproj);
+}
+
+void
+Renderer2D::beginScene(const glm::mat4& viewproj)
+{
     theRenderStorage.m_texShader->bind();
     theRenderStorage.m_texShader->setMat4(
             RenderNames::u_ViewProj, viewproj);
 
     grResetBatchInfo();
 }
+
 void
 Renderer2D::endScene()
 {

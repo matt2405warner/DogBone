@@ -62,6 +62,7 @@ public:
 
     static void init() { theApi->init(); }
     static void beginScene(Camera &camera, const glm::mat4& transform);
+    static void beginScene(const glm::mat4& view_projection);
     static void endScene();
     static void drawIndexed(std::shared_ptr<VertexArray> vao, uint32_t count = 0)
     {

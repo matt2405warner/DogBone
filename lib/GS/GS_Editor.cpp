@@ -18,8 +18,8 @@ Editor::instance()
 void
 Editor::initialize()
 {
-    UT::Application* app =  UT::AppInterface::mainApp();
-    UT::Window* window = app->mainWindow();
+    UT::Application *app = UT::AppInterface::mainApp();
+    UT::Window *window = app->mainWindow();
 
     GR::Framebuffer::Specification spec;
     spec.m_width = window->width();
@@ -27,6 +27,10 @@ Editor::initialize()
 
     // Generate our frame buffer
     m_frameBuffer = GR::Framebuffer::create(spec);
+
+    m_camera = EditorCamera(
+            30.0f, (float)window->width() / (float)window->height(), 0.1f,
+            1000.0f);
 }
 void
 Editor::shutdown()
@@ -34,4 +38,4 @@ Editor::shutdown()
     m_frameBuffer.reset();
 }
 
-}
+} // namespace dogb::GS

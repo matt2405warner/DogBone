@@ -57,6 +57,7 @@ public:
     static void shutdown();
 
     static void beginScene(const GR::Camera &camera, const glm::mat4& transform);
+    static void beginScene(const glm::mat4& viewproj);
     static void endScene();
 
     static void flush();

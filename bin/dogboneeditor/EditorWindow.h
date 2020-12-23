@@ -28,10 +28,14 @@ public:
     }
 
     void initialize() override;
+    void update(UT::Timestep ts) override;
 
     ProjectWindow *m_projectWindow{};
     DBE::SceneWindow *m_sceneWindow{};
     GR::ShaderLibrary m_shaderLibrary;
+
+protected:
+    void onMouseScrolled(float x_offset, float y_offset) override;
 
 private:
     void initializeHotKeys();

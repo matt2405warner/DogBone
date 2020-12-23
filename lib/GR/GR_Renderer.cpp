@@ -31,7 +31,13 @@ Renderer::submit(Shader *shader, std::shared_ptr<VertexArray> vao, const glm::ma
 void
 Renderer::beginScene(Camera &camera, const glm::mat4& transform)
 {
-    theSceneCtx.m_viewProjMatrix = camera.projection() * glm::inverse(transform);
+    beginScene(camera.projection() * glm::inverse(transform));
+}
+
+void
+Renderer::beginScene(const glm::mat4 &view_projection)
+{
+    theSceneCtx.m_viewProjMatrix = view_projection;
 }
 
 void

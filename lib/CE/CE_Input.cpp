@@ -44,7 +44,7 @@ float GetMouseY()
     auto window = reinterpret_cast<GLFWwindow*>(UT::AppInterface::mainApp()->mainWindow()->nativeWindow());
     double x, y;
     glfwGetCursorPos(window, &x, &y);
-    return static_cast<float>(x);
+    return static_cast<float>(y);
 }
 
 std::pair<float, float> GetMousePos()
