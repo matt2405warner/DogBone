@@ -27,6 +27,13 @@ public:
     void deserialize(GS_YAML::Node& node);
     void onGUI();
 
+    [[nodiscard]] bool isPrimary() const
+    {
+        if (!m_camera)
+            return false;
+        return m_camera->m_primary;
+    }
+
     std::shared_ptr<GS::Camera> m_camera;
 };
 }

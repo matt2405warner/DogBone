@@ -5,6 +5,7 @@ set(sources
         CE_GLFWHelpers.cpp
         CE_Asset.cpp
         CE_Archiver.cpp
+        CE_HotKeyManager.cpp
         )
 
 set(headers
@@ -12,6 +13,7 @@ set(headers
         CE_GLFWHelpers.h
         CE_Asset.h
         CE_Archiver.h
+        CE_HotKeyManager.h
         )
 
 db_lib(

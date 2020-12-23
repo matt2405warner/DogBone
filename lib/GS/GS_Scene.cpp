@@ -31,5 +31,17 @@ Scene::createEntity(const std::string& name)
 {
     return m_entityManager.createEntity(name);
 }
+Entity
+Scene::getPrimaryCameraEntity()
+{
+    auto view = m_entityManager.registry().view<CameraComponent>();
+    for (auto&& entity : view)
+    {
+        const auto& camera = view.get<CameraComponent>(entity);
+        if (camera.isPrimary())
+            return Entity{entity, m_entityManager};
+    }
+    return Entity();
+}
 
 } // namespace dogb::GS

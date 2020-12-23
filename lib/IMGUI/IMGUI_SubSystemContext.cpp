@@ -13,6 +13,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <ImGuizmo.h>
 
 namespace dogb::IMGUI
 {
@@ -130,6 +131,7 @@ void SubSystemContext::update(UT::Timestep ts)
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 
     onGUI();
 

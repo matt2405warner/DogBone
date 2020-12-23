@@ -25,6 +25,7 @@ set(sources
         GS_SceneSerializer.cpp
         GS_YAML.cpp
         GS_ComponentTypeRegistry.cpp
+        GS_Math.cpp
         )
 
 set(headers
@@ -54,6 +55,7 @@ set(headers
         GS_SceneSerializer.h
         GS_YAML.h
         GS_ComponentTypeRegistry.h
+        GS_Math.h
         )
 
 db_lib(

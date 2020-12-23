@@ -28,9 +28,13 @@ TransformComponent::onGUI()
 glm::mat4
 TransformComponent::transform() const
 {
+#if 1
+    glm::mat4 rotation = glm::toMat4(glm::quat(m_rotation));
+#else
     glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), m_rotation.x, {1, 0, 0})
                          * glm::rotate(glm::mat4(1.0f), m_rotation.y, {0, 1, 0})
                          * glm::rotate(glm::mat4(1.0f), m_rotation.z, {0, 0, 1});
+#endif
 
     return glm::translate(glm::mat4(1.0f), m_translation) * rotation *
            glm::scale(glm::mat4(1.0f), m_scale);

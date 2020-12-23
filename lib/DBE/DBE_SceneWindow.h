@@ -13,6 +13,8 @@
 
 #include <GR/GR_Framebuffer.h>
 
+#include <CE/CE_Input.h>
+
 #include <glm/glm.hpp>
 
 #include <memory>
@@ -38,9 +40,14 @@ public:
     void onStart() override;
     void onGUI(const UT::Timestep& ts) override;
 
+    bool onUpdateKeys(const CE::Input::KeyEvent& ev);
+
     static void menuItem();
 
     glm::vec2 m_viewportSize;
+
+private:
+    int m_gizmoType;
 };
 
 }

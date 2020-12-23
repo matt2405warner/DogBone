@@ -31,4 +31,4 @@ db_lib(
         HEADERS ${headers}
 )
 
-db_link_libraries(PUBLIC GR CONAN_PKG::dock_imgui)
+db_link_libraries(PUBLIC GR CONAN_PKG::dock_imgui CONAN_PKG::imguizmo)

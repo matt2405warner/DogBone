@@ -11,6 +11,8 @@
 
 #include <SYS/SYS_Types.h>
 
+#include <boost/functional/hash.hpp>
+
 #include <utility>
 
 namespace dogb::CE::Input
@@ -214,6 +216,79 @@ DB_CE_API float GetMouseX();
 DB_CE_API float GetMouseY();
 DB_CE_API std::pair<float, float> GetMousePos();
 
-}
+struct DB_CE_API KeyEvent
+{
+    explicit KeyEvent(
+            KeyType key,
+            ActionType action = ActionType::ACTION_NONE,
+            ModifierKeyType modifier = ModifierKeyType::MODIFIER_NONE)
+        : m_key(key), m_action(action), m_modifier(modifier)
+    {
+    }
+
+    KeyType m_key;
+    ActionType m_action;
+    ModifierKeyType m_modifier;
+
+    bool operator<(const KeyEvent &e) const
+    {
+        if (m_key > e.m_key)
+            return false;
+        if (m_key < e.m_key)
+            return true;
+        return m_modifier < e.m_modifier;
+    }
+    bool operator==(const KeyEvent &e) const
+    {
+        return m_key == e.m_key && m_modifier == e.m_modifier;
+    }
+};
+struct DB_CE_API HotKey
+{
+    explicit HotKey(
+            KeyType key,
+            ModifierKeyType modifier = ModifierKeyType::MODIFIER_NONE)
+            : m_key(key), m_modifier(modifier)
+    {
+    }
+    explicit HotKey(const KeyEvent& ev) :
+        m_key(ev.m_key), m_modifier(ev.m_modifier)
+    {}
+
+    KeyType m_key;
+    ModifierKeyType m_modifier;
+
+    bool operator<(const HotKey &e) const
+    {
+        if (m_key > e.m_key)
+            return false;
+        if (m_key < e.m_key)
+            return true;
+        return m_modifier < e.m_modifier;
+    }
+    bool operator==(const HotKey &e) const
+    {
+        return m_key == e.m_key && m_modifier == e.m_modifier;
+    }
+};
+
+} // namespace dogb::CE::Input
+
+namespace std
+{
+template <>
+struct hash<dogb::CE::Input::HotKey>
+{
+    size_t operator()(const dogb::CE::Input::HotKey &hotkey) const
+    {
+        using namespace boost;
+        size_t seed = 0;
+
+        hash_combine(seed, hash_value(hotkey.m_key));
+        hash_combine(seed, hash_value(hotkey.m_modifier));
+        return seed;
+    }
+};
+} // namespace std
 
 #endif // DOGBONE_CE_INPUT_H

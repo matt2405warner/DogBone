@@ -55,14 +55,13 @@ struct DB_GR_API WindowMovedEvent : public detail::Event
     int height;
 };
 
-struct DB_GR_API KeyEvent : public detail::Event
+struct DB_GR_API WindowKeyEvent : public detail::Event
 {
-    KeyEvent(CE::Input::KeyType _code, CE::Input::ActionType _action)
-        : detail::Event(detail::Type::kKeyEvent), code(_code), action(_action)
+    WindowKeyEvent(const CE::Input::KeyEvent& ev)
+        : detail::Event(detail::Type::kKeyEvent), event(ev)
     {
     }
-    CE::Input::KeyType code;
-    CE::Input::ActionType action;
+    CE::Input::KeyEvent event;
 };
 
 struct DB_GR_API MouseMovedEvent : public detail::Event
@@ -140,33 +139,53 @@ grGlfwScrollCallback(GLFWwindow *window, double xOffset, double yOffset)
             xOffset, yOffset));
 }
 
-#if 0
 static void
-grGlfwKeyCallback(GLFWwindow *window, int key, int, int action, int)
+grGlfwKeyCallback(GLFWwindow *window, int key, int, int action, int modifier)
 {
     using namespace CE::Input;
 
     auto desk_win = reinterpret_cast<DesktopWindow *>(glfwGetWindowUserPointer(window));
-    ActionType _action = ActionType::ACTION_NONE;
+
+    CE::Input::KeyEvent key_event{static_cast<CE::Input::KeyType>(key)};
     switch (action)
     {
     case GLFW_PRESS:
-        _action = ActionType::PRESS;
+        key_event.m_action = ActionType::PRESS;
         break;
     case GLFW_RELEASE:
-        _action = ActionType::RELEASE;
+        key_event.m_action = ActionType::RELEASE;
         break;
     case GLFW_REPEAT:
-        _action = ActionType::REPEAT;
+        key_event.m_action = ActionType::REPEAT;
         break;
     default:
         UT_LOG_ERROR("Unkown key action.");
         break;
     }
+    switch (modifier)
+    {
+    case GLFW_MOD_SHIFT:
+        key_event.m_modifier = ModifierKeyType::MODIFIER_SHIFT;
+        break;
+    case GLFW_MOD_CONTROL:
+        key_event.m_modifier = ModifierKeyType::MODIFIER_CTRL;
+        break;
+    case GLFW_MOD_ALT:
+        key_event.m_modifier = ModifierKeyType::MODIFIER_ALT;
+        break;
+    case GLFW_MOD_SUPER:
+        key_event.m_modifier = ModifierKeyType::MODIFIER_SUPER;
+        break;
+    default:
+        key_event.m_modifier = ModifierKeyType::MODIFIER_NONE;
+        break;
+    }
+
     desk_win->addEvent(
-            std::make_unique<WindowEvent::KeyEvent>(static_cast<KeyType>(key), _action));
+            std::make_unique<WindowEvent::WindowKeyEvent>(key_event));
 }
 
+#if 0
 static void
 grGlfwMouseButtonCallback(GLFWwindow *window, int button, int action, int)
 {
@@ -189,7 +208,9 @@ grGlfwMouseButtonCallback(GLFWwindow *window, int button, int action, int)
     desk_win->addEvent(std::make_unique<WindowEvent::MouseButtonEvent>(
             static_cast<MouseButtonType>(button), _action));
 }
+#endif
 
+#if 0
 static void
 grGlfwCursorPosCallback(GLFWwindow *window, double xPos, double yPos)
 {
@@ -262,8 +283,8 @@ DesktopWindow::initialize()
     glfwSetWindowSizeCallback(m_handle.get(), grGlfwWindowSizeCallback);
     glfwSetWindowCloseCallback(m_handle.get(), grGlfwWindowCloseCallback);
     glfwSetScrollCallback(m_handle.get(), grGlfwScrollCallback);
-#if 0
     glfwSetKeyCallback(m_handle.get(), grGlfwKeyCallback);
+#if 0
     glfwSetMouseButtonCallback(m_handle.get(), grGlfwMouseButtonCallback);
     glfwSetCursorPosCallback(m_handle.get(), grGlfwCursorPosCallback);
 #endif
@@ -353,6 +374,11 @@ DesktopWindow::flushEvents()
             MouseScrolledEvent *ev =
                     reinterpret_cast<MouseScrolledEvent *>(e.get());
             onMouseScrolled(ev->xOffset, ev->yOffset);
+        }
+        else if (e->m_type == kKeyEvent)
+        {
+            WindowKeyEvent* ev = reinterpret_cast<WindowKeyEvent*>(e.get());
+            m_hotkeyManager.handle(ev->event);
         }
         else
         {

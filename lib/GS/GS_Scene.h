@@ -27,6 +27,8 @@ public:
 
     Entity createEntity(const std::string& name = std::string());
 
+    Entity getPrimaryCameraEntity();
+
     EntityManager m_entityManager;
 
     uint32_t m_viewportWidth = 0;

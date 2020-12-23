@@ -32,6 +32,9 @@ public:
     ProjectWindow *m_projectWindow{};
     DBE::SceneWindow *m_sceneWindow{};
     GR::ShaderLibrary m_shaderLibrary;
+
+private:
+    void initializeHotKeys();
 };
 
 } // namespace dogb

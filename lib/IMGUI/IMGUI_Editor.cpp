@@ -20,7 +20,7 @@ EditorDrawTransform(glm::vec3& position, glm::vec3& rotation, glm::vec3& scale)
     EditorDrawVec3Control("Translation", position);
     glm::vec3 deg_rotation = glm::degrees(rotation);
     EditorDrawVec3Control("Rotation", deg_rotation);
-    rotation = deg_rotation;
+    rotation = glm::radians(deg_rotation);
     EditorDrawVec3Control("Scale", scale, 1.0f);
 }
 

@@ -5,6 +5,7 @@
 #include "GS_CameraComponent.h"
 
 #include "GS_Editor.h"
+#include "GS_World.h"
 
 #include <UT/UT_Application.h>
 

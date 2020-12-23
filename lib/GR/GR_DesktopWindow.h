@@ -9,6 +9,7 @@
 
 #include <CE/CE_GLFWHelpers.h>
 #include <CE/CE_Input.h>
+#include <CE/CE_HotKeyManager.h>
 
 #include <UT/UT_EventDispatcher.h>
 #include <UT/UT_Window.h>
@@ -80,6 +81,7 @@ public:
     CloseSignalType m_closeSignal;
     MouseScrolledSignalType m_scrolledSignal;
 
+    CE::HotKeyManager m_hotkeyManager;
 protected:
     virtual void onResize(I32 width, I32 height);
     virtual void onMouseScrolled(float x_offset, float y_offset);

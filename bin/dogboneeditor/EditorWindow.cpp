@@ -120,6 +120,7 @@ EditorWindow::initialize()
             imgui_ctx->createGUIWindow<DBE::ConsoleWindow>();
     console_win->show();
 
+    initializeHotKeys();
 #if 0
     GS::World &world = GS::World::instance();
 
@@ -127,6 +128,35 @@ EditorWindow::initialize()
     serializer.serialize("../assets/scenes/test.dbscene");
     serializer.deserialize("../assets/scenes/test.dbscene");
 #endif
+}
+void
+EditorWindow::initializeHotKeys()
+{
+    using namespace CE::Input;
+
+    CE::HotKeyConfiguration global_configuration;
+    global_configuration.setHotKey(
+            HotKey{.m_key = KeyType::KEY_Q},
+            std::bind(
+                    &DBE::SceneWindow::onUpdateKeys, m_sceneWindow,
+                    std::placeholders::_1));
+    global_configuration.setHotKey(
+            HotKey{.m_key = KeyType::KEY_E},
+            std::bind(
+                    &DBE::SceneWindow::onUpdateKeys, m_sceneWindow,
+                    std::placeholders::_1));
+    global_configuration.setHotKey(
+            HotKey{.m_key = KeyType::KEY_R},
+            std::bind(
+                    &DBE::SceneWindow::onUpdateKeys, m_sceneWindow,
+                    std::placeholders::_1));
+    global_configuration.setHotKey(
+            HotKey{.m_key = KeyType::KEY_T},
+            std::bind(
+                    &DBE::SceneWindow::onUpdateKeys, m_sceneWindow,
+                    std::placeholders::_1));
+
+    m_hotkeyManager.setGlobalConfiguration(global_configuration);
 }
 
 } // namespace dogb
