@@ -185,7 +185,6 @@ grGlfwKeyCallback(GLFWwindow *window, int key, int, int action, int modifier)
             std::make_unique<WindowEvent::WindowKeyEvent>(key_event));
 }
 
-#if 0
 static void
 grGlfwMouseButtonCallback(GLFWwindow *window, int button, int action, int)
 {
@@ -208,7 +207,6 @@ grGlfwMouseButtonCallback(GLFWwindow *window, int button, int action, int)
     desk_win->addEvent(std::make_unique<WindowEvent::MouseButtonEvent>(
             static_cast<MouseButtonType>(button), _action));
 }
-#endif
 
 #if 0
 static void
@@ -284,8 +282,8 @@ DesktopWindow::initialize()
     glfwSetWindowCloseCallback(m_handle.get(), grGlfwWindowCloseCallback);
     glfwSetScrollCallback(m_handle.get(), grGlfwScrollCallback);
     glfwSetKeyCallback(m_handle.get(), grGlfwKeyCallback);
-#if 0
     glfwSetMouseButtonCallback(m_handle.get(), grGlfwMouseButtonCallback);
+#if 0
     glfwSetCursorPosCallback(m_handle.get(), grGlfwCursorPosCallback);
 #endif
 
@@ -379,6 +377,12 @@ DesktopWindow::flushEvents()
         {
             WindowKeyEvent* ev = reinterpret_cast<WindowKeyEvent*>(e.get());
             m_hotkeyManager.handle(ev->event);
+        }
+        else if (e->m_type == kMouseButtonEvent)
+        {
+            MouseButtonEvent* ev=
+                reinterpret_cast<MouseButtonEvent*>(e.get());
+            onMouseButton(ev->button, ev->action);
         }
         else
         {

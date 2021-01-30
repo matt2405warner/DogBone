@@ -52,6 +52,8 @@ RenderComponentSystem::onUpdate(
             auto &&[mesh_transform, mesh] =
             mesh2d_view.get<TransformComponent, Mesh2DComponent>(
                     mesh_entity);
+
+            GR::Renderer2D::pushEntity((uint32_t)mesh_entity);
             GR::Renderer2D::drawQuad(
                     mesh_transform.transform(), mesh.m_color.toVec4());
         }

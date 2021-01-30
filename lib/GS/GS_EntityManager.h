@@ -47,6 +47,8 @@ public:
     explicit operator bool() const;
     explicit operator IdType() const { return m_handle; }
 
+    IdType handle() const { return m_handle; }
+
     bool operator<(const Entity &entity) const
     {
         return m_handle < entity.m_handle;

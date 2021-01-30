@@ -22,6 +22,10 @@ Editor::initialize()
     UT::Window *window = app->mainWindow();
 
     GR::Framebuffer::Specification spec;
+    spec.m_attachments = {
+            GR::Framebuffer::TextureFormat::RGBA8,
+            GR::Framebuffer::TextureFormat::RED_INTEGER,
+            GR::Framebuffer::TextureFormat::Depth};
     spec.m_width = window->width();
     spec.m_height = window->height();
 
@@ -36,6 +40,11 @@ void
 Editor::shutdown()
 {
     m_frameBuffer.reset();
+}
+void
+Editor::onUpdate(const UT::Timestep &ts)
+{
+    m_camera.onUpdate(ts);
 }
 
 } // namespace dogb::GS

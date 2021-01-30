@@ -4,6 +4,7 @@
 
 #include "GS_Mesh.h"
 
+#include <GR/GR_Renderer2D.h>
 #include <GR/GR_Renderer.h>
 
 #include <UT/UT_Profiler.h>
@@ -29,6 +30,9 @@ Mesh::draw(const glm::mat4 &transform)
 
     _mat.uploadValues();
     _mat.bindTextures();
+
+    // Set the entity ID.
+    _mat.m_shader->setInt(GR::RenderNames::u_EntityID, static_cast<int>(m_entity.handle()));
 
     GR::Renderer::submit(_mat.m_shader.get(), m_VAO, transform);
 

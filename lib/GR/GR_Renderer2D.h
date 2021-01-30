@@ -27,6 +27,7 @@ DB_RENDER_NAME(u_Transform)
 DB_RENDER_NAME(u_ViewProj)
 DB_RENDER_NAME(u_Texture)
 DB_RENDER_NAME(u_Textures)
+DB_RENDER_NAME(u_EntityID)
 
 DB_RENDER_NAME(a_Position)
 DB_RENDER_NAME(a_Color)
@@ -140,6 +141,8 @@ public:
             std::shared_ptr<SubTexture2D> tex,
             float tiling = 1.0f,
             const glm::vec4 &tint = glm::vec4(1.0f));
+
+    static void pushEntity(uint32_t entity_id);
 
     static void resetStats();
     static const Statistics &statistics();

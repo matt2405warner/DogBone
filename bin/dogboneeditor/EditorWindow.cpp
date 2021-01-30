@@ -167,7 +167,44 @@ EditorWindow::update(UT::Timestep ts)
 {
     DesktopWindow::update(ts);
 
-    GS::Editor::camera().onUpdate(ts);
+    GS::Editor::instance().onUpdate(ts);
+}
+
+void
+EditorWindow::onMouseButton(
+        CE::Input::MouseButtonType button,
+        CE::Input::ActionType action)
+{
+    if (button != CE::Input::MouseButtonType::MOUSE_BUTTON_LEFT)
+        return;
+    else if (action != CE::Input::ActionType::PRESS)
+        return;
+
+    auto[mx, my] = ImGui::GetMousePos();
+    //UT_LOG_WARN("Mouse Pos = {0}, {1}", mx, my);
+    mx -= m_sceneWindow->m_viewportBounds[0].x;
+    my -= m_sceneWindow->m_viewportBounds[0].y;
+    glm::vec2 vsize = m_sceneWindow->m_viewportBounds[1] - m_sceneWindow->m_viewportBounds[0];
+    my = vsize.y - my;
+    int mouse_x = (int)mx;
+    int mouse_y = (int)my;
+    if (mouse_x >= 0 && mouse_y >= 0 && mouse_x < (int)vsize.x && mouse_y < (int)vsize.y)
+    {
+        auto frame_buffer = GS::Editor::instance().framebuffer();
+        //UT_LOG_WARN("Mouse = {0}, {1}", mouse_x, mouse_y);
+        frame_buffer->bind();
+        int px = frame_buffer->readPixel(1, mouse_x, mouse_y);
+        frame_buffer->unbind();
+#if 0
+        if (px != -1)
+        {
+            GS::World::instance().m_selectedEntity = GS::Entity(
+                    static_cast<entt::entity>(px),
+                    GS::World::instance().m_activeScene->m_entityManager);
+        }
+#endif
+        UT_LOG_WARN("Pixel: {0}", px);
+    }
 }
 
 } // namespace dogb

@@ -85,6 +85,9 @@ public:
 protected:
     virtual void onResize(I32 width, I32 height);
     virtual void onMouseScrolled(float x_offset, float y_offset);
+    virtual void onMouseButton(
+            CE::Input::MouseButtonType ,
+            CE::Input::ActionType ) {}
 
 private:
     [[nodiscard]] CE::WindowType *handle() { return m_handle.get(); }

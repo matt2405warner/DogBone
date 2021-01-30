@@ -522,4 +522,10 @@ Renderer2D::statistics()
     return theRenderStorage.m_stats;
 }
 
+void
+Renderer2D::pushEntity(uint32_t entity_id)
+{
+    theRenderStorage.m_texShader->setInt(RenderNames::u_EntityID, static_cast<int>(entity_id));
+}
+
 } // namespace dogb::GR

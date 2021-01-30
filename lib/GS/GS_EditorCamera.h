@@ -45,6 +45,10 @@ public:
 
     [[nodiscard]] float pitch() const { return m_pitch; }
     [[nodiscard]] float yaw() const { return m_yaw; }
+    [[nodiscard]] glm::vec2 viewportSize() const
+    {
+        return glm::vec2{m_viewportWidth, m_viewportHeight};
+    }
 
 private:
     void updateProjection_();

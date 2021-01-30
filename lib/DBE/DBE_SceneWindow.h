@@ -46,6 +46,7 @@ public:
 
     glm::vec2 m_viewportSize;
 
+    glm::vec2 m_viewportBounds[2];
 private:
     int m_gizmoType;
 };

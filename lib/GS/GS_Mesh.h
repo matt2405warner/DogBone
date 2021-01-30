@@ -27,6 +27,8 @@ public:
     GS::MaterialPtr m_material;
 
     void draw(const glm::mat4& transform);
+
+    Entity m_entity;
 };
 }
 

@@ -31,6 +31,7 @@ public:
     static Editor &instance();
 
     void initialize();
+    void onUpdate(const UT::Timestep& ts);
     void shutdown();
 
     [[nodiscard]] std::shared_ptr<GR::Framebuffer> framebuffer() const

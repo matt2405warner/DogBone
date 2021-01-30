@@ -26,7 +26,10 @@ DBE_REGISTER_MENU("Window/Scene", &dogb::DBE::SceneWindow::menuItem)
 
 namespace dogb::DBE
 {
-SceneWindow::SceneWindow() : m_viewportSize({0.0f, 0.0f}) {}
+SceneWindow::SceneWindow()
+    : m_viewportSize({0.0f, 0.0f}), m_gizmoType(ImGuizmo::OPERATION::TRANSLATE)
+{
+}
 
 void
 SceneWindow::onStart()
@@ -40,6 +43,10 @@ SceneWindow::onStart()
 void
 SceneWindow::onGUI(const UT::Timestep &)
 {
+    // Make sure this is the first thing called since we need the initial offset
+    // of the viewport before all other things are drawn.
+    ImVec2 viewport_offset = ImGui::GetCursorPos();
+
     GS::World &world = GS::World::instance();
 
     //const bool is_focused = ImGui::IsWindowFocused();
@@ -73,6 +80,15 @@ SceneWindow::onGUI(const UT::Timestep &)
             reinterpret_cast<void *>(tex_id),
             ImVec2{m_viewportSize.x, m_viewportSize.y}, ImVec2{0, 1},
             ImVec2{1, 0});
+
+    ImVec2 window_size = ImGui::GetWindowSize();
+    ImVec2 min_bound = ImGui::GetWindowPos();
+    min_bound.x += viewport_offset.x;
+    min_bound.y += viewport_offset.y;
+
+    ImVec2 max_bound = { min_bound.x + window_size.x, min_bound.y + window_size.y};
+    m_viewportBounds[0] = {min_bound.x, min_bound.y};
+    m_viewportBounds[1] = {max_bound.x, max_bound.y};
 
     bool snap = CE::Input::IsKeyPressed(CE::Input::KeyType::KEY_LEFT_CTRL);
     float snap_value = 0.5f;

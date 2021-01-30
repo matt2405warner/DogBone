@@ -36,6 +36,9 @@ public:
 
 protected:
     void onMouseScrolled(float x_offset, float y_offset) override;
+    void onMouseButton(
+            CE::Input::MouseButtonType button,
+            CE::Input::ActionType action) override;
 
 private:
     void initializeHotKeys();
