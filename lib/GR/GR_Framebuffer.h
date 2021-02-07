@@ -68,6 +68,9 @@ public:
 
     virtual void resize(uint32_t width, uint32_t height) = 0;
 
+    virtual void clearAttachment(uint32_t attachment_index, int value) = 0;
+    virtual void clearAttachment(uint32_t attachment_index, float value) = 0;
+
     [[nodiscard]] const Specification& specification() const { return m_specification; }
     Specification& specification() { return m_specification; }
 

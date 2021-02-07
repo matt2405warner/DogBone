@@ -162,13 +162,6 @@ EditorWindow::onMouseScrolled(float x_offset, float y_offset)
 
     GS::Editor::camera().onMouseScroll(x_offset, y_offset);
 }
-void
-EditorWindow::update(UT::Timestep ts)
-{
-    DesktopWindow::update(ts);
-
-    GS::Editor::instance().onUpdate(ts);
-}
 
 void
 EditorWindow::onMouseButton(
@@ -195,6 +188,7 @@ EditorWindow::onMouseButton(
         frame_buffer->bind();
         int px = frame_buffer->readPixel(1, mouse_x, mouse_y);
         frame_buffer->unbind();
+        UT_LOG_WARN("Mouse Value: {0}", px)
 #if 0
         if (px != -1)
         {

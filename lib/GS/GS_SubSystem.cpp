@@ -16,6 +16,9 @@ SubSystem::init() {
 void
 SubSystem::update(const UT::Timestep& timestep)
 {
+    // Update the editor prior to updating the world.
+    GS::Editor::instance().onUpdate(timestep);
+
     World::instance().update(timestep);
 }
 void

@@ -80,13 +80,12 @@ gr_attachColorTexture(
 
 static void
 gr_attachDepthTexture(
-                uint32_t id,
-                uint32_t samples,
-                GLenum format,
-                GLenum attachment,
-                uint32_t width,
-                uint32_t height
-                )
+        uint32_t id,
+        uint32_t samples,
+        GLenum format,
+        GLenum attachment,
+        uint32_t width,
+        uint32_t height)
 {
     bool multisampled = samples > 1;
     if (multisampled)
@@ -97,8 +96,7 @@ gr_attachDepthTexture(
     }
     else
     {
-        glTexStorage2D(
-                GL_TEXTURE_2D, 1, format, width, height);
+        glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -108,8 +106,44 @@ gr_attachDepthTexture(
     }
 
     glFramebufferTexture2D(
-            GL_FRAMEBUFFER, attachment,
-            gr_textureTarget(multisampled), id, 0);
+            GL_FRAMEBUFFER, attachment, gr_textureTarget(multisampled), id, 0);
+}
+
+static GLenum
+gr_textureFormatToGL(Framebuffer::TextureFormat format)
+{
+    switch (format)
+    {
+    case Framebuffer::TextureFormat::RGBA8:
+        return GL_RGBA8;
+    case Framebuffer::TextureFormat::RED_INTEGER:
+        return GL_RED_INTEGER;
+    default:
+        UT_ASSERT_MSG(false, "Unhandled type");
+        return 0;
+    }
+}
+
+template <typename T>
+GLenum
+gr_typeToGLenum(T& )
+{
+    UT_ASSERT_MSG(false, "Unhandled date type");
+    return 0;
+}
+
+template <>
+GLenum
+gr_typeToGLenum<int>(int&)
+{
+    return GL_INT;
+}
+
+template<>
+GLenum
+gr_typeToGLenum<float>(float&)
+{
+    return GL_FLOAT;
 }
 
 GLFramebuffer::GLFramebuffer(const Specification &spec) : Framebuffer(spec)
@@ -261,6 +295,25 @@ GLFramebuffer::readPixel(uint32_t attachement_index, int x, int y) const
     int pixel = 0;
     glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel);
     return pixel;
+}
+
+#define CLEAR_TEXT_IMAGE(_index_, _value_)                                     \
+    UT_ASSERT(attachment_index < m_colorAttachments.size());                   \
+    auto &spec = m_colorAttachmentSpecs[_index_];                              \
+    glClearTexImage(                                                           \
+            m_colorAttachments[_index_], 0,                                    \
+            gr_textureFormatToGL(spec.m_format), gr_typeToGLenum(_value_),     \
+            &_value_);
+
+void
+GLFramebuffer::clearAttachment(uint32_t attachment_index, int value)
+{
+    CLEAR_TEXT_IMAGE(attachment_index, value);
+}
+void
+GLFramebuffer::clearAttachment(uint32_t attachment_index, float value)
+{
+    CLEAR_TEXT_IMAGE(attachment_index, value);
 }
 
 } // namespace dogb::GR::OpenGL

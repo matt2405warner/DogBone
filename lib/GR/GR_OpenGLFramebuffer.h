@@ -23,12 +23,14 @@ public:
 
     void resize(uint32_t width, uint32_t height) override ;
 
+    void clearAttachment(uint32_t attachment_index, int value) override;
+    void clearAttachment(uint32_t attachment_index, float value) override;
     [[nodiscard]] uint32_t colorAttachmentRendererID(uint32_t index) const override
     {
         UT_ASSERT(index < m_colorAttachments.size());
         return m_colorAttachments[index];
     }
-    int readPixel(uint32_t attachement_index, int x, int y) const override;
+    [[nodiscard]] int readPixel(uint32_t attachement_index, int x, int y) const override;
 
     void bind() override ;
     void unbind() override ;

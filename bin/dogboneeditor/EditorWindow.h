@@ -28,7 +28,6 @@ public:
     }
 
     void initialize() override;
-    void update(UT::Timestep ts) override;
 
     ProjectWindow *m_projectWindow{};
     DBE::SceneWindow *m_sceneWindow{};

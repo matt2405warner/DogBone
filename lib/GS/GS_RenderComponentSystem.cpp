@@ -41,6 +41,9 @@ RenderComponentSystem::onUpdate(
         GR::Renderer::setClearColor({0.1f, 0.1f, 0.1f, 1.0f});
         GR::Renderer::clear();
 
+        // Clear our entity ID attachment to -1
+        frame_buffer->clearAttachment(1, -1);
+
         // ---------------------------------------------------------------------
         // 2D Editor View
         // ---------------------------------------------------------------------
