@@ -30,6 +30,7 @@ public:
     void serialize(GS_YAML::Emitter& emitter) const;
     void deserialize(GS_YAML::Node& node);
     void onGUI();
+    void draw(const Entity& ent, const glm::mat4& transform);
 
     GR::Color m_color{1.0f, 1.0f, 1.0f, 1.0f};
 };

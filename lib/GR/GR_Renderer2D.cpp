@@ -14,6 +14,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <utility>
+#include <cstdint>
 
 namespace dogb::GR
 {
@@ -24,6 +25,8 @@ struct QuadVertex
     glm::vec2 m_texCoord;
     float m_texIndex;
     float m_tilingFactor;
+    // Editor only
+    int m_entityID;
 };
 
 struct RenderStorage
@@ -47,7 +50,8 @@ struct RenderStorage
                 {GR::ShaderDataType::Float4, RenderNames::a_Color},
                 {GR::ShaderDataType::Float2, RenderNames::a_TexCoord},
                 {GR::ShaderDataType::Float, RenderNames::a_TexIndex},
-                {GR::ShaderDataType::Float, RenderNames::a_TilingFactor}};
+                {GR::ShaderDataType::Float, RenderNames::a_TilingFactor},
+                {GR::ShaderDataType::Int, RenderNames::a_EntityID}};
         m_VB->setLayout(quad_layout);
         m_VAO->addVertexBuffer(m_VB);
 
@@ -225,15 +229,64 @@ grSubmitRender(
         const glm::vec4 &color,
         std::shared_ptr<Texture> tex = nullptr,
         float tiling = 1.0f,
-        const glm::vec2 coords[4] = nullptr)
+        const glm::vec2 coords[4] = nullptr,
+        int entity_id = -1)
 {
     UT_PROFILE_FUNCTION()
 
+    Renderer2D::startDrawQuad(transform);
+    Renderer2D::pushTexture(tex, color, tiling, coords);
+    Renderer2D::pushEntity(entity_id);
+    Renderer2D::endDrawQuad();
+}
+
+void
+Renderer2D::pushEntity(int entity_id)
+{
+    for (unsigned int i = 0; i < 3; i++)
+    {
+        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount + i]
+                .m_entityID = entity_id;
+    }
+}
+
+void
+Renderer2D::startDrawQuad(const glm::mat4 &transform)
+{
     // NB: make sure to flush the scene if we have reached the max vertices for
     //      one draw call.
     if (theRenderStorage.m_quadIndexCount >= RenderStorage::theMaxIndices)
         grFlushAndReset();
 
+    uint32_t idx = theRenderStorage.m_quadVertexCount;
+    theRenderStorage.m_vertices[idx].m_position =
+            transform * theRenderStorage.m_quadVertexPositions[0];
+    theRenderStorage.m_vertices[idx + 1].m_position =
+            transform * theRenderStorage.m_quadVertexPositions[1];
+    theRenderStorage.m_vertices[idx + 2].m_position =
+            transform * theRenderStorage.m_quadVertexPositions[2];
+    theRenderStorage.m_vertices[idx + 3].m_position =
+            transform * theRenderStorage.m_quadVertexPositions[3];
+}
+
+#define SET_TEX_AT_INDEX(offset)                                               \
+    theRenderStorage.m_vertices[idx + offset].m_texIndex = tex_slot;           \
+    theRenderStorage.m_vertices[idx + offset].m_color = tint;                  \
+    theRenderStorage.m_vertices[idx + offset].m_tilingFactor = tiling;
+
+#define SET_QUAD_TEX_INFO()                                                    \
+    SET_TEX_AT_INDEX(0);                                                       \
+    SET_TEX_AT_INDEX(1);                                                       \
+    SET_TEX_AT_INDEX(2);                                                       \
+    SET_TEX_AT_INDEX(3);
+
+void
+Renderer2D::pushTexture(
+        const std::shared_ptr<Texture> &tex,
+        const glm::vec4 &tint,
+        float tiling,
+        const glm::vec2 coords[4])
+{
     bool use_texture = tex != nullptr;
     float tex_slot = 0;
     if (use_texture)
@@ -268,89 +321,32 @@ grSubmitRender(
         }
     }
 
-    // x1y1
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_position =
-            transform * theRenderStorage.m_quadVertexPositions[0];
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_color =
-            color;
+    const uint32_t idx = theRenderStorage.m_quadVertexCount;
+    // Set the coords
     if (coords == nullptr)
     {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = {0.0f, 0.0f};
+        theRenderStorage.m_vertices[idx].m_texCoord = {0.0f, 0.0f};
+        theRenderStorage.m_vertices[idx + 1].m_texCoord = {1.0f, 0.0f};
+        theRenderStorage.m_vertices[idx + 2].m_texCoord = {1.0f, 1.0f};
+        theRenderStorage.m_vertices[idx + 3].m_texCoord = {0.0f, 1.0f};
     }
     else
     {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = coords[0];
+        theRenderStorage.m_vertices[idx].m_texCoord = coords[0];
+        theRenderStorage.m_vertices[idx + 1].m_texCoord = coords[1];
+        theRenderStorage.m_vertices[idx + 2].m_texCoord = coords[2];
+        theRenderStorage.m_vertices[idx + 3].m_texCoord = coords[3];
     }
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_texIndex =
-            tex_slot;
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-            .m_tilingFactor = tiling;
-    theRenderStorage.m_quadVertexCount++;
-    // x2y1
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_position =
-            transform * theRenderStorage.m_quadVertexPositions[1];
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_color =
-            color;
-    if (coords == nullptr)
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = {1.0f, 0.0f};
-    }
-    else
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = coords[1];
-    }
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_texIndex =
-            tex_slot;
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-            .m_tilingFactor = tiling;
-    theRenderStorage.m_quadVertexCount++;
-    // x2y2
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_position =
-            transform * theRenderStorage.m_quadVertexPositions[2];
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_color =
-            color;
-    if (coords == nullptr)
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = {1.0f, 1.0f};
-    }
-    else
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = coords[2];
-    }
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_texIndex =
-            tex_slot;
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-            .m_tilingFactor = tiling;
-    theRenderStorage.m_quadVertexCount++;
-    // x1y2
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_position =
-            transform * theRenderStorage.m_quadVertexPositions[3];
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_color =
-            color;
-    if (coords == nullptr)
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = {0.0f, 1.0f};
-    }
-    else
-    {
-        theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-                .m_texCoord = coords[3];
-    }
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount].m_texIndex =
-            tex_slot;
-    theRenderStorage.m_vertices[theRenderStorage.m_quadVertexCount]
-            .m_tilingFactor = tiling;
-    theRenderStorage.m_quadVertexCount++;
 
+    // Set the texture information for all four vertices.
+    SET_QUAD_TEX_INFO();
+}
+
+void
+Renderer2D::endDrawQuad()
+{
+    theRenderStorage.m_quadVertexCount += 4;
     theRenderStorage.m_quadIndexCount += 6;
-
     theRenderStorage.m_stats.m_quadCount++;
 }
 
@@ -520,12 +516,6 @@ const Renderer2D::Statistics &
 Renderer2D::statistics()
 {
     return theRenderStorage.m_stats;
-}
-
-void
-Renderer2D::pushEntity(uint32_t entity_id)
-{
-    theRenderStorage.m_texShader->setInt(RenderNames::u_EntityID, static_cast<int>(entity_id));
 }
 
 } // namespace dogb::GR

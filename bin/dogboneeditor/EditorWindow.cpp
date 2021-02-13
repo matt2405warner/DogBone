@@ -189,14 +189,16 @@ EditorWindow::onMouseButton(
         int px = frame_buffer->readPixel(1, mouse_x, mouse_y);
         frame_buffer->unbind();
         UT_LOG_WARN("Mouse Value: {0}", px)
-#if 0
         if (px != -1)
         {
             GS::World::instance().m_selectedEntity = GS::Entity(
                     static_cast<entt::entity>(px),
                     GS::World::instance().m_activeScene->m_entityManager);
         }
-#endif
+        else
+        {
+            GS::World::instance().m_selectedEntity = GS::Entity();
+        }
         UT_LOG_WARN("Pixel: {0}", px);
     }
 }

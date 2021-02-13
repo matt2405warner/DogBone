@@ -32,7 +32,7 @@ Mesh::draw(const glm::mat4 &transform)
     _mat.bindTextures();
 
     // Set the entity ID.
-    _mat.m_shader->setInt(GR::RenderNames::u_EntityID, static_cast<int>(m_entity.handle()));
+    //_mat.m_shader->setInt(GR::RenderNames::u_EntityID, static_cast<int>(m_entity.handle()));
 
     GR::Renderer::submit(_mat.m_shader.get(), m_VAO, transform);
 

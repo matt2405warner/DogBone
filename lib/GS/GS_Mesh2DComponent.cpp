@@ -4,6 +4,8 @@
 
 #include "GS_Mesh2DComponent.h"
 
+#include <GR/GR_Renderer2D.h>
+
 #include <imgui.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -26,6 +28,14 @@ void
 Mesh2DComponent::deserialize(GS_YAML::Node& node)
 {
     m_color = node["m_color"].as<glm::vec4>();
+}
+void
+Mesh2DComponent::draw(const GS::Entity& ent, const glm::mat4& transform)
+{
+    GR::Renderer2D::startDrawQuad(transform);
+    GR::Renderer2D::pushEntity(static_cast<int>(ent.handle()));
+    GR::Renderer2D::pushTexture(nullptr /*text*/, m_color);
+    GR::Renderer2D::endDrawQuad();
 }
 
 }

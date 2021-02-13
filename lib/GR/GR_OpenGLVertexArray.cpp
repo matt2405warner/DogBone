@@ -4,6 +4,8 @@
 
 #include "GR_OpenGLVertexArray.h"
 
+#include <UT/UT_Assert.h>
+
 #include <glad/glad.h>
 
 namespace dogb::GR::OpenGL
@@ -69,10 +71,35 @@ GLVertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vbuffer)
     for (auto &&e : layout)
     {
         glEnableVertexAttribArray(index);
-        glVertexAttribPointer(
-                index, static_cast<int>(e.componentCount()), ShaderDataTypeToOpenGLBaseType(e.type),
-                e.is_normalized ? GL_TRUE : GL_FALSE, static_cast<int>(layout.stride()),
-                reinterpret_cast<const void *>(e.offset));
+        switch(e.type)
+        {
+        case ShaderDataType::Float:
+        case ShaderDataType::Float2:
+        case ShaderDataType::Float3:
+        case ShaderDataType::Float4:
+            glVertexAttribPointer(
+                    index, static_cast<int>(e.componentCount()),
+                    ShaderDataTypeToOpenGLBaseType(e.type),
+                    e.is_normalized ? GL_TRUE : GL_FALSE,
+                    static_cast<int>(layout.stride()),
+                    reinterpret_cast<const void *>(e.offset));
+            break;
+        case ShaderDataType::Int:
+        case ShaderDataType::Int2:
+        case ShaderDataType::Int3:
+        case ShaderDataType::Int4:
+            glVertexAttribIPointer(
+                    index, static_cast<int>(e.componentCount()),
+                    ShaderDataTypeToOpenGLBaseType(e.type),
+                    static_cast<int>(layout.stride()),
+                    reinterpret_cast<const void *>(e.offset));
+            break;
+        default:
+            UT_ASSERT_MSG(false, "Unhandled shader data type");
+            break;
+        }
+
+
         index++;
     }
 

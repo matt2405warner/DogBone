@@ -27,13 +27,13 @@ DB_RENDER_NAME(u_Transform)
 DB_RENDER_NAME(u_ViewProj)
 DB_RENDER_NAME(u_Texture)
 DB_RENDER_NAME(u_Textures)
-DB_RENDER_NAME(u_EntityID)
 
 DB_RENDER_NAME(a_Position)
 DB_RENDER_NAME(a_Color)
 DB_RENDER_NAME(a_TexCoord)
 DB_RENDER_NAME(a_TexIndex)
 DB_RENDER_NAME(a_TilingFactor)
+DB_RENDER_NAME(a_EntityID)
 } // namespace RenderNames
 
 class DB_GR_API Renderer2D
@@ -142,11 +142,19 @@ public:
             float tiling = 1.0f,
             const glm::vec4 &tint = glm::vec4(1.0f));
 
-    static void pushEntity(uint32_t entity_id);
+    static void startDrawQuad(const glm::mat4 &transform);
+    static void pushEntity(int entity_id);
+    static void pushTexture(
+            const std::shared_ptr<Texture> &tex,
+            const glm::vec4 &tint,
+            float tiling = 1.0f,
+            const glm::vec2 coords[4] = nullptr);
+    static void endDrawQuad();
 
     static void resetStats();
     static const Statistics &statistics();
 };
+
 } // namespace dogb::GR
 
 #endif // DOGBONE_RENDERER2D_H
