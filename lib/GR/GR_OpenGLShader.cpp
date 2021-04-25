@@ -208,7 +208,7 @@ void
 GLShader::setMat3(const std::string &name, const glm::mat3 &data)
         const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(data));
 }
 
@@ -216,57 +216,70 @@ void
 GLShader::setMat4(const std::string &name, const glm::mat4 &data)
         const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(data));
 }
 
 void
 GLShader::setFloatv(const std::string &name, float *data, uint32_t count) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform1fv(location, count, data);
 }
 
 void
 GLShader::setFloat(const std::string &name, float data) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform1f(location, data);
 }
 
 void
 GLShader::setFloat2(const std::string &name, const glm::vec2 &data) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform2f(location, data.x, data.y);
 }
 
 void
 GLShader::setFloat3(const std::string &name, const glm::vec3 &data) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform3f(location, data.x, data.y, data.z);
 }
 
 void
 GLShader::setFloat4(const std::string &name, const glm::vec4 &data) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform4f(location, data.x, data.y, data.z, data.w);
 }
 
 void
 GLShader::setIntv(const std::string &name, int *data, uint32_t count) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform1iv(location, count, data);
 }
 
 void
 GLShader::setInt(const std::string &name, int data) const
 {
-    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    GLint location = getUniformLocation(name);
     glUniform1i(location, data);
+}
+GLint
+GLShader::getUniformLocation(const std::string &name) const
+{
+    if (auto it = m_UniformLocationCache.find(name); it != m_UniformLocationCache.end())
+        return it->second;
+    GLint location = glGetUniformLocation(m_ID, name.c_str());
+    if (location == -1)
+    {
+        UT_LOG_WARN("Uniform '{0}' not found!", name);
+    }
+    m_UniformLocationCache[name] = location;
+    return location;
 }
 
 } // namespace dogb::GR::OpenGL
